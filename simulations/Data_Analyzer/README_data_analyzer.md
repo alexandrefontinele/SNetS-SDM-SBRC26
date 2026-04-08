@@ -455,7 +455,7 @@ No menu **Export**:
 ### Executar o programa
 
 ```bash
-python gerar_grafico_vFinal_v41.py
+python SimulationDataAnalyzer.py
 ```
 
 ### Instalar dependências

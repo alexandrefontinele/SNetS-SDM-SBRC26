@@ -4,22 +4,22 @@
 
 **Simulation Graph Analyzer** é um aplicativo desktop em Python para carregar arquivos CSV com resultados de simulações, comparar algoritmos e gerar gráficos para métricas como:
 
-- Probabilidade de bloqueio
-- Probabilidade de bloqueio por taxa de bits
-- Estatísticas de crosstalk
-- Utilização de modulação
-- Utilização de espectro
+- Probabilidade de bloqueio;
+- Probabilidade de bloqueio por taxa de bits;
+- Estatísticas de crosstalk;
+- Utilização de modulação;
+- Utilização de espectro.
 
 O programa também oferece:
 
-- gráficos de linha e de barras
-- intervalos de confiança
-- comparação de ganho entre algoritmos
-- personalização de rótulos e textos dos gráficos
-- personalização de estilos de linha
-- exportação dos gráficos em **SVG** e **PDF**
-- exportação de tabelas de IC em **CSV**
-- salvamento e carregamento de customizações do usuário em **JSON**
+- Gráficos de linha e de barras;
+- Intervalos de confiança;
+- Comparação de ganho entre algoritmos;
+- Personalização de rótulos e textos dos gráficos;
+- Personalização de estilos de linha;
+- Exportação dos gráficos em **SVG** e **PDF**;
+- Exportação de tabelas de IC em **CSV**;
+- Salvamento e carregamento de customizações do usuário em **JSON**.
 
 ---
 
@@ -64,13 +64,13 @@ sudo apt-get install python3-tk
 Exemplo:
 
 ```text
-gerar_grafico_vFinal_v41.py
+SimulationDataAnalyzer.py
 ```
 
 Execução:
 
 ```bash
-python gerar_grafico_vFinal_v41.py
+python SimulationDataAnalyzer.py
 ```
 
 ---
@@ -79,8 +79,8 @@ python gerar_grafico_vFinal_v41.py
 
 O programa espera arquivos CSV com:
 
-- uma coluna chamada **`Metrics`**
-- uma ou mais colunas de replicação como:
+- Uma coluna chamada **`Metrics`**
+- Uma ou mais colunas de replicação como:
   - `rep0`
   - `rep1`
   - `rep2`
@@ -195,27 +195,27 @@ Isso afeta os rótulos e textos dos gráficos.
 
 ### Modo do gráfico de barras
 As opções normalmente incluem:
-- valores absolutos empilhados
-- porcentagens / normalizado empilhado
+- Valores absolutos empilhados;
+- Porcentagens / normalizado empilhado.
 
 ### Tratamento da barra de erro em escala log
 Controla como o limite inferior do intervalo de confiança é tratado quando o gráfico usa eixo Y em escala logarítmica.
 
 Modos típicos:
-- esconder parte inferior quando IC inferior <= 0
-- calcular intervalo em escala log
-- marcar erro inferior truncado
+- Esconder parte inferior quando IC inferior <= 0;
+- Calcular intervalo em escala log;
+- Marcar erro inferior truncado.
 
 ### Estilo da grade do eixo Y
 Permite escolher como a grade horizontal é desenhada.
 
 ### Cargas e replicações
 Campos típicos:
-- **Initial load**
-- **Load increment**
-- **Replications (0=auto)**
-- **Bar plot load point**
-- **Specific loads filter**
+- **Initial load**;
+- **Load increment**;
+- **Replications (0=auto)**;
+- **Bar plot load point**;
+- **Specific loads filter**.
 
 Exemplo de filtro de cargas:
 
@@ -229,14 +229,14 @@ Exemplo de filtro de cargas:
 
 ### Confidence level
 Exemplos:
-- `90%`
-- `95%`
-- `99%`
+- `90%`;
+- `95%`;
+- `99%`.
 
 ### CI method
 Métodos disponíveis:
-- **t-Student**
-- **Bootstrap**
+- **t-Student**;
+- **Bootstrap**.
 
 ### Bootstrap resamples
 Define quantas reamostragens bootstrap serão usadas quando esse método estiver selecionado.
@@ -247,31 +247,31 @@ Define quantas reamostragens bootstrap serão usadas quando esse método estiver
 
 O programa permite personalizar a aparência dos gráficos, incluindo:
 
-- tamanho da fonte dos rótulos dos eixos
-- tamanho da fonte dos ticks
-- tamanho da fonte da legenda
-- posição da legenda
-- negrito nos rótulos dos eixos
-- negrito nos ticks dos eixos
+- Tamanho da fonte dos rótulos dos eixos;
+- Tamanho da fonte dos ticks;
+- Tamanho da fonte da legenda;
+- Posição da legenda;
+- Negrito nos rótulos dos eixos;
+- Negrito nos ticks dos eixos.
 
 ### Posição da legenda
 Dependendo da versão, as opções podem incluir:
 
-- No legend
-- Inside (best)
-- Inside (upper right)
-- Inside (upper left)
-- Inside (lower right)
-- Inside (lower left)
-- Inside (center right)
-- Inside (center left)
-- Inside (upper center)
-- Inside (lower center)
-- Inside (center)
-- Bottom (outside)
-- Top (outside)
-- Right (outside)
-- Left (outside)
+- No legend;
+- Inside (best);
+- Inside (upper right);
+- Inside (upper left);
+- Inside (lower right);
+- Inside (lower left);
+- Inside (center right);
+- Inside (center left);
+- Inside (upper center);
+- Inside (lower center);
+- Inside (center);
+- Bottom (outside);
+- Top (outside);
+- Right (outside);
+- Left (outside).
 
 ---
 
@@ -280,15 +280,15 @@ Dependendo da versão, as opções podem incluir:
 Esses campos controlam o espaçamento extra ao redor dos gráficos.
 
 ### Margens do eixo X
-- Left margin
-- Right margin
-- Bar-plot X margin
+- Left margin;
+- Right margin;
+- Bar-plot X margin.
 
 ### Margens do eixo Y
-- Linear bottom margin
-- Linear top margin
-- Log bottom factor
-- Log top factor
+- Linear bottom margin;
+- Linear top margin;
+- Log bottom factor;
+- Log top factor.
 
 Esses valores são úteis quando curvas ou rótulos ficam muito próximos das bordas do gráfico.
 
@@ -300,8 +300,8 @@ O programa permite personalizar títulos e rótulos dos eixos dos gráficos gera
 
 Você pode usar placeholders como:
 
-- `{metric}`
-- `{load}`
+- `{metric}`;
+- `{load}`.
 
 Exemplo:
 
@@ -317,14 +317,14 @@ Para gráficos de componentes de bloqueio, você pode renomear os rótulos exibi
 
 Exemplo de mapeamento dos componentes:
 
-- QoTN → OSNRN
-- QoTO → OSNRO
-- crosstalk → XTN
-- crosstalk in other → XTO
-- lack of transmitters → Transmissores
-- lack of receivers → Receptores
-- fragmentation → Fragmentação
-- other → Outros
+- QoTN → OSNRN;
+- QoTO → OSNRO;
+- crosstalk → XTN;
+- crosstalk in other → XTO;
+- lack of transmitters → Transmissores;
+- lack of receivers → Receptores;
+- fragmentation → Fragmentação;
+- other → Outros.
 
 ---
 
@@ -333,9 +333,9 @@ Exemplo de mapeamento dos componentes:
 O programa suporta estilos de linha personalizados por algoritmo.
 
 Você pode ajustar:
-- cor da linha
-- marcador
-- estilo da linha
+- Cor da linha;
+- Marcador;
+- Estilo da linha.
 
 Isso é especialmente útil em gráficos de linha quando muitos algoritmos são exibidos juntos.
 
@@ -347,17 +347,17 @@ Isso é especialmente útil em gráficos de linha quando muitos algoritmos são 
 Use gráficos de linha para comparar o desempenho dos algoritmos ao longo dos pontos de carga.
 
 Recursos típicos:
-- curva média por algoritmo
-- barras de erro com intervalo de confiança
-- escala log opcional
-- melhor algoritmo por carga impresso no terminal/console
+- Curva média por algoritmo;
+- Barras de erro com intervalo de confiança;
+- Escala log opcional;
+- Melhor algoritmo por carga impresso no terminal/console.
 
 ### Gráfico de barras
 Use gráficos de barras para analisar a decomposição dos componentes.
 
 Modos típicos:
-- valores absolutos empilhados
-- porcentagens empilhadas
+- Valores absolutos empilhados;
+- Porcentagens empilhadas.
 
 ---
 
@@ -365,11 +365,11 @@ Modos típicos:
 
 Quando um gráfico de linha é gerado, o programa imprime no terminal uma tabela de IC com campos como:
 
-- load
-- mean
-- CI lower
-- CI upper
-- truncated
+- Load;
+- Mean;
+- CI lower;
+- CI upper;
+- Truncated;
 
 Isso é útil para inspeção numérica da incerteza em torno da média.
 
@@ -401,19 +401,19 @@ O programa suporta exportação/importação de customizações do usuário em a
 
 ### Save customizations
 Salva configurações como:
-- idioma do gráfico
-- modo do gráfico de barras
-- tratamento de erro em escala log
-- métrica selecionada
-- tema
-- estilos de linha
-- textos dos gráficos
-- rótulos da legenda dos componentes
-- seleção de componentes
-- posição da legenda
-- fontes
-- margens
-- e outras preferências do usuário, dependendo da versão
+- Idioma do gráfico;
+- Modo do gráfico de barras;
+- Tratamento de erro em escala log;
+- Métrica selecionada;
+- Tema;
+- Estilos de linha;
+- Textos dos gráficos;
+- Rótulos da legenda dos componentes;
+- Seleção de componentes;
+- Posição da legenda;
+- Fontes;
+- Margens;
+- E outras preferências do usuário, dependendo da versão.
 
 ### Load customizations
 Restaura preferências salvas anteriormente.
@@ -428,8 +428,8 @@ Dependendo da versão atual, o programa suporta:
 
 ### Exportação de gráficos
 No menu **Export**:
-- **Save last plot (SVG)**
-- **Save last plot (PDF)**
+- **Save last plot (SVG)**;
+- **Save last plot (PDF)**.
 
 ### Exportação de tabelas
 - **Export last CI table (CSV)**
@@ -438,15 +438,15 @@ No menu **Export**:
 
 ## Fluxo de uso típico
 
-1. Abra o programa
-2. Carregue os arquivos CSV
-3. Selecione a métrica a ser analisada
-4. Escolha gráfico de linha ou de barras
-5. Configure as opções de intervalo de confiança
-6. Ajuste aparência e margens, se necessário
-7. Gere o gráfico
-8. Exporte o gráfico ou a tabela de IC, se desejar
-9. Salve as customizações para reutilizar depois
+1. Abra o programa.
+2. Carregue os arquivos CSV.
+3. Selecione a métrica a ser analisada.
+4. Escolha gráfico de linha ou de barras.
+5. Configure as opções de intervalo de confiança.
+6. Ajuste aparência e margens, se necessário.
+7. Gere o gráfico.
+8. Exporte o gráfico ou a tabela de IC, se desejar.
+9. Salve as customizações para reutilizar depois.
 
 ---
 
@@ -487,16 +487,16 @@ No Windows, reinstalar o Python com suporte a Tcl/Tk pode ajudar.
 
 ### 3. Os CSVs carregam, mas nenhuma métrica aparece
 Verifique se:
-- o arquivo tem coluna `Metrics`
-- as colunas de replicação começam com `rep`
-- o CSV não está corrompido
-- separadores e codificação estão corretos
+- O arquivo tem coluna `Metrics`;
+- As colunas de replicação começam com `rep`;
+- O CSV não está corrompido;
+- Separadores e codificação estão corretos.
 
 ### 4. O gráfico aparece, mas alguns algoritmos não são mostrados
 Possíveis motivos:
-- todos os valores daquela métrica são zero ou inválidos
-- as colunas de replicação não foram detectadas
-- o filtro de cargas excluiu todos os pontos
+- Todos os valores daquela métrica são zero ou inválidos;
+- As colunas de replicação não foram detectadas;
+- O filtro de cargas excluiu todos os pontos.
 
 ### 5. Problemas com escala log
 Se limites inferiores do IC virarem zero ou negativos, use outra opção em:
@@ -504,9 +504,9 @@ Se limites inferiores do IC virarem zero ou negativos, use outra opção em:
 
 ### 6. Exportação não funciona
 Garanta que:
-- um gráfico já foi gerado
-- o arquivo de destino não está aberto em outro programa
-- você tem permissão de escrita na pasta de destino
+- Um gráfico já foi gerado;
+- O arquivo de destino não está aberto em outro programa;
+- Você tem permissão de escrita na pasta de destino.
 
 ---
 
@@ -521,26 +521,10 @@ Garanta que:
 ## Ambiente sugerido
 
 Para melhores resultados:
-- Python 3.10+
-- Windows 10/11
-- arquivos CSV em UTF-8
-- resultados organizados em pastas e por tipo de métrica
+- Python 3.10+;
+- Windows 10/11;
+- Arquivos CSV em UTF-8;
+- Resultados organizados em pastas e por tipo de métrica.
 
 ---
 
-## Nota de licença / uso interno
-
-Se este programa for de uso interno ou acadêmico, vale a pena adicionar:
-- nome do autor
-- instituição / laboratório
-- número da versão
-- data
-- histórico de alterações
-
-Exemplo:
-
-```text
-Simulation Graph Analyzer
-Version 41
-Author: Seu Nome
-```

@@ -612,7 +612,7 @@ class ScrollableWindow(ttk.Frame):
 class GenericAnalyzerGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Simulation Graph Analyzer")
+        self.root.title("SimGraph - Simulation Graph Analyzer")
         self.root.geometry("1220x820")
         self.root.minsize(1080, 720)
 

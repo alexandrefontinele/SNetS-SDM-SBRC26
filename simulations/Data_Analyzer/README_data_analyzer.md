@@ -1,8 +1,8 @@
-# Simulation Graph Analyzer — README
+# SimGraph - Simulation Graph Analyzer — README
 
 ## Visão geral
 
-**Simulation Graph Analyzer** é um aplicativo desktop em Python para carregar arquivos CSV com resultados de simulações, comparar algoritmos e gerar gráficos para métricas como:
+**SimGraph - Simulation Graph Analyzer** é um aplicativo desktop em Python para carregar arquivos CSV com resultados de simulações, comparar algoritmos e gerar gráficos para métricas como:
 
 - Probabilidade de bloqueio;
 - Probabilidade de bloqueio por taxa de bits;

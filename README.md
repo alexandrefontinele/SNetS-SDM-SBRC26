@@ -1,6 +1,10 @@
 # SNetS-SDM-SBRC26
 
-> **Título do artigo:** **IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs**
+**Título do artigo:** **IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs**
+
+## Resumo do artigo
+
+Neste trabalho investigamos o problema ampliado PRMCSA, no qual a potência é tratada como variável de decisão. Propomos o algoritmo **IMPA** (*Impairment-Aware Margin Power Assignment*) para atribuição adaptativa de potência em **SDM-EONs**. O IMPA seleciona a menor potência viável que satisfaz simultaneamente margens de **OSNR** e **crosstalk**, considerando também o impacto sobre circuitos vizinhos já estabelecidos. Avaliações nas topologias **NSFNet** e **USA** demonstram que o IMPA reduz significativamente a probabilidade de bloqueio em relação aos algoritmos clássicos e adaptativos da literatura, alcançando uma redução na probabilidade de bloqueio de bitrate de pelo menos **18%** na topologia NSFNet e **46,5%** na topologia USA.
 
 ## Resumo do artefato
 
@@ -17,10 +21,6 @@ O artefato foi organizado para permitir que os revisores:
 2. **Executem** uma instância local do simulador usando um diretório de configuração;
 3. **Utilizem** os resultados já incluídos no repositório para regenerar gráficos e tabelas;
 4. **Reproduzam** as principais reivindicações experimentais do artigo a partir dos dados disponibilizados.
-
-## Resumo do artigo
-
-Neste trabalho investigamos o problema ampliado PRMCSA, no qual a potência é tratada como variável de decisão. Propomos o algoritmo **IMPA** (*Impairment-Aware Margin Power Assignment*) para atribuição adaptativa de potência em **SDM-EONs**. O IMPA seleciona a menor potência viável que satisfaz simultaneamente margens de **OSNR** e **crosstalk**, considerando também o impacto sobre circuitos vizinhos já estabelecidos. Avaliações nas topologias **NSFNet** e **USA** demonstram que o IMPA reduz significativamente a probabilidade de bloqueio em relação aos algoritmos clássicos e adaptativos da literatura, alcançando uma redução na probabilidade de bloqueio de bitrate de pelo menos **18%** na topologia NSFNet e **46,5%** na topologia USA.
 
 ---
 
@@ -42,6 +42,9 @@ Depois:
 2. Selecione a métrica `BlockingProbability` ou `BitRateBlockingProbability`;
 3. Gere um gráfico de linha;
 4. Observe no terminal a tabela de melhor algoritmo por carga.
+
+Para instruções detalhadas sobre o analisador gráfico, consulte:  
+[README do programa de geração de gráficos](https://github.com/alexandrefontinele/SNetS-SDM-SBRC26/blob/main/simulations/Data_Analyzer/README_data_analyzer.md)
 
 ## Caminho rápido 2 — Executar uma simulação local com o JAR
 
@@ -127,7 +130,8 @@ Para a avaliação prática do artefato, os caminhos mais importantes são:
   **Uso:** executar o simulador em modo local.
 
 - `simulations/Data_Analyzer/SimulationDataAnalyzer.py`  
-  **Uso:** abrir a ferramenta de análise e geração de gráficos.
+  **Uso:** abrir a ferramenta de análise e geração de gráficos.  
+  **README da ferramenta:** [README do programa de geração de gráficos](https://github.com/alexandrefontinele/SNetS-SDM-SBRC26/blob/main/simulations/Data_Analyzer/README_data_analyzer.md)
 
 - `simulations/Data_Analyzer/USA/`  
   **Uso:** carregar CSVs já organizados da topologia USA.
@@ -279,7 +283,7 @@ Esses modos não são necessários para reproduzir as funcionalidades e os exper
 
 Há dois caminhos recomendados.
 
-## Opção A — Usar o JAR já incluído no repositório (recomendado para os revisores)
+## Opção A — usar o JAR já incluído no repositório (recomendado para os revisores)
 
 ### 1. Clonar o repositório
 
@@ -332,7 +336,7 @@ simulations/Data_Analyzer/SimulationDataAnalyzer.py
 
 ---
 
-## Opção B — Compilar a partir do código-fonte
+## Opção B — compilar a partir do código-fonte
 
 ### 1. Clonar o repositório
 
@@ -361,7 +365,7 @@ mvn package
 
 Esta seção apresenta um teste mínimo para verificar se o artefato está funcional.
 
-## Teste mínimo 1 — Abrir o analisador de dados
+## Teste mínimo 1 — abrir o analisador de dados
 
 ### Passo 1
 Entre na pasta do analisador:
@@ -398,7 +402,7 @@ O revisor deve conseguir:
 - Gerar um gráfico de linha;
 - Ver no terminal a saída textual com a tabela de melhor algoritmo por carga.
 
-## Teste mínimo 2 — Executar uma simulação local
+## Teste mínimo 2 — executar uma simulação local
 
 Escolha um diretório de configuração completo, por exemplo:
 
@@ -431,9 +435,9 @@ O simulador deve:
 
 ### Evidência concreta esperada
 O revisor deve observar no terminal:
-- Leitura do diretório de configuração;
-- Inicialização da simulação;
-- Mensagens de progresso ou processamento.
+- leitura do diretório de configuração;
+- inicialização da simulação;
+- mensagens de progresso ou processamento.
 
 ---
 
@@ -452,7 +456,7 @@ Esta seção descreve formas de reproduzir as principais reivindicações experi
 
 ---
 
-## Reivindicação #1 — Os resultados experimentais podem ser regenerados graficamente a partir dos CSVs incluídos
+## Reivindicação #1 — os resultados experimentais podem ser regenerados graficamente a partir dos CSVs incluídos
 
 ### Objetivo
 Mostrar que os resultados salvos no repositório podem ser carregados e convertidos novamente em gráficos comparativos.
@@ -494,7 +498,7 @@ O analisador deve:
 
 ---
 
-## Reivindicação #2 — Os diretórios de simulação incluídos permitem reproduzir execuções locais do simulador
+## Reivindicação #2 — os diretórios de simulação incluídos permitem reproduzir execuções locais do simulador
 
 ### Objetivo
 Executar ao menos uma configuração completa de simulação local contida no repositório.
@@ -532,7 +536,7 @@ Os diretórios de simulação já incluem resultados CSV e configurações. Assi
 
 ---
 
-## Reivindicação #3 — O artefato contém experimentos organizados por topologia, algoritmo e parâmetros
+## Reivindicação #3 — o artefato contém experimentos organizados por topologia, algoritmo e parâmetros
 
 ### Objetivo
 Mostrar que o repositório foi organizado para facilitar rastreabilidade experimental.
@@ -558,7 +562,7 @@ O revisor deve conseguir:
 
 ---
 
-## Reivindicação #4 — O código-fonte está disponível e organizado de forma modular
+## Reivindicação #4 — o código-fonte está disponível e organizado de forma modular
 
 ### Objetivo
 Sustentar a avaliação de sustentabilidade e compreensibilidade do artefato.
@@ -602,6 +606,17 @@ Esse fluxo já cobre, de forma prática:
 - Alguns cenários completos podem demandar mais tempo de execução que o ideal para uma avaliação rápida;
 - O fluxo recomendado para os revisores é usar primeiro os **resultados já incluídos** para regeneração de gráficos e, em seguida, executar um cenário local representativo;
 - O analisador gráfico depende de ambiente com suporte a interface gráfica via **Tkinter**.
+
+---
+
+# Como citar
+
+Se desejar citar o artigo associado a este artefato, utilize os dados do trabalho:
+
+**IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs.**  
+Autores: Jordana França, Uriel P. Mori, Alexandre C. Fontinele, Iallen Santos, Andre C. B. Soares.
+
+> Ajuste esta seção para o formato bibliográfico final adotado pelo SBRC 2026, se necessário.
 
 ---
 

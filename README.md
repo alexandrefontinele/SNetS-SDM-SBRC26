@@ -94,6 +94,7 @@ Os selos considerados para o processo de avaliação são:
 - **Projeto:** SNetS-SDM-SBRC26
 - **Artigo:** *IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs*
 - **Instituições:** Universidade Federal do Piauí (UFPI) e Instituto Federal do Piauí (IFPI)
+- **Trilha que o trabalho foi submetido:** Trilha Principal
 - **Linguagens principais:** Java e Python
 - **Artefato principal:** Simulador Java + conjuntos de simulação + analisador gráfico em Python
 - **Licença:** MIT

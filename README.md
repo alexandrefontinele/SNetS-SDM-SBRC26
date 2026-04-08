@@ -279,7 +279,7 @@ Esses modos não são necessários para reproduzir as funcionalidades e os exper
 
 Há dois caminhos recomendados.
 
-## Opção A — usar o JAR já incluído no repositório (recomendado para os revisores)
+## Opção A — Usar o JAR já incluído no repositório (recomendado para os revisores)
 
 ### 1. Clonar o repositório
 
@@ -332,7 +332,7 @@ simulations/Data_Analyzer/SimulationDataAnalyzer.py
 
 ---
 
-## Opção B — compilar a partir do código-fonte
+## Opção B — Compilar a partir do código-fonte
 
 ### 1. Clonar o repositório
 
@@ -361,7 +361,7 @@ mvn package
 
 Esta seção apresenta um teste mínimo para verificar se o artefato está funcional.
 
-## Teste mínimo 1 — abrir o analisador de dados
+## Teste mínimo 1 — Abrir o analisador de dados
 
 ### Passo 1
 Entre na pasta do analisador:
@@ -398,7 +398,7 @@ O revisor deve conseguir:
 - Gerar um gráfico de linha;
 - Ver no terminal a saída textual com a tabela de melhor algoritmo por carga.
 
-## Teste mínimo 2 — executar uma simulação local
+## Teste mínimo 2 — Executar uma simulação local
 
 Escolha um diretório de configuração completo, por exemplo:
 

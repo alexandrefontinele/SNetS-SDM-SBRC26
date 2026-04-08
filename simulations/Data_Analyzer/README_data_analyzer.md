@@ -1,4 +1,4 @@
-# Simulation Graph Analyzer — README (PT-BR)
+# Simulation Graph Analyzer — README
 
 ## Visão geral
 
@@ -20,6 +20,20 @@ O programa também oferece:
 - Exportação dos gráficos em **SVG** e **PDF**;
 - Exportação de tabelas de IC em **CSV**;
 - Salvamento e carregamento de customizações do usuário em **JSON**.
+
+---
+
+## O que o programa faz
+
+De forma prática, o programa permite:
+
+1. Carregar arquivos CSV de resultados de simulações;
+2. Identificar automaticamente as métricas disponíveis;
+3. Comparar algoritmos em diferentes cargas de rede;
+4. Gerar gráficos de linha e gráficos de barras;
+5. Calcular e exibir intervalos de confiança;
+6. Calcular o ganho de um algoritmo em relação aos demais;
+7. Exportar gráficos e tabelas para uso em artigos, relatórios e apresentações.
 
 ---
 
@@ -48,7 +62,7 @@ pip install numpy pandas matplotlib scipy
 ### Tkinter
 A interface usa **Tkinter** e **ttk**.
 
-- No Windows, o Tkinter normalmente já vem com o Python.
+- No Windows, o Tkinter normalmente já vem com o Python;
 - No Linux, pode ser necessário instalar separadamente.
 
 Exemplo no Debian/Ubuntu:
@@ -79,7 +93,7 @@ python SimulationDataAnalyzer.py
 
 O programa espera arquivos CSV com:
 
-- Uma coluna chamada **`Metrics`**
+- Uma coluna chamada **`Metrics`**;
 - Uma ou mais colunas de replicação como:
   - `rep0`
   - `rep1`
@@ -98,8 +112,8 @@ O programa detecta automaticamente as colunas de replicação.
 
 ### Separador decimal
 O programa aceita valores numéricos com:
-- ponto (`.`)
-- vírgula (`,`) — convertida internamente quando necessário
+- ponto (`.`);
+- vírgula (`,`), convertida internamente quando necessário.
 
 ---
 
@@ -211,11 +225,11 @@ Permite escolher como a grade horizontal é desenhada.
 
 ### Cargas e replicações
 Campos típicos:
-- **Initial load**;
-- **Load increment**;
-- **Replications (0=auto)**;
-- **Bar plot load point**;
-- **Specific loads filter**.
+- **Initial load**
+- **Load increment**
+- **Replications (0=auto)**
+- **Bar plot load point**
+- **Specific loads filter**
 
 Exemplo de filtro de cargas:
 
@@ -235,11 +249,57 @@ Exemplos:
 
 ### CI method
 Métodos disponíveis:
-- **t-Student**;
-- **Bootstrap**.
+- **t-Student**
+- **Bootstrap**
 
 ### Bootstrap resamples
 Define quantas reamostragens bootstrap serão usadas quando esse método estiver selecionado.
+
+---
+
+## Explicação simples dos métodos de intervalo de confiança
+
+O programa oferece dois métodos principais para calcular o **IC (Intervalo de Confiança)**.
+
+### Método t-Student
+O método **t-Student** calcula o intervalo de confiança usando:
+- a média dos resultados;
+- o desvio padrão;
+- o número de replicações;
+- uma fórmula estatística clássica.
+
+Em termos práticos:
+- ele é mais tradicional;
+- costuma ser mais rápido;
+- funciona bem quando os dados têm comportamento mais regular.
+
+**Resumo simples:**  
+O método t-Student estima o intervalo de confiança a partir de uma fórmula baseada na média e na variação dos dados.
+
+### Método Bootstrap
+O método **Bootstrap** calcula o intervalo de confiança por **reamostragem**.
+
+Em vez de usar apenas uma fórmula direta, ele:
+1. pega os valores das replicações;
+2. cria várias novas amostras com reposição;
+3. calcula várias médias simuladas;
+4. usa essas médias para estimar o intervalo de confiança.
+
+Em termos práticos:
+- ele é mais empírico;
+- faz menos suposições sobre a distribuição dos dados;
+- pode ser útil quando os dados são mais irregulares ou assimétricos.
+
+**Resumo simples:**  
+O método Bootstrap estima o intervalo de confiança repetindo várias amostragens sobre os próprios dados.
+
+### Diferença prática entre os dois
+- **t-Student**: mais clássico, mais rápido e baseado em fórmula;
+- **Bootstrap**: mais flexível, baseado em reamostragem e pode representar melhor dados menos regulares.
+
+### Quando usar cada um
+- Use **t-Student** quando quiser um método clássico e rápido;
+- Use **Bootstrap** quando quiser uma estimativa mais baseada no comportamento real das replicações.
 
 ---
 
@@ -369,7 +429,7 @@ Quando um gráfico de linha é gerado, o programa imprime no terminal uma tabela
 - Mean;
 - CI lower;
 - CI upper;
-- Truncated;
+- Truncated.
 
 Isso é útil para inspeção numérica da incerteza em torno da média.
 
@@ -386,8 +446,8 @@ Gain = (Rother - Ralgo) / Rother
 ```
 
 Onde:
-- `Rother` é a métrica do algoritmo de referência
-- `Ralgo` é a métrica do algoritmo selecionado
+- `Rother` é a métrica do algoritmo de referência;
+- `Ralgo` é a métrica do algoritmo selecionado.
 
 O ganho normalmente é apresentado em porcentagem.
 
@@ -413,7 +473,7 @@ Salva configurações como:
 - Posição da legenda;
 - Fontes;
 - Margens;
-- E outras preferências do usuário, dependendo da versão.
+- Outras preferências do usuário, dependendo da versão.
 
 ### Load customizations
 Restaura preferências salvas anteriormente.
@@ -438,14 +498,14 @@ No menu **Export**:
 
 ## Fluxo de uso típico
 
-1. Abra o programa.
-2. Carregue os arquivos CSV.
-3. Selecione a métrica a ser analisada.
-4. Escolha gráfico de linha ou de barras.
-5. Configure as opções de intervalo de confiança.
-6. Ajuste aparência e margens, se necessário.
-7. Gere o gráfico.
-8. Exporte o gráfico ou a tabela de IC, se desejar.
+1. Abra o programa;
+2. Carregue os arquivos CSV;
+3. Selecione a métrica a ser analisada;
+4. Escolha gráfico de linha ou de barras;
+5. Configure as opções de intervalo de confiança;
+6. Ajuste aparência e margens, se necessário;
+7. Gere o gráfico;
+8. Exporte o gráfico ou a tabela de IC, se desejar;
 9. Salve as customizações para reutilizar depois.
 
 ---
@@ -512,8 +572,8 @@ Garanta que:
 
 ## Observações
 
-- O programa é voltado para análise de arquivos CSV com resultados de simulações.
-- Ele é especialmente útil para comparar múltiplos algoritmos sob diferentes cargas de rede.
+- O programa é voltado para análise de arquivos CSV com resultados de simulações;
+- Ele é especialmente útil para comparar múltiplos algoritmos sob diferentes cargas de rede;
 - Manter nomes de arquivo consistentes ajuda bastante no carregamento por pasta.
 
 ---
@@ -527,4 +587,3 @@ Para melhores resultados:
 - Resultados organizados em pastas e por tipo de métrica.
 
 ---
-

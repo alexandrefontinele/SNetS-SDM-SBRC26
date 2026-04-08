@@ -1,6 +1,6 @@
 # SNetS-SDM-SBRC26
 
-**Título do artigo:** **IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs**
+## **Título do artigo:** **IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs**
 
 ## Resumo do artigo
 

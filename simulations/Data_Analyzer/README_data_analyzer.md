@@ -1,8 +1,9 @@
-# SimGraph - Simulation Graph Analyzer — README
+# SimGraph — Simulation Graph Analyzer  
+README (PT-BR)
 
 ## Visão geral
 
-**SimGraph - Simulation Graph Analyzer** é um aplicativo desktop em Python para carregar arquivos CSV com resultados de simulações, comparar algoritmos e gerar gráficos para métricas como:
+**SimGraph — Simulation Graph Analyzer** é um aplicativo desktop em Python para carregar arquivos CSV com resultados de simulações, comparar algoritmos e gerar gráficos para métricas como:
 
 - Probabilidade de bloqueio;
 - Probabilidade de bloqueio por taxa de bits;
@@ -15,10 +16,10 @@ O programa também oferece:
 - Gráficos de linha e de barras;
 - Intervalos de confiança;
 - Comparação de ganho entre algoritmos;
-- Personalização de rótulos e textos dos gráficos;
-- Personalização de estilos de linha;
+- Personalização de rótulos, textos e aparência dos gráficos;
+- Personalização de estilos de linha por algoritmo;
 - Exportação dos gráficos em **SVG** e **PDF**;
-- Exportação de tabelas de IC em **CSV**;
+- Exportação de tabelas de intervalo de confiança em **CSV**;
 - Salvamento e carregamento de customizações do usuário em **JSON**.
 
 ---
@@ -34,6 +35,21 @@ De forma prática, o programa permite:
 5. Calcular e exibir intervalos de confiança;
 6. Calcular o ganho de um algoritmo em relação aos demais;
 7. Exportar gráficos e tabelas para uso em artigos, relatórios e apresentações.
+
+---
+
+## Fluxo rápido de uso
+
+Se você quiser usar o programa rapidamente, o fluxo recomendado é:
+
+1. Abra o programa;
+2. Clique em **Load CSV files**;
+3. Carregue os arquivos por seleção manual ou por pasta;
+4. Escolha a métrica desejada em **Metric selection**;
+5. Escolha o tipo de gráfico em **Plot setup**;
+6. Ajuste as opções estatísticas e visuais, se necessário;
+7. Clique em **Generate plot**;
+8. Exporte o gráfico ou a tabela de IC, se desejar.
 
 ---
 
@@ -115,35 +131,74 @@ O programa aceita valores numéricos com:
 - ponto (`.`);
 - vírgula (`,`), convertida internamente quando necessário.
 
+### Observação importante
+Mesmo quando os arquivos possuem nomes diferentes ou organização variada entre pastas, o programa tenta identificar os conteúdos relevantes de forma automática durante o carregamento.
+
 ---
 
 ## Formas de carregar dados
 
-O programa suporta dois modos.
+O programa suporta **dois modos principais de carregamento**, acessados pela janela **Load CSV files**.
 
-### 1. Carregamento direto de CSV
-Carrega arquivos CSV manualmente, selecionando os arquivos diretamente.
+### 1. Carregamento manual de arquivos CSV
+Esse modo permite selecionar os arquivos diretamente, como em um fluxo tradicional de abertura de arquivos.
 
-Isso é útil quando você já sabe exatamente quais arquivos quer analisar.
+Ele é recomendado quando:
+- Você já sabe exatamente quais arquivos quer comparar;
+- Os arquivos estão espalhados em pastas diferentes;
+- Você quer montar manualmente o conjunto de arquivos da análise.
+
+#### Como funciona
+1. Clique em **Load CSV files**;
+2. Na janela aberta, use a opção de carregamento manual;
+3. Selecione um ou mais arquivos CSV;
+4. O programa lê os arquivos, identifica as métricas disponíveis e atualiza a área de seleção de métricas.
+
+#### Vantagens
+- Maior controle sobre os arquivos carregados;
+- Útil para análises pontuais;
+- Mantém compatibilidade com versões anteriores do programa.
+
+---
 
 ### 2. Carregamento por pasta
-O programa pode varrer uma pasta raiz que contém várias subpastas com arquivos de resultados.
+Esse modo foi criado para facilitar análises em cenários com muitas subpastas e vários arquivos de resultados.
 
-Exemplo de estrutura:
+Ele é recomendado quando:
+- Você tem uma pasta raiz com várias subpastas de experimentos;
+- Cada subpasta contém arquivos CSV de tipos diferentes;
+- Você quer carregar automaticamente arquivos do mesmo tipo em vários cenários.
+
+#### Exemplo de estrutura
 
 ```text
 results_root/
 ├── run_01/
 │   ├── USA_IMPA_HXT_mo_0_00_mx_0_00_BlockingProbability.csv
 │   ├── USA_IMPA_HXT_mo_0_00_mx_0_00_BitRateBlockingProbability.csv
+│   ├── USA_IMPA_HXT_mo_0_00_mx_0_00_CrosstalkStatistics.csv
 │   └── ...
 ├── run_02/
 │   ├── USA_PABS_HXT_mo_0_00_mx_0_00_BlockingProbability.csv
 │   ├── USA_PABS_HXT_mo_0_00_mx_0_00_BitRateBlockingProbability.csv
+│   ├── USA_PABS_HXT_mo_0_00_mx_0_00_CrosstalkStatistics.csv
 │   └── ...
 ```
 
-O tipo do arquivo é detectado pelo final do nome, por exemplo:
+#### Como funciona
+1. Clique em **Load CSV files**;
+2. Na janela aberta, clique em **Browse folder**;
+3. Selecione a **pasta raiz** que contém as subpastas com os resultados;
+4. O programa varre as subpastas e tenta identificar os tipos de arquivo disponíveis;
+5. Depois disso, ele lista os tipos encontrados na área **Available metric file types**;
+6. Você escolhe quais tipos deseja carregar;
+7. O programa agrupa os arquivos selecionados e os prepara para análise.
+
+#### Como o programa identifica o tipo do arquivo
+O programa tenta identificar o tipo do arquivo em **duas etapas**:
+
+##### a) Pelo nome do arquivo
+Primeiro, ele verifica o final do nome do arquivo, por exemplo:
 
 - `_BlockingProbability`
 - `_BitRateBlockingProbability`
@@ -151,7 +206,41 @@ O tipo do arquivo é detectado pelo final do nome, por exemplo:
 - `_ModulationUtilization`
 - `_SpectrumUtilization`
 
-O carregador agrupa os arquivos por tipo detectado e permite escolher quais tipos devem ser carregados.
+##### b) Pelo conteúdo do CSV
+Se o nome do arquivo não seguir o padrão esperado, o programa tenta identificar o tipo com base nos **dados internos do CSV**, analisando por exemplo:
+- A coluna `Metrics`;
+- Os nomes das métricas;
+- A estrutura das colunas do arquivo.
+
+Isso torna o carregamento por pasta mais robusto mesmo quando o nome do arquivo não está totalmente padronizado.
+
+#### Vantagens
+- Economiza tempo ao trabalhar com muitos arquivos;
+- Facilita a comparação entre algoritmos e topologias;
+- Reduz a necessidade de selecionar arquivo por arquivo;
+- Funciona melhor mesmo em diretórios com nomenclatura incompleta ou inconsistente.
+
+---
+
+### Qual modo escolher?
+
+#### Use o carregamento manual quando:
+- Quiser selecionar arquivos específicos;
+- Estiver testando poucos arquivos;
+- Quiser controle total sobre os CSVs da análise.
+
+#### Use o carregamento por pasta quando:
+- Houver muitas subpastas;
+- Os resultados estiverem organizados por experimento;
+- Você quiser carregar automaticamente todos os arquivos de um mesmo tipo.
+
+---
+
+### Observações importantes sobre carregamento
+- O programa espera arquivos CSV válidos e legíveis;
+- Arquivos com coluna `Metrics` e colunas de replicação (`rep0`, `rep1`, etc.) tendem a ser identificados com mais facilidade;
+- Mesmo no carregamento por pasta, o programa tenta preservar compatibilidade com diferentes estruturas de arquivos;
+- Se algum arquivo não puder ser classificado pelo nome, o programa tentará classificá-lo pelo conteúdo antes de ignorá-lo.
 
 ---
 
@@ -177,11 +266,23 @@ Ações comuns:
 - **Configure algorithm names**
 - **Edit graph texts**
 - **Edit component legends**
+- **Edit line styles**
 - **Select components for bar plot**
 - **Generate plot**
 - **Compute gains**
 
 Algumas ações só ficam habilitadas depois que CSVs válidos são carregados.
+
+### O que cada ação faz
+
+- **Load CSV files**: abre a janela de carregamento manual ou por pasta;
+- **Configure algorithm names**: permite renomear os algoritmos exibidos nos gráficos;
+- **Edit graph texts**: altera títulos, eixos e textos dos gráficos;
+- **Edit component legends**: altera os nomes usados nas legendas dos componentes;
+- **Edit line styles**: altera cor, marcador e estilo de linha dos algoritmos;
+- **Select components for bar plot**: escolhe quais componentes aparecem nos gráficos de barras;
+- **Generate plot**: gera o gráfico com base nas opções atuais;
+- **Compute gains**: calcula o ganho de um algoritmo em relação aos demais.
 
 ---
 
@@ -190,6 +291,12 @@ Algumas ações só ficam habilitadas depois que CSVs válidos são carregados.
 Depois de carregar os arquivos, o programa analisa a coluna `Metrics` e lista todas as métricas detectadas.
 
 Depois disso, você pode escolher qual métrica será analisada e plotada.
+
+### Dica
+Se nenhuma métrica aparecer:
+- Verifique se os CSVs possuem a coluna `Metrics`;
+- Confira se os arquivos foram carregados corretamente;
+- Tente o modo manual, caso o modo por pasta não encontre o padrão esperado.
 
 ---
 
@@ -202,10 +309,10 @@ Opções:
 
 ### Idioma do gráfico
 Opções:
-- `en`
-- `pt`
+- `Inglês`
+- `Português`
 
-Isso afeta os rótulos e textos dos gráficos.
+Isso afeta os rótulos e textos dos gráficos. Não altera o idioma da interface do programa.
 
 ### Modo do gráfico de barras
 As opções normalmente incluem:
@@ -237,15 +344,18 @@ Exemplo de filtro de cargas:
 500, 1000, 1500
 ```
 
+### Observação
+O filtro de cargas permite restringir a análise apenas a determinados pontos de carga, o que é útil para comparações específicas.
+
 ---
 
 ## Statistics
 
 ### Confidence level
 Exemplos:
-- `90%`;
-- `95%`;
-- `99%`.
+- `90%`
+- `95%`
+- `99%`
 
 ### CI method
 Métodos disponíveis:
@@ -257,21 +367,21 @@ Define quantas reamostragens bootstrap serão usadas quando esse método estiver
 
 ---
 
-## Explicação simples dos métodos de intervalo de confiança
+## Explicação dos métodos de intervalo de confiança
 
-O programa oferece dois métodos principais para calcular o **IC (Intervalo de Confiança)**.
+O programa oferece dois métodos principais para calcular o **CI (Confidence Interval)**.
 
 ### Método t-Student
 O método **t-Student** calcula o intervalo de confiança usando:
-- a média dos resultados;
-- o desvio padrão;
-- o número de replicações;
-- uma fórmula estatística clássica.
+- A média dos resultados;
+- O desvio padrão;
+- O número de replicações;
+- Uma fórmula estatística clássica.
 
 Em termos práticos:
-- ele é mais tradicional;
-- costuma ser mais rápido;
-- funciona bem quando os dados têm comportamento mais regular.
+- Ele é mais tradicional;
+- Costuma ser mais rápido;
+- Funciona bem quando os dados têm comportamento mais regular.
 
 **Resumo simples:**  
 O método t-Student estima o intervalo de confiança a partir de uma fórmula baseada na média e na variação dos dados.
@@ -280,15 +390,15 @@ O método t-Student estima o intervalo de confiança a partir de uma fórmula ba
 O método **Bootstrap** calcula o intervalo de confiança por **reamostragem**.
 
 Em vez de usar apenas uma fórmula direta, ele:
-1. pega os valores das replicações;
-2. cria várias novas amostras com reposição;
-3. calcula várias médias simuladas;
-4. usa essas médias para estimar o intervalo de confiança.
+1. Pega os valores das replicações;
+2. Cria várias novas amostras com reposição;
+3. Calcula várias médias simuladas;
+4. Usa essas médias para estimar o intervalo de confiança.
 
 Em termos práticos:
-- ele é mais empírico;
-- faz menos suposições sobre a distribuição dos dados;
-- pode ser útil quando os dados são mais irregulares ou assimétricos.
+- Ele é mais empírico;
+- Faz menos suposições sobre a distribuição dos dados;
+- Pode ser útil quando os dados são mais irregulares ou assimétricos.
 
 **Resumo simples:**  
 O método Bootstrap estima o intervalo de confiança repetindo várias amostragens sobre os próprios dados.
@@ -300,6 +410,11 @@ O método Bootstrap estima o intervalo de confiança repetindo várias amostrage
 ### Quando usar cada um
 - Use **t-Student** quando quiser um método clássico e rápido;
 - Use **Bootstrap** quando quiser uma estimativa mais baseada no comportamento real das replicações.
+
+### Observação importante
+Se você tiver poucas replicações, os dois métodos podem produzir resultados diferentes com mais facilidade. Em geral:
+- **t-Student** tende a ser mais direto;
+- **Bootstrap** tende a refletir mais o comportamento real da amostra.
 
 ---
 
@@ -333,6 +448,11 @@ Dependendo da versão, as opções podem incluir:
 - Right (outside);
 - Left (outside).
 
+### Dica de uso
+- Use posições **inside** quando quiser manter tudo dentro do gráfico;
+- Use posições **outside** quando houver muitas curvas ou componentes;
+- Use **No legend** quando o gráfico for apenas para inspeção visual rápida.
+
 ---
 
 ## Margins
@@ -352,6 +472,10 @@ Esses campos controlam o espaçamento extra ao redor dos gráficos.
 
 Esses valores são úteis quando curvas ou rótulos ficam muito próximos das bordas do gráfico.
 
+### Exemplo prático
+Se a curva estiver muito distante do topo do gráfico, você pode reduzir o **Linear top margin**.  
+Se estiver muito encostada, pode aumentar esse valor.
+
 ---
 
 ## Edição dos textos dos gráficos
@@ -368,6 +492,12 @@ Exemplo:
 ```text
 {metric} at {load} Erlangs
 ```
+
+### Quando isso é útil
+Essa personalização é especialmente útil quando você quer:
+- Gerar figuras para artigos;
+- Alternar entre inglês e português;
+- Ajustar títulos para apresentações e relatórios.
 
 ---
 
@@ -386,6 +516,9 @@ Exemplo de mapeamento dos componentes:
 - fragmentation → Fragmentação;
 - other → Outros.
 
+### Observação
+A ordem de exibição dos componentes pode ser configurada no código e influencia tanto a legenda quanto a montagem das barras empilhadas.
+
 ---
 
 ## Edição dos estilos de linha
@@ -398,6 +531,12 @@ Você pode ajustar:
 - Estilo da linha.
 
 Isso é especialmente útil em gráficos de linha quando muitos algoritmos são exibidos juntos.
+
+### Exemplo de uso
+Você pode definir:
+- Uma cor distinta por algoritmo;
+- Marcadores diferentes;
+- Estilos de linha distintos para facilitar a leitura visual em gráficos com muitas curvas.
 
 ---
 
@@ -419,6 +558,10 @@ Modos típicos:
 - Valores absolutos empilhados;
 - Porcentagens empilhadas.
 
+### Observação
+Os gráficos de linha são mais indicados para acompanhar o comportamento da métrica em função da carga.  
+Os gráficos de barras são mais indicados para comparar a composição dos bloqueios ou distribuições em um ponto específico.
+
 ---
 
 ## Saída do intervalo de confiança
@@ -432,6 +575,9 @@ Quando um gráfico de linha é gerado, o programa imprime no terminal uma tabela
 - Truncated.
 
 Isso é útil para inspeção numérica da incerteza em torno da média.
+
+### O que significa “Truncated”
+Esse campo indica se a parte inferior da barra de erro precisou ser ajustada, por exemplo em casos de escala log ou quando o limite inferior ficaria inválido.
 
 ---
 
@@ -452,6 +598,11 @@ Onde:
 O ganho normalmente é apresentado em porcentagem.
 
 A tabela de ganhos também pode ser exportada.
+
+### Interpretação
+- Ganho positivo: o algoritmo escolhido teve desempenho melhor;
+- Ganho negativo: o algoritmo escolhido teve desempenho pior;
+- Valor zero: os dois resultados foram equivalentes.
 
 ---
 
@@ -480,6 +631,13 @@ Restaura preferências salvas anteriormente.
 
 Isso é útil quando você usa o mesmo layout e as mesmas configurações com frequência.
 
+### Dica
+Salve uma customização para cada tipo de análise, por exemplo:
+- Uma para PBC;
+- Uma para PBBR;
+- Uma para gráficos em português;
+- Outra para gráficos em inglês.
+
 ---
 
 ## Opções de exportação
@@ -493,6 +651,11 @@ No menu **Export**:
 
 ### Exportação de tabelas
 - **Export last CI table (CSV)**
+
+### Quando usar cada formato
+- **SVG**: ideal para edição posterior e uso em artigos;
+- **PDF**: ideal para compartilhamento e impressão;
+- **CSV**: ideal para análise numérica e documentação dos intervalos de confiança.
 
 ---
 
@@ -568,13 +731,27 @@ Garanta que:
 - O arquivo de destino não está aberto em outro programa;
 - Você tem permissão de escrita na pasta de destino.
 
+### 7. O carregamento por pasta não encontra os tipos corretamente
+Tente:
+- Verificar se os arquivos possuem nomes parcialmente padronizados;
+- Usar o carregamento manual;
+- Confirmar se os CSVs têm conteúdo coerente, especialmente a coluna `Metrics`.
+
+### 8. A legenda ou o gráfico ficou poluído
+Tente:
+- Reduzir a quantidade de algoritmos exibidos;
+- Mover a legenda para fora do gráfico;
+- Usar fontes menores;
+- Ajustar as margens.
+
 ---
 
 ## Observações
 
 - O programa é voltado para análise de arquivos CSV com resultados de simulações;
 - Ele é especialmente útil para comparar múltiplos algoritmos sob diferentes cargas de rede;
-- Manter nomes de arquivo consistentes ajuda bastante no carregamento por pasta.
+- Manter nomes de arquivo consistentes ajuda bastante no carregamento por pasta;
+- O carregamento por conteúdo melhora a robustez quando o nome do arquivo não segue padrão.
 
 ---
 
@@ -585,5 +762,19 @@ Para melhores resultados:
 - Windows 10/11;
 - Arquivos CSV em UTF-8;
 - Resultados organizados em pastas e por tipo de métrica.
+
+---
+
+## Resumo final
+
+O **SimGraph** foi projetado para facilitar a análise comparativa de resultados de simulações, oferecendo:
+- Carregamento flexível de CSVs;
+- Identificação automática de métricas;
+- Geração de gráficos configuráveis;
+- Cálculo de intervalos de confiança;
+- Cálculo de ganho entre algoritmos;
+- Exportação para formatos úteis em pesquisa e documentação.
+
+Se você utiliza muitos resultados organizados por topologia, algoritmo e carga, o modo de carregamento por pasta tende a ser o mais prático. Se você quer controle total sobre quais arquivos comparar, o carregamento manual é a melhor opção.
 
 ---

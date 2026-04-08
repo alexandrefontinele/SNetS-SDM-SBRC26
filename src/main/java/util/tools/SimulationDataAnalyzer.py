@@ -181,6 +181,16 @@ KNOWN_METRIC_FILE_SUFFIXES = [
     "SpectrumUtilization",
 ]
 
+LANGUAGE_DISPLAY_TO_CODE = {
+    "English": "en",
+    "Português": "pt",
+}
+
+LANGUAGE_CODE_TO_DISPLAY = {
+    "en": "English",
+    "pt": "Português",
+}
+
 COMPONENT_COLORS = {
     "lack of transmitters": "#7f7f7f",
     "lack of receivers": "#8c564b",
@@ -640,6 +650,7 @@ class GenericAnalyzerGUI:
         self.plot_type = tk.StringVar(value="line")
         self.log_scale = tk.BooleanVar(value=False)
         self.graph_language = tk.StringVar(value="en")
+        self.graph_language_display = tk.StringVar(value=LANGUAGE_CODE_TO_DISPLAY.get("en", "English"))
         self.bar_plot_mode = tk.StringVar(value="absolute")
         self.log_error_mode = tk.StringVar(value="Mark truncated lower error")
         self.y_grid_mode = tk.StringVar(value="Many lines (major + minor)")
@@ -655,10 +666,24 @@ class GenericAnalyzerGUI:
         self._build_menu()
         self._build_ui()
         self.theme_name.trace_add("write", self._on_theme_changed)
+        self.graph_language_display.trace_add("write", self._sync_graph_language_from_display)
+        self.graph_language.trace_add("write", self._sync_graph_language_display)
 
     # ------------------------------
     # UI helpers
     # ------------------------------
+    def _sync_graph_language_from_display(self, *args):
+        display_value = self.graph_language_display.get()
+        code_value = LANGUAGE_DISPLAY_TO_CODE.get(display_value, "en")
+        if self.graph_language.get() != code_value:
+            self.graph_language.set(code_value)
+
+    def _sync_graph_language_display(self, *args):
+        code_value = self.graph_language.get()
+        display_value = LANGUAGE_CODE_TO_DISPLAY.get(code_value, "English")
+        if self.graph_language_display.get() != display_value:
+            self.graph_language_display.set(display_value)
+
     def _build_styles(self):
         self.root.option_add("*Font", "{Segoe UI} 10")
         style = ttk.Style(self.root)
@@ -966,7 +991,7 @@ class GenericAnalyzerGUI:
 
         frame_lang = ttk.LabelFrame(tab, text="Language and bar mode", style="Card.TLabelframe")
         frame_lang.grid(row=0, column=1, sticky="nsew", padx=(6, 0), pady=(0, 8))
-        self._add_combo_row(frame_lang, 0, "Graph language", self.graph_language, ["en", "pt"])
+        self._add_combo_row(frame_lang, 0, "Graph language", self.graph_language_display, ["English", "Português"])
         self._add_combo_row(frame_lang, 1, "Bar plot mode", self.bar_plot_mode, ["absolute", "percent"])
         self._add_combo_row(frame_lang, 2, "Log-scale error bar handling", self.log_error_mode, LOG_ERROR_MODE_OPTIONS)
         self._add_combo_row(frame_lang, 3, "Y-axis grid style", self.y_grid_mode, Y_GRID_OPTIONS)
@@ -2531,6 +2556,78 @@ class GenericAnalyzerGUI:
                 pass
         self.generated_temp_dir = None
 
+    def _read_csv_for_type_detection(self, file_path: str):
+        read_attempts = [
+            {"nrows": 120},
+            {"nrows": 120, "engine": "python"},
+            {"nrows": 120, "engine": "python", "on_bad_lines": "skip"},
+        ]
+        for kwargs in read_attempts:
+            try:
+                return pd.read_csv(file_path, **kwargs)
+            except Exception:
+                continue
+        return None
+
+    def infer_metric_file_type_from_content(self, file_path: str) -> str | None:
+        df = self._read_csv_for_type_detection(file_path)
+        if df is not None:
+            columns_lower = {str(col).strip().lower() for col in df.columns}
+            if "metrics" in columns_lower:
+                metrics_col = next((col for col in df.columns if str(col).strip().lower() == "metrics"), None)
+                metric_values = []
+                if metrics_col is not None:
+                    try:
+                        metric_values = (
+                            df[metrics_col]
+                            .dropna()
+                            .astype(str)
+                            .str.strip()
+                            .str.lower()
+                            .tolist()
+                        )
+                    except Exception:
+                        metric_values = []
+
+                if any("bitrate blocking probability" in value for value in metric_values):
+                    return "BitRateBlockingProbability"
+                if any(
+                    ("blocking probability" in value) and ("bitrate" not in value)
+                    for value in metric_values
+                ):
+                    return "BlockingProbability"
+                if any("crosstalk" in value for value in metric_values):
+                    return "CrosstalkStatistics"
+                if any("modulation" in value for value in metric_values) or {"modulation", "bandwidth"}.issubset(columns_lower):
+                    return "ModulationUtilization"
+                if any(value == "utilization" for value in metric_values) and {"link", "core", "number of slots", "slot"}.issubset(columns_lower):
+                    return "SpectrumUtilization"
+
+            if {"modulation", "bandwidth"}.issubset(columns_lower):
+                return "ModulationUtilization"
+            if "overlaps" in columns_lower:
+                return "CrosstalkStatistics"
+            if {"link", "core", "number of slots", "slot"}.issubset(columns_lower):
+                return "SpectrumUtilization"
+
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as fh:
+                header = "\n".join([fh.readline() for _ in range(8)]).lower()
+        except Exception:
+            return None
+
+        if "bitrate blocking probability" in header or "general requested bitrate" in header:
+            return "BitRateBlockingProbability"
+        if "blocking probability" in header and "bitrate" not in header:
+            return "BlockingProbability"
+        if "crosstalk" in header or ",overlaps," in header:
+            return "CrosstalkStatistics"
+        if ",modulation," in header and ",bandwidth," in header:
+            return "ModulationUtilization"
+        if ",link," in header and ",core," in header and "number of slots" in header and ",slot," in header:
+            return "SpectrumUtilization"
+        return None
+
     def detect_metric_file_type(self, file_path: str) -> str | None:
         name = os.path.splitext(os.path.basename(file_path))[0]
 
@@ -2540,8 +2637,11 @@ class GenericAnalyzerGUI:
 
         match = re.search(r"_([A-Za-z][A-Za-z0-9]+)$", name)
         if match:
-            return match.group(1)
-        return None
+            guessed = match.group(1)
+            if guessed in KNOWN_METRIC_FILE_SUFFIXES:
+                return guessed
+
+        return self.infer_metric_file_type_from_content(file_path)
 
     def get_grouped_metric_files(self, root_folder: str):
         grouped: dict[str, list[str]] = {}

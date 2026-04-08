@@ -1,6 +1,8 @@
 # SNetS-SDM-SBRC26
 
-## **Título do artigo:** **IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs**
+## Título do artigo
+
+**IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs**
 
 ## Resumo do artigo
 
@@ -436,9 +438,9 @@ O simulador deve:
 
 ### Evidência concreta esperada
 O revisor deve observar no terminal:
-- leitura do diretório de configuração;
-- inicialização da simulação;
-- mensagens de progresso ou processamento.
+- Leitura do diretório de configuração;
+- Inicialização da simulação;
+- Mensagens de progresso ou processamento.
 
 ---
 
@@ -607,17 +609,6 @@ Esse fluxo já cobre, de forma prática:
 - Alguns cenários completos podem demandar mais tempo de execução que o ideal para uma avaliação rápida;
 - O fluxo recomendado para os revisores é usar primeiro os **resultados já incluídos** para regeneração de gráficos e, em seguida, executar um cenário local representativo;
 - O analisador gráfico depende de ambiente com suporte a interface gráfica via **Tkinter**.
-
----
-
-# Como citar
-
-Se desejar citar o artigo associado a este artefato, utilize os dados do trabalho:
-
-**IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs.**  
-Autores: Jordana França, Uriel P. Mori, Alexandre C. Fontinele, Iallen Santos, Andre C. B. Soares.
-
-> Ajuste esta seção para o formato bibliográfico final adotado pelo SBRC 2026, se necessário.
 
 ---
 

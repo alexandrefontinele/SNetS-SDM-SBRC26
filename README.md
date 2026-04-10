@@ -187,7 +187,7 @@ SNetS-SDM-SBRC26/
 ## Ambiente de execução recomendado
 
 ### Configuração sugerida para uma avaliação confortável
-- **CPU:** 8 núcleos ou mais;
+- **CPU:** 10 núcleos ou mais;
 - **RAM:** 16 GB ou mais;
 - **Armazenamento livre:** 5 GB ou mais.
 
@@ -440,13 +440,15 @@ Escolha um diretório de configuração completo, por exemplo:
 simulations/USA_sims/IMPA/USA_IMPA_HXT_mo_0_00_mx_0_00
 ```
 
-Esse diretório contém:
-- `simulation`
-- `network`
-- `others`
-- `physicalLayer`
-- `traffic`
-- Além de arquivos CSV de saída e auxiliares.
+Esse diretório contém os principais arquivos de configuração da simulação:
+
+- `simulation`: parâmetros gerais da execução, como requisições, replicações, algoritmo usado e número de threads;
+- `network`: configuração da topologia, enlaces, núcleos, modulações, slots e banda de guarda;
+- `others`: parâmetros adicionais dos algoritmos e margens usadas na simulação;
+- `physicalLayer`: parâmetros da camada física e do modelo de QoT, como ASE, NLI e crosstalk;
+- `traffic`: configuração do tráfego e das demandas geradas;
+- Também podem existir arquivos CSV de saída e arquivos auxiliares gerados pela execução.
+
 
 ### Execução com o JAR
 
@@ -598,16 +600,18 @@ O revisor deve conseguir:
 Sustentar a avaliação de sustentabilidade e compreensibilidade do artefato.
 
 ### Evidência observável
-O código Java está organizado em módulos como:
-- `gprmcsa`
-- `measurement`
-- `network`
-- `request`
-- `simulationControl`
-- `simulator`
-- `util`
 
-Além disso, há um `pom.xml`, licença MIT e estrutura consistente de projeto Java/Maven.
+O código Java está organizado em módulos como:
+
+- `gprmcsa`: implementa a lógica dos algoritmos de alocação de recursos, incluindo roteamento, espectro, núcleo, modulação, potência, banda de guarda, regeneração, realocação e grooming;
+- `measurement`: reúne as métricas e estatísticas da simulação, como probabilidade de bloqueio, bloqueio por taxa de bits, fragmentação, consumo de energia e utilização de recursos;
+- `network`: modela os principais elementos da rede e do plano de controle, como nós, enlaces, núcleos, espectro, circuitos, malha e camada física;
+- `request`: define as requisições de conexão usadas nas simulações;
+- `simulationControl`: controla a execução da simulação, leitura das configurações, gerenciamento dos experimentos e processamento dos resultados;
+- `simulator`: contém o núcleo do simulador baseado em eventos;
+- `util`: reúne classes utilitárias de apoio usadas em diferentes partes do projeto.
+
+Além disso, há um `pom.xml`, licença MIT e uma estrutura consistente de projeto Java/Maven.
 
 ---
 

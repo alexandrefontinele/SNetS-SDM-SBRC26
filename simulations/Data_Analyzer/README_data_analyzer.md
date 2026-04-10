@@ -38,21 +38,6 @@ De forma prática, o programa permite:
 
 ---
 
-## Fluxo rápido de uso
-
-Se você quiser usar o programa rapidamente, o fluxo recomendado é:
-
-1. Abra o programa;
-2. Clique em **Load CSV files**;
-3. Carregue os arquivos por seleção manual ou por pasta;
-4. Escolha a métrica desejada em **Metric selection**;
-5. Escolha o tipo de gráfico em **Plot setup**;
-6. Ajuste as opções estatísticas e visuais, se necessário;
-7. Clique em **Generate plot**;
-8. Exporte o gráfico ou a tabela de IC, se desejar.
-
----
-
 ## Requisitos
 
 ### Sistema operacional
@@ -105,6 +90,252 @@ python SimulationDataAnalyzer.py
 
 ---
 
+## Interface principal
+
+A janela principal é dividida em seções como:
+
+- **Actions (Ações)**
+- **Metric selection (Seleção de métrica)**
+- **Loaded files (Arquivos carregados)**
+- **Plot setup (Configuração do gráfico)**
+- **Statistics (Estatísticas)**
+- **Appearance (Aparência)**
+- **Margins (Margens)**
+
+Essa organização ajuda a separar:
+- As ações principais do programa;
+- A escolha da métrica;
+- A configuração do gráfico;
+- As opções estatísticas;
+- Os ajustes visuais.
+
+Além das áreas principais da janela, o programa também possui menus superiores como **File**, **Theme** e **Export**, usados para carregar configurações, trocar o tema visual e exportar gráficos e tabelas.
+
+---
+
+## Área Actions (Ações)
+
+Ações comuns:
+
+- **Load CSV files (Carregar arquivos CSV)**
+- **Configure algorithm names (Configurar nomes dos algoritmos)**
+- **Edit graph texts (Editar textos dos gráficos)**
+- **Edit component legends (Editar legendas dos componentes)**
+- **Edit line styles (Editar estilos de linha)**
+- **Select components for bar plot (Selecionar componentes para gráfico de barras)**
+- **Generate plot (Gerar gráfico)**
+- **Compute gains (Calcular ganhos)**
+
+Algumas ações só ficam habilitadas depois que CSVs válidos são carregados.
+
+### O que cada ação faz
+
+- **Load CSV files**: abre a janela de carregamento manual ou por pasta;
+- **Configure algorithm names**: permite renomear os algoritmos exibidos nos gráficos;
+- **Edit graph texts**: altera títulos, eixos e textos dos gráficos;
+- **Edit component legends**: altera os nomes usados nas legendas dos componentes;
+- **Edit line styles**: altera cor, marcador e estilo de linha dos algoritmos;
+- **Select components for bar plot**: escolhe quais componentes aparecem nos gráficos de barras;
+- **Generate plot**: gera o gráfico com base nas opções atuais;
+- **Compute gains**: abre a janela de configuração de ganhos, permitindo comparar um algoritmo com os demais e exportar os resultados em CSV.
+
+---
+
+## Seleção de métrica
+
+Depois de carregar os arquivos, o programa analisa a coluna `Metrics` e lista todas as métricas detectadas.
+
+Depois disso, você pode escolher qual métrica será analisada e plotada.
+
+### Dica
+Se nenhuma métrica aparecer:
+- Verifique se os CSVs possuem a coluna `Metrics`;
+- Confira se os arquivos foram carregados corretamente;
+- Tente o modo manual, caso o modo por pasta não encontre o padrão esperado.
+
+---
+
+## Plot setup (Configuração do gráfico)
+
+### Tipo de gráfico
+Opções:
+- **Line plot (Gráfico de linha)**
+- **Bar plot (Gráfico de barras)**
+
+### Idioma do gráfico
+Opções:
+- **English (Inglês)**
+- **Português**
+
+Isso afeta os rótulos e textos dos gráficos. Não altera o idioma da interface do programa.
+
+### Modo do gráfico de barras
+As opções normalmente incluem:
+- Valores absolutos empilhados;
+- Porcentagens / normalizado empilhado.
+
+### Tratamento da barra de erro em escala log
+Controla como o limite inferior do intervalo de confiança é tratado quando o gráfico usa eixo Y em escala logarítmica.
+
+Modos típicos:
+- Esconder parte inferior quando CI inferior <= 0;
+- Calcular intervalo em escala log;
+- Marcar erro inferior truncado.
+
+### Estilo da grade do eixo Y
+Permite escolher como a grade horizontal é desenhada.
+
+### Cargas e replicações
+Campos típicos:
+- **Initial load (Carga inicial)**
+- **Load increment (Incremento de carga)**
+- **Replications (0=auto) (Replicações, 0=automático)**
+- **Bar plot load point (Ponto de carga do gráfico de barras)**
+- **Specific loads filter (Filtro de cargas específicas)**
+
+Exemplo de filtro de cargas:
+
+```text
+500, 1000, 1500
+```
+
+### Observação
+O filtro de cargas permite restringir a análise apenas a determinados pontos de carga, o que é útil para comparações específicas.
+
+---
+
+## Statistics (Estatísticas)
+
+### Confidence level (Nível de confiança)
+Exemplos:
+- `90%`
+- `95%`
+- `99%`
+
+### CI (Confidence Interval / Intervalo de Confiança) method
+Métodos disponíveis:
+- **t-Student**
+- **Bootstrap**
+
+### Bootstrap resamples (Reamostragens bootstrap)
+Define quantas reamostragens bootstrap serão usadas quando esse método estiver selecionado.
+
+---
+
+## Explicação dos métodos de intervalo de confiança
+
+O programa oferece dois métodos principais para calcular o **CI (Confidence Interval / Intervalo de Confiança)**.
+
+### Método t-Student
+O método **t-Student** calcula o intervalo de confiança usando:
+- A média dos resultados;
+- O desvio padrão;
+- O número de replicações;
+- Uma fórmula estatística clássica.
+
+Em termos práticos:
+- Ele é mais tradicional;
+- Costuma ser mais rápido;
+- Funciona bem quando os dados têm comportamento mais regular.
+
+**Resumo simples:**  
+O método t-Student estima o intervalo de confiança a partir de uma fórmula baseada na média e na variação dos dados.
+
+### Método Bootstrap
+O método **Bootstrap** calcula o intervalo de confiança por **reamostragem**.
+
+Em vez de usar apenas uma fórmula direta, ele:
+1. Pega os valores das replicações;
+2. Cria várias novas amostras com reposição;
+3. Calcula várias médias simuladas;
+4. Usa essas médias para estimar o intervalo de confiança.
+
+Em termos práticos:
+- Ele é mais empírico;
+- Faz menos suposições sobre a distribuição dos dados;
+- Pode ser útil quando os dados são mais irregulares ou assimétricos.
+
+**Resumo simples:**  
+O método Bootstrap estima o intervalo de confiança repetindo várias amostragens sobre os próprios dados.
+
+### Diferença prática entre os dois
+- **t-Student**: mais clássico, mais rápido e baseado em fórmula;
+- **Bootstrap**: mais flexível, baseado em reamostragem e pode representar melhor dados menos regulares.
+
+### Quando usar cada um
+- Use **t-Student** quando quiser um método clássico e rápido;
+- Use **Bootstrap** quando quiser uma estimativa mais baseada no comportamento real das replicações.
+
+### Observação importante
+Se você tiver poucas replicações, os dois métodos podem produzir resultados diferentes com mais facilidade. Em geral:
+- **t-Student** tende a ser mais direto;
+- **Bootstrap** tende a refletir mais o comportamento real da amostra.
+
+---
+
+## Appearance (Aparência)
+
+O programa permite personalizar a aparência dos gráficos, incluindo:
+
+- Tamanho da fonte dos rótulos dos eixos;
+- Tamanho da fonte dos ticks;
+- Tamanho da fonte da legenda;
+- Posição da legenda;
+- Negrito nos rótulos dos eixos;
+- Negrito nos ticks dos eixos.
+
+### Posição da legenda
+Dependendo da versão, as opções podem incluir:
+
+- **No legend (Sem legenda)**
+- **Inside (best) (Dentro, melhor posição)**
+- **Inside (upper right) (Dentro, superior direita)**
+- **Inside (upper left) (Dentro, superior esquerda)**
+- **Inside (lower right) (Dentro, inferior direita)**
+- **Inside (lower left) (Dentro, inferior esquerda)**
+- **Inside (center right) (Dentro, centro à direita)**
+- **Inside (center left) (Dentro, centro à esquerda)**
+- **Inside (upper center) (Dentro, centro superior)**
+- **Inside (lower center) (Dentro, centro inferior)**
+- **Inside (center) (Dentro, centro)**
+- **Bottom (outside) (Embaixo, fora)**
+- **Top (outside) (Em cima, fora)**
+- **Right (outside) (À direita, fora)**
+- **Left (outside) (À esquerda, fora)**
+
+### Dica de uso
+- Use posições **inside (dentro)** quando quiser manter tudo dentro do gráfico;
+- Use posições **outside (fora)** quando houver muitas curvas ou componentes;
+- Use **No legend (Sem legenda)** quando o gráfico for apenas para inspeção visual rápida.
+
+### Observação
+A troca do tema visual da aplicação é feita pelo menu **Theme**, e não dentro da aba **Appearance (Aparência)**.
+
+---
+
+## Margins (Margens)
+
+Esses campos controlam o espaçamento extra ao redor dos gráficos.
+
+### Margens do eixo X
+- **Left margin (Margem esquerda)**
+- **Right margin (Margem direita)**
+- **Bar-plot X margin (Margem X do gráfico de barras)**
+
+### Margens do eixo Y
+- **Linear bottom margin (Margem inferior linear)**
+- **Linear top margin (Margem superior linear)**
+- **Log bottom factor (Fator inferior log)**
+- **Log top factor (Fator superior log)**
+
+Esses valores são úteis quando curvas ou rótulos ficam muito próximos das bordas do gráfico.
+
+### Exemplo prático
+Se a curva estiver muito distante do topo do gráfico, você pode reduzir o **Linear top margin**.  
+Se estiver muito encostada, pode aumentar esse valor.
+
+---
+
 ## Estrutura esperada dos CSVs
 
 O programa espera arquivos CSV com:
@@ -138,7 +369,7 @@ Mesmo quando os arquivos possuem nomes diferentes ou organização variada entre
 
 ## Formas de carregar dados
 
-O programa suporta **dois modos principais de carregamento**, acessados pela janela **Load CSV files**.
+O programa suporta **dois modos principais de carregamento**, acessados pela janela **Load CSV files (Carregar arquivos CSV)**.
 
 ### 1. Carregamento manual de arquivos CSV
 Esse modo permite selecionar os arquivos diretamente, como em um fluxo tradicional de abertura de arquivos.
@@ -149,7 +380,7 @@ Ele é recomendado quando:
 - Você quer montar manualmente o conjunto de arquivos da análise.
 
 #### Como funciona
-1. Clique em **Load CSV files**;
+1. Clique em **Load CSV files (Carregar arquivos CSV)**;
 2. Na janela aberta, use a opção de carregamento manual;
 3. Selecione um ou mais arquivos CSV;
 4. O programa lê os arquivos, identifica as métricas disponíveis e atualiza a área de seleção de métricas.
@@ -158,6 +389,9 @@ Ele é recomendado quando:
 - Maior controle sobre os arquivos carregados;
 - Útil para análises pontuais;
 - Mantém compatibilidade com versões anteriores do programa.
+
+### Modo de compatibilidade
+Na janela de carregamento também existe uma área de **Compatibility mode (Modo de compatibilidade)**, que permite usar o botão **Load files manually... (Carregar arquivos manualmente...)** para manter o fluxo tradicional de seleção direta de arquivos CSV.
 
 ---
 
@@ -186,11 +420,11 @@ results_root/
 ```
 
 #### Como funciona
-1. Clique em **Load CSV files**;
-2. Na janela aberta, clique em **Browse folder**;
+1. Clique em **Load CSV files (Carregar arquivos CSV)**;
+2. Na janela aberta, clique em **Browse folder (Selecionar pasta)**;
 3. Selecione a **pasta raiz** que contém as subpastas com os resultados;
 4. O programa varre as subpastas e tenta identificar os tipos de arquivo disponíveis;
-5. Depois disso, ele lista os tipos encontrados na área **Available metric file types**;
+5. Depois disso, ele lista os tipos encontrados na área **Available metric file types (Tipos de arquivos de métrica disponíveis)**;
 6. Você escolhe quais tipos deseja carregar;
 7. O programa agrupa os arquivos selecionados e os prepara para análise.
 
@@ -244,237 +478,18 @@ Isso torna o carregamento por pasta mais robusto mesmo quando o nome do arquivo 
 
 ---
 
-## Interface principal
+## Fluxo rápido de uso
 
-A janela principal é dividida em seções como:
+Se você quiser usar o programa rapidamente, o fluxo recomendado é:
 
-- **Actions**
-- **Metric selection**
-- **Loaded files**
-- **Plot setup**
-- **Statistics**
-- **Appearance**
-- **Margins**
-
----
-
-## Área Actions
-
-Ações comuns:
-
-- **Load CSV files**
-- **Configure algorithm names**
-- **Edit graph texts**
-- **Edit component legends**
-- **Edit line styles**
-- **Select components for bar plot**
-- **Generate plot**
-- **Compute gains**
-
-Algumas ações só ficam habilitadas depois que CSVs válidos são carregados.
-
-### O que cada ação faz
-
-- **Load CSV files**: abre a janela de carregamento manual ou por pasta;
-- **Configure algorithm names**: permite renomear os algoritmos exibidos nos gráficos;
-- **Edit graph texts**: altera títulos, eixos e textos dos gráficos;
-- **Edit component legends**: altera os nomes usados nas legendas dos componentes;
-- **Edit line styles**: altera cor, marcador e estilo de linha dos algoritmos;
-- **Select components for bar plot**: escolhe quais componentes aparecem nos gráficos de barras;
-- **Generate plot**: gera o gráfico com base nas opções atuais;
-- **Compute gains**: calcula o ganho de um algoritmo em relação aos demais.
-
----
-
-## Seleção de métrica
-
-Depois de carregar os arquivos, o programa analisa a coluna `Metrics` e lista todas as métricas detectadas.
-
-Depois disso, você pode escolher qual métrica será analisada e plotada.
-
-### Dica
-Se nenhuma métrica aparecer:
-- Verifique se os CSVs possuem a coluna `Metrics`;
-- Confira se os arquivos foram carregados corretamente;
-- Tente o modo manual, caso o modo por pasta não encontre o padrão esperado.
-
----
-
-## Plot setup
-
-### Tipo de gráfico
-Opções:
-- **Line plot**
-- **Bar plot**
-
-### Idioma do gráfico
-Opções:
-- `Inglês`
-- `Português`
-
-Isso afeta os rótulos e textos dos gráficos. Não altera o idioma da interface do programa.
-
-### Modo do gráfico de barras
-As opções normalmente incluem:
-- Valores absolutos empilhados;
-- Porcentagens / normalizado empilhado.
-
-### Tratamento da barra de erro em escala log
-Controla como o limite inferior do intervalo de confiança é tratado quando o gráfico usa eixo Y em escala logarítmica.
-
-Modos típicos:
-- Esconder parte inferior quando CI inferior <= 0;
-- Calcular intervalo em escala log;
-- Marcar erro inferior truncado.
-
-### Estilo da grade do eixo Y
-Permite escolher como a grade horizontal é desenhada.
-
-### Cargas e replicações
-Campos típicos:
-- **Initial load**
-- **Load increment**
-- **Replications (0=auto)**
-- **Bar plot load point**
-- **Specific loads filter**
-
-Exemplo de filtro de cargas:
-
-```text
-500, 1000, 1500
-```
-
-### Observação
-O filtro de cargas permite restringir a análise apenas a determinados pontos de carga, o que é útil para comparações específicas.
-
----
-
-## Statistics
-
-### Confidence level
-Exemplos:
-- `90%`
-- `95%`
-- `99%`
-
-### CI(Confidence Interval) method
-Métodos disponíveis:
-- **t-Student**
-- **Bootstrap**
-
-### Bootstrap resamples
-Define quantas reamostragens bootstrap serão usadas quando esse método estiver selecionado.
-
----
-
-## Explicação dos métodos de intervalo de confiança (CI - Confidence Interval)
-
-O programa oferece dois métodos principais para calcular o **CI**.
-
-### Método t-Student
-O método **t-Student** calcula o intervalo de confiança usando:
-- A média dos resultados;
-- O desvio padrão;
-- O número de replicações;
-- Uma fórmula estatística clássica.
-
-Em termos práticos:
-- Ele é mais tradicional;
-- Costuma ser mais rápido;
-- Funciona bem quando os dados têm comportamento mais regular.
-
-**Resumo simples:**  
-O método t-Student estima o intervalo de confiança a partir de uma fórmula baseada na média e na variação dos dados.
-
-### Método Bootstrap
-O método **Bootstrap** calcula o intervalo de confiança por **reamostragem**.
-
-Em vez de usar apenas uma fórmula direta, ele:
-1. Pega os valores das replicações;
-2. Cria várias novas amostras com reposição;
-3. Calcula várias médias simuladas;
-4. Usa essas médias para estimar o intervalo de confiança.
-
-Em termos práticos:
-- Ele é mais empírico;
-- Faz menos suposições sobre a distribuição dos dados;
-- Pode ser útil quando os dados são mais irregulares ou assimétricos.
-
-**Resumo simples:**  
-O método Bootstrap estima o intervalo de confiança repetindo várias amostragens sobre os próprios dados.
-
-### Diferença prática entre os dois
-- **t-Student**: mais clássico, mais rápido e baseado em fórmula;
-- **Bootstrap**: mais flexível, baseado em reamostragem e pode representar melhor dados menos regulares.
-
-### Quando usar cada um
-- Use **t-Student** quando quiser um método clássico e rápido;
-- Use **Bootstrap** quando quiser uma estimativa mais baseada no comportamento real das replicações.
-
-### Observação importante
-Se você tiver poucas replicações, os dois métodos podem produzir resultados diferentes com mais facilidade. Em geral:
-- **t-Student** tende a ser mais direto;
-- **Bootstrap** tende a refletir mais o comportamento real da amostra.
-
----
-
-## Appearance
-
-O programa permite personalizar a aparência dos gráficos, incluindo:
-
-- Tamanho da fonte dos rótulos dos eixos;
-- Tamanho da fonte dos ticks;
-- Tamanho da fonte da legenda;
-- Posição da legenda;
-- Negrito nos rótulos dos eixos;
-- Negrito nos ticks dos eixos.
-
-### Posição da legenda
-Dependendo da versão, as opções podem incluir:
-
-- No legend;
-- Inside (best);
-- Inside (upper right);
-- Inside (upper left);
-- Inside (lower right);
-- Inside (lower left);
-- Inside (center right);
-- Inside (center left);
-- Inside (upper center);
-- Inside (lower center);
-- Inside (center);
-- Bottom (outside);
-- Top (outside);
-- Right (outside);
-- Left (outside).
-
-### Dica de uso
-- Use posições **inside** quando quiser manter tudo dentro do gráfico;
-- Use posições **outside** quando houver muitas curvas ou componentes;
-- Use **No legend** quando o gráfico for apenas para inspeção visual rápida.
-
----
-
-## Margins
-
-Esses campos controlam o espaçamento extra ao redor dos gráficos.
-
-### Margens do eixo X
-- Left margin;
-- Right margin;
-- Bar-plot X margin.
-
-### Margens do eixo Y
-- Linear bottom margin;
-- Linear top margin;
-- Log bottom factor;
-- Log top factor.
-
-Esses valores são úteis quando curvas ou rótulos ficam muito próximos das bordas do gráfico.
-
-### Exemplo prático
-Se a curva estiver muito distante do topo do gráfico, você pode reduzir o **Linear top margin**.  
-Se estiver muito encostada, pode aumentar esse valor.
+1. Abra o programa;
+2. Clique em **Load CSV files (Carregar arquivos CSV)**;
+3. Carregue os arquivos por seleção manual ou por pasta;
+4. Escolha a métrica desejada em **Metric selection (Seleção de métrica)**;
+5. Escolha o tipo de gráfico em **Plot setup (Configuração do gráfico)**;
+6. Ajuste as opções estatísticas e visuais, se necessário;
+7. Clique em **Generate plot (Gerar gráfico)**;
+8. Exporte o gráfico ou a tabela de IC, se desejar.
 
 ---
 
@@ -566,17 +581,17 @@ Os gráficos de barras são mais indicados para comparar a composição dos bloq
 
 ## Saída do intervalo de confiança
 
-Quando um gráfico de linha é gerado, o programa imprime no terminal uma tabela de CI com campos como:
+Quando um gráfico de linha é gerado, o programa imprime no terminal uma tabela de **CI (Confidence Interval / Intervalo de Confiança)** com campos como:
 
-- Load;
-- Mean;
-- CI lower;
-- CI upper;
-- Truncated.
+- `Load (Carga)`;
+- `Mean (Média)`;
+- `CI lower (Limite inferior do IC)`;
+- `CI upper (Limite superior do IC)`;
+- `Truncated (Truncado)`.
 
 Isso é útil para inspeção numérica da incerteza em torno da média.
 
-### O que significa “Truncated”
+### O que significa “Truncated (Truncado)”
 Esse campo indica se a parte inferior da barra de erro precisou ser ajustada, por exemplo em casos de escala log ou quando o limite inferior ficaria inválido.
 
 ---
@@ -610,7 +625,7 @@ A tabela de ganhos também pode ser exportada.
 
 O programa suporta exportação/importação de customizações do usuário em arquivos JSON.
 
-### Save customizations
+### Save customizations (Salvar customizações)
 Salva configurações como:
 - Idioma do gráfico;
 - Modo do gráfico de barras;
@@ -626,7 +641,7 @@ Salva configurações como:
 - Margens;
 - Outras preferências do usuário, dependendo da versão.
 
-### Load customizations
+### Load customizations (Carregar customizações)
 Restaura preferências salvas anteriormente.
 
 Isso é útil quando você usa o mesmo layout e as mesmas configurações com frequência.
@@ -645,31 +660,17 @@ Salve uma customização para cada tipo de análise, por exemplo:
 Dependendo da versão atual, o programa suporta:
 
 ### Exportação de gráficos
-No menu **Export**:
-- **Save last plot (SVG)**;
-- **Save last plot (PDF)**.
+No menu **Export (Exportar)**:
+- **Save last plot (SVG) (Salvar último gráfico em SVG)**;
+- **Save last plot (PDF) (Salvar último gráfico em PDF)**.
 
 ### Exportação de tabelas
-- **Export last CI table (CSV)**
+- **Export last CI table (CSV) (Exportar última tabela de IC em CSV)**
 
 ### Quando usar cada formato
 - **SVG**: ideal para edição posterior e uso em artigos;
 - **PDF**: ideal para compartilhamento e impressão;
 - **CSV**: ideal para análise numérica e documentação dos intervalos de confiança.
-
----
-
-## Fluxo de uso típico
-
-1. Abra o programa;
-2. Carregue os arquivos CSV;
-3. Selecione a métrica a ser analisada;
-4. Escolha gráfico de linha ou de barras;
-5. Configure as opções de intervalo de confiança;
-6. Ajuste aparência e margens, se necessário;
-7. Gere o gráfico;
-8. Exporte o gráfico ou a tabela de CI, se desejar;
-9. Salve as customizações para reutilizar depois.
 
 ---
 
@@ -723,7 +724,7 @@ Possíveis motivos:
 
 ### 5. Problemas com escala log
 Se limites inferiores do CI virarem zero ou negativos, use outra opção em:
-- **Log-scale error bar handling**
+- **Log-scale error bar handling (Tratamento da barra de erro em escala log)**
 
 ### 6. Exportação não funciona
 Garanta que:

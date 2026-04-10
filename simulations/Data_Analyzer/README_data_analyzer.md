@@ -323,7 +323,7 @@ As opções normalmente incluem:
 Controla como o limite inferior do intervalo de confiança é tratado quando o gráfico usa eixo Y em escala logarítmica.
 
 Modos típicos:
-- Esconder parte inferior quando IC inferior <= 0;
+- Esconder parte inferior quando CI inferior <= 0;
 - Calcular intervalo em escala log;
 - Marcar erro inferior truncado.
 
@@ -357,7 +357,7 @@ Exemplos:
 - `95%`
 - `99%`
 
-### CI method
+### CI(Confidence Interval) method
 Métodos disponíveis:
 - **t-Student**
 - **Bootstrap**
@@ -367,9 +367,9 @@ Define quantas reamostragens bootstrap serão usadas quando esse método estiver
 
 ---
 
-## Explicação dos métodos de intervalo de confiança
+## Explicação dos métodos de intervalo de confiança (CI - Confidence Interval)
 
-O programa oferece dois métodos principais para calcular o **CI (Confidence Interval)**.
+O programa oferece dois métodos principais para calcular o **CI**.
 
 ### Método t-Student
 O método **t-Student** calcula o intervalo de confiança usando:
@@ -566,7 +566,7 @@ Os gráficos de barras são mais indicados para comparar a composição dos bloq
 
 ## Saída do intervalo de confiança
 
-Quando um gráfico de linha é gerado, o programa imprime no terminal uma tabela de IC com campos como:
+Quando um gráfico de linha é gerado, o programa imprime no terminal uma tabela de CI com campos como:
 
 - Load;
 - Mean;
@@ -668,7 +668,7 @@ No menu **Export**:
 5. Configure as opções de intervalo de confiança;
 6. Ajuste aparência e margens, se necessário;
 7. Gere o gráfico;
-8. Exporte o gráfico ou a tabela de IC, se desejar;
+8. Exporte o gráfico ou a tabela de CI, se desejar;
 9. Salve as customizações para reutilizar depois.
 
 ---
@@ -722,7 +722,7 @@ Possíveis motivos:
 - O filtro de cargas excluiu todos os pontos.
 
 ### 5. Problemas com escala log
-Se limites inferiores do IC virarem zero ou negativos, use outra opção em:
+Se limites inferiores do CI virarem zero ou negativos, use outra opção em:
 - **Log-scale error bar handling**
 
 ### 6. Exportação não funciona

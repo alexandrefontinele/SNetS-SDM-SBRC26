@@ -21,7 +21,7 @@ Este repositório contém o artefato associado ao artigo submetido ao **SBRC 202
 O artefato foi organizado para permitir que os revisores:
 1. **Inspecionem** o código-fonte do simulador;
 2. **Executem** uma instância local do simulador usando um diretório de configuração;
-3. **Utilizem** os resultados já incluídos no repositório para regenerar gráficos e tabelas;
+3. **Utilizem** os resultados já incluídos no repositório para recriar gráficos e tabelas;
 4. **Reproduzam** as principais reivindicações experimentais do artigo a partir dos dados disponibilizados.
 
 ---
@@ -30,7 +30,7 @@ O artefato foi organizado para permitir que os revisores:
 
 Se você dispõe de pouco tempo, siga este roteiro mínimo.
 
-## Caminho rápido 1 — Regenerar gráficos a partir dos CSVs já incluídos
+## Caminho rápido 1 — Recriar gráficos a partir dos CSVs já incluídos
 
 ```bash
 git clone https://github.com/alexandrefontinele/SNetS-SDM-SBRC26.git
@@ -122,7 +122,7 @@ O artefato apoia a avaliação do algoritmo **IMPA**, proposto no artigo, permit
 - Examinar a implementação do algoritmo e do simulador;
 - Executar cenários locais;
 - Verificar os resultados nas topologias **NSFNet** e **USA**;
-- Regenerar gráficos de **PBC** e **PBBR**;
+- Recriar gráficos de **PBC (Probabilidade de Bloqueios de Circuito)** e **PBBR (Probabilidade de Bloqueio de BitRate)**;
 - Comparar o IMPA com algoritmos clássicos e adaptativos da literatura.
 
 ## O que o revisor realmente vai usar
@@ -186,35 +186,56 @@ SNetS-SDM-SBRC26/
 
 ## Ambiente de execução recomendado
 
-### Hardware recomendado
-- CPU: 4 núcleos ou mais
-- RAM: 8 GB ou mais
-- Armazenamento livre: 5 GB ou mais
+### Configuração sugerida para uma avaliação confortável
+- **CPU:** 8 núcleos ou mais;
+- **RAM:** 16 GB ou mais;
+- **Armazenamento livre:** 5 GB ou mais.
+
+> Observação 1: Esta configuração é uma recomendação prática para facilitar a avaliação do artefato. O repositório não impõe esses valores como requisitos rígidos.
+
+> Observação 2: Pode-se definir a quantidade de threads usadas pelo simulador no parâmetro `threads`, localizado no arquivo `simulation`, que se encontra dentro das pastas de configuração das simulações.
 
 ### Software recomendado
-- **Windows 10/11** ou **Linux**
-- **Java 8**
-- **Python 3.10+**
-- **Maven 3.8+** (opcional, para compilar a partir do código-fonte)
+- **Windows 10/11** ou **Linux**;
+- **Java 8**;
+- **Python 3.10+**;
+- **Maven 3.x** *(opcional, apenas para compilar a partir do código-fonte)*.
+
+> Observação: Para a avaliação padrão do artefato, o uso do **JAR já incluído no repositório** é suficiente, sem necessidade de compilar o projeto.
 
 ## Necessário, opcional e não necessário para a avaliação
 
-### Necessário
-- Java 8;
-- Python 3.10+;
-- Bibliotecas Python: `numpy`, `pandas`, `matplotlib`, `scipy`;
-- O JAR do simulador;
-- Os CSVs e diretórios de simulação do repositório.
+### Necessário para executar simulações locais
+- **Java 8**;
+- O arquivo **`simulations/SNetS-SDM-SBRC26.jar`**;
+- Um diretório de simulação válido em:
+  - `simulations/USA_sims/`
+  - `simulations/NSFNet_sims/`
+
+### Necessário para regenerar gráficos e analisar resultados
+- **Python 3.10+**;
+- Bibliotecas Python:
+  - `numpy`
+  - `pandas`
+  - `matplotlib`
+  - `scipy`
+- O script:
+  - `simulations/Data_Analyzer/SimulationDataAnalyzer.py`
+- Os arquivos CSV já incluídos no repositório, especialmente em:
+  - `simulations/Data_Analyzer/USA/`
+  - `simulations/Data_Analyzer/NSFNet/`
 
 ### Opcional
-- Maven, caso o revisor deseje compilar a partir do código-fonte;
-- Linux com `python3-tk`, caso o sistema não tenha Tkinter disponível por padrão.
+- **Maven 3.x**, caso o revisor deseje compilar o projeto a partir do código-fonte;
+- **`python3-tk` no Linux**, caso o ambiente não tenha suporte ao Tkinter por padrão.
 
 ### Não necessário para a avaliação padrão
-- Firebase;
-- Credenciais privadas;
-- Modos distribuídos/LAN;
-- Infraestrutura externa de nuvem.
+- **Firebase**;
+- **Credenciais privadas**;
+- **Modos distribuídos/LAN**;
+- **Infraestrutura externa de nuvem**.
+
+> Observação: O fluxo recomendado para a avaliação é usar o **modo local** do simulador e o **analisador gráfico em Python**. As dependências ligadas a Firebase não são necessárias para esse fluxo.
 
 ---
 
@@ -252,6 +273,12 @@ Em Linux, pode ser necessário instalar também o Tkinter:
 sudo apt-get install python3-tk
 ```
 
+### Observação sobre dependências
+Para a avaliação padrão:
+- as dependências **Java/Maven** são relevantes para o simulador;
+- as dependências **Python** são relevantes para o analisador de resultados;
+- o uso de **Firebase** pode ser ignorado no fluxo local recomendado.
+
 ## Recursos de terceiros
 
 O modo local do simulador **não depende** de Firebase.  
@@ -286,7 +313,7 @@ Esses modos não são necessários para reproduzir as funcionalidades e os exper
 
 Há dois caminhos recomendados.
 
-## Opção A — usar o JAR já incluído no repositório (recomendado para os revisores)
+## Opção A — Usar o JAR já incluído no repositório (recomendado para os revisores)
 
 ### 1. Clonar o repositório
 
@@ -339,7 +366,7 @@ simulations/Data_Analyzer/SimulationDataAnalyzer.py
 
 ---
 
-## Opção B — compilar a partir do código-fonte
+## Opção B — Compilar a partir do código-fonte
 
 ### 1. Clonar o repositório
 
@@ -360,7 +387,7 @@ mvn -version
 mvn package
 ```
 
-> **Observação:** para a avaliação do artefato, a opção mais simples continua sendo usar o **JAR já incluído** no repositório.
+> Observação: Para a avaliação do artefato, a opção mais simples continua sendo usar o **JAR já incluído** no repositório.
 
 ---
 
@@ -368,7 +395,7 @@ mvn package
 
 Esta seção apresenta um teste mínimo para verificar se o artefato está funcional.
 
-## Teste mínimo 1 — abrir o analisador de dados
+## Teste mínimo 1 — Abrir o analisador de dados
 
 ### Passo 1
 Entre na pasta do analisador:
@@ -405,7 +432,7 @@ O revisor deve conseguir:
 - Gerar um gráfico de linha;
 - Ver no terminal a saída textual com a tabela de melhor algoritmo por carga.
 
-## Teste mínimo 2 — executar uma simulação local
+## Teste mínimo 2 — Executar uma simulação local
 
 Escolha um diretório de configuração completo, por exemplo:
 
@@ -452,14 +479,14 @@ Esta seção descreve formas de reproduzir as principais reivindicações experi
 
 | Reivindicação | Como reproduzir | Resultado esperado |
 |---|---|---|
-| Regenerar os principais gráficos a partir dos CSVs | Usar `SimulationDataAnalyzer.py` com os CSVs de `USA/` e `NSFNet/` | Gráficos de PBC/PBBR, ICs e melhor algoritmo por carga |
+| Recriar os principais gráficos a partir dos CSVs | Usar `SimulationDataAnalyzer.py` com os CSVs de `USA/` e `NSFNet/` | Gráficos de PBC/PBBR, ICs e melhor algoritmo por carga |
 | Executar uma simulação local válida | Rodar o JAR com um diretório completo de `USA_sims/` ou `NSFNet_sims/` | Inicialização correta e progresso da simulação no terminal |
 | Verificar organização experimental do artefato | Inspecionar pastas por topologia, algoritmo e parametrização | Relação clara entre cenários, resultados e configurações |
 | Inspecionar a implementação | Examinar `src/main/java/` | Código modularizado e rastreável em relação ao artigo |
 
 ---
 
-## Reivindicação #1 — os resultados experimentais podem ser regenerados graficamente a partir dos CSVs incluídos
+## Reivindicação #1 — Os resultados experimentais podem ser regenerados graficamente a partir dos CSVs incluídos
 
 ### Objetivo
 Mostrar que os resultados salvos no repositório podem ser carregados e convertidos novamente em gráficos comparativos.
@@ -501,7 +528,7 @@ O analisador deve:
 
 ---
 
-## Reivindicação #2 — os diretórios de simulação incluídos permitem reproduzir execuções locais do simulador
+## Reivindicação #2 — Os diretórios de simulação incluídos permitem reproduzir execuções locais do simulador
 
 ### Objetivo
 Executar ao menos uma configuração completa de simulação local contida no repositório.
@@ -535,11 +562,11 @@ O simulador deve:
 ### Observação
 Os diretórios de simulação já incluem resultados CSV e configurações. Assim, mesmo que o revisor não deseje rerodar muitos cenários, ele ainda poderá:
 - Verificar a consistência das configurações;
-- Usar os resultados já incluídos para regenerar gráficos e comparar algoritmos.
+- Usar os resultados já incluídos para recriar gráficos e comparar algoritmos.
 
 ---
 
-## Reivindicação #3 — o artefato contém experimentos organizados por topologia, algoritmo e parâmetros
+## Reivindicação #3 — O artefato contém experimentos organizados por topologia, algoritmo e parâmetros
 
 ### Objetivo
 Mostrar que o repositório foi organizado para facilitar rastreabilidade experimental.
@@ -565,7 +592,7 @@ O revisor deve conseguir:
 
 ---
 
-## Reivindicação #4 — o código-fonte está disponível e organizado de forma modular
+## Reivindicação #4 — O código-fonte está disponível e organizado de forma modular
 
 ### Objetivo
 Sustentar a avaliação de sustentabilidade e compreensibilidade do artefato.

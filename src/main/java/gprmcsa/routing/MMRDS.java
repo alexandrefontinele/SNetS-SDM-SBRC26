@@ -22,7 +22,7 @@ import simulationControl.Util;
 /**
  * This class represents the MMRDS Routing Algorithm.
  * This algorithm is presented in http://sbrc2013.unb.br/files/anais/trilha-principal/artigos/artigo-9.pdf
- * 
+ *
  * @author Iallen
  */
 public class MMRDS implements RoutingAlgorithmInterface {
@@ -33,6 +33,12 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     private Util util;
 
+    /**
+     * Finds the route.
+     * @param request the request.
+     * @param mesh the mesh.
+     * @return true if the condition is met; false otherwise.
+     */
     @Override
     public boolean findRoute(Circuit request, Mesh mesh) {
         if (routesForAllPairs == null) {
@@ -56,7 +62,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     /**
      * Initializes the cost of all network links with the value one.
-     * 
+     *
      * @param mesh
      */
     public void inicializeLinkCost(Mesh mesh) {
@@ -68,7 +74,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     /**
      * Computes the smallest paths for each pair
-     * 
+     *
      * @param mesh Mesh
      */
     public void computeAllRoutes(Mesh mesh) {
@@ -93,7 +99,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     /**
      * Computes the smallest paths for a given pair
-     * 
+     *
      * @param n1 Node
      * @param n2 Node
      * @param mesh Mesh
@@ -142,7 +148,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     /**
      * Checks whether the specified route has a loop
-     * 
+     *
      * @param r Route
      * @return boolean
      */
@@ -158,7 +164,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     /**
      * Chooses the best route by similarity for all pairs
-     * 
+     *
      * @param routesForAllPairs2 HashMap<String, List<Route>>
      * @param similarityForAllPairs2 HashMap<String, Double>
      * @param mesh Mesh
@@ -177,7 +183,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
             for (int i = 1; i < pairsList.size(); i++) {
                 String pairName = pairsList.get(i);
                 Double similaridade = similarityForAllPairs2.get(pairName);
-                
+
                 if (maxSimilaridade < similaridade) {
                     maxSimilaridade = similaridade;
                     maxPairName = pairName;
@@ -191,7 +197,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     /**
      * Chooses the best route by similarity for a given pair
-     * 
+     *
      * @param parName String
      * @param routesForAllPairs2 HashMap<String, List<Route>>
      */
@@ -214,7 +220,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     /**
      * Updates the weight of the links of a given route
-     * 
+     *
      * @param route Route
      */
     private void updateRouteLinkCosts(Route route) {
@@ -227,7 +233,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     /**
      * This method calculates the cost of a given route
-     * 
+     *
      * @param route Route
      * @return Double
      */
@@ -242,7 +248,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     /**
      * This method calculates the similarity between two routes
-     * 
+     *
      * @param rm1 Route
      * @param rm2 Route
      * @return Double
@@ -269,7 +275,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     /**
      * Computes the similarity for a list of routes and checks with a given value
-     * 
+     *
      * @param lrm List<Route>
      * @param re int
      * @return Double
@@ -289,7 +295,7 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
     /**
      * Computes the similarity for a list of routes
-     * 
+     *
      * @param lrm List<Route>
      * @return Double
      */
@@ -305,22 +311,22 @@ public class MMRDS implements RoutingAlgorithmInterface {
 
         return sim / lrm.size();
     }
-    
+
     /**
      * This method saves in files the routes for all the pairs.
-     * 
+     *
      * @param nodeList Vector<Node>
      */
     private void salveRoutesByPar(Vector<Node> nodeList) {
     	List<String> routesList = new ArrayList<String>();
-    	
+
     	int numNodes = nodeList.size();
         for(int i = 1; i <= numNodes; i++){
     	    for(int j = 1; j <= numNodes; j++){
-    		    
+
     		    if(i != j){
 	      		    String pair = i + DIV + j;
-	      		    
+
 		        	Route rota = routesForAllPairs.get(pair);
 		        	StringBuilder sb = new StringBuilder();
 		        	for(int n = 0; n < rota.getNodeList().size(); n++){
@@ -329,34 +335,34 @@ public class MMRDS implements RoutingAlgorithmInterface {
 		        			sb.append("-");
 		        		}
 		        	}
-		        	
+
 		        	routesList.add(sb.toString());
     		    }
     	    }
         }
-        
+
         Gson gson = new GsonBuilder().create();
         String json = gson.toJson(routesList);
-        
+
         try {
         	String separator = System.getProperty("file.separator");
-        	
+
         	FileWriter fw = new FileWriter(util.projectPath + separator + "routesByPar.txt");
 			BufferedWriter out = new BufferedWriter(fw);
-            
+
 			out.append(json);
-			
+
 			out.close();
 			fw.close();
-            
+
         } catch (Exception ex) {
         	ex.printStackTrace();
         }
     }
-    
+
     /**
 	 * Returns the route list for all pairs
-	 * 
+	 *
 	 * @return Vector<Route>
 	 */
     public HashMap<String, Route> getRoutesForAllPairs() {

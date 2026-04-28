@@ -11,7 +11,7 @@ import simulationControl.parsers.SimulationRequest;
 import simulationControl.resultManagers.TransmittersReceiversRegeneratorsUtilizationResultManager;
 
 /**
- * This class stores the measures regarding the use of transmitters, receivers, and 
+ * This class stores the measures regarding the use of transmitters, receivers, and
  * regenerators for a load point / replication
  *
  * @author Iallen
@@ -34,14 +34,14 @@ public class TransmittersReceiversRegeneratorsUtilization extends Measurement {
 
     /**
      * Creates a new instance of TransmitersReceiversUtilization
-     * 
+     *
      * @param loadPoint int
      * @param replication int
      * @param mesh Mesh
      */
     public TransmittersReceiversRegeneratorsUtilization(int loadPoint, int replication) {
         super(loadPoint, replication);
-        
+
         numberObservations = 0.0;
         avgTxUtilization = 0.0;
         avgRxUtilization = 0.0;
@@ -60,7 +60,7 @@ public class TransmittersReceiversRegeneratorsUtilization extends Measurement {
 
     /**
      * Adds a new observation to the use of transmitters, receivers and regenerators
-     * 
+     *
      * @param cp ControlPlane
      * @param success boolean
      * @param request RequestForConnection
@@ -86,7 +86,7 @@ public class TransmittersReceiversRegeneratorsUtilization extends Measurement {
             if (rxUtNo == null) rxUtNo = 0.0;
             rxUtNo += node.getRxs().getRxUtilization();
             avgRxUtilizationPerNode.put(node.getName(), txUtNo);
-            
+
             Double regenUtNo = avgRegenUtilizationPerNode.get(node.getName());
 			if(regenUtNo == null) regenUtNo = 0.0;
 			regenUtNo += node.getRegenerators().getRegenUtilization();
@@ -101,16 +101,20 @@ public class TransmittersReceiversRegeneratorsUtilization extends Measurement {
             if (maxRxUtNo == null) maxRxUtNo = 0;
             if (node.getRxs().getRxUtilization() >= maxRxUtNo)
                 maxRxUtilizationPerNode.put(node.getName(), node.getRxs().getRxUtilization());
-            
+
             Integer maxRegenUtNo = maxRegenUtilizationPerNode.get(node.getName());
 			if(maxRegenUtNo == null) maxRegenUtNo = 0;
 			if(node.getRegenerators().getRegenUtilization() >= maxRegenUtNo)
 				maxRegenUtilizationPerNode.put(node.getName(), node.getRegenerators().getRegenUtilization());
         }
-        
+
         numberObservations++;
     }
 
+    /**
+     * Returns the file name.
+     * @return the file name.
+     */
     @Override
     public String getFileName() {
         return SimulationRequest.Result.FILE_TRANSMITTERS_RECEIVERS_REGENERATORS_UTILIZATION;
@@ -118,7 +122,7 @@ public class TransmittersReceiversRegeneratorsUtilization extends Measurement {
 
     /**
      * Returns the average transmitters utilization
-     * 
+     *
      * @return double
      */
     public double getAvgTxUtilizationGen() {
@@ -127,16 +131,16 @@ public class TransmittersReceiversRegeneratorsUtilization extends Measurement {
 
     /**
      * Returns the average receivers utilization
-     * 
+     *
      * @return double
      */
     public double getAvgRxUtilizationGen() {
         return avgRxUtilization / (double)numberObservations;
     }
-    
+
     /**
      * Returns the average renerators utilization
-     * 
+     *
      * @return double
      */
     public double getAvgRegenUtilizationGen (){
@@ -145,7 +149,7 @@ public class TransmittersReceiversRegeneratorsUtilization extends Measurement {
 
     /**
      * Returns the average transmitters utilization for the node reported as parameter
-     * 
+     *
      * @param node String
      * @return double
      */
@@ -155,17 +159,17 @@ public class TransmittersReceiversRegeneratorsUtilization extends Measurement {
 
     /**
      * Returns the average receivers utilization for the node reported as parameter
-     * 
+     *
      * @param node String
      * @return double
      */
     public double getAvgRxUtilizationPerNode(String node) {
         return avgRxUtilizationPerNode.get(node) / (double)numberObservations;
     }
-    
+
     /**
      * Returns the average regenerators utilization for the node reported as parameter
-     * 
+     *
      * @param node String
      * @return double
      */
@@ -175,7 +179,7 @@ public class TransmittersReceiversRegeneratorsUtilization extends Measurement {
 
     /**
      * Returns the maximum transmitters utilization for the node reported as parameter
-     * 
+     *
      * @param node String
      * @return int
      */
@@ -185,17 +189,17 @@ public class TransmittersReceiversRegeneratorsUtilization extends Measurement {
 
     /**
      * Returns the maximum receivers utilization for the node reported as parameter
-     * 
+     *
      * @param node String
      * @return int
      */
     public int getMaxRxUtilizationPerNode(String node) {
         return maxRxUtilizationPerNode.get(node);
     }
-    
+
     /**
      * Returns the maximum regenerators utilization for the node reported as parameter
-     * 
+     *
      * @param node String
      * @return int
      */
@@ -206,7 +210,7 @@ public class TransmittersReceiversRegeneratorsUtilization extends Measurement {
     /**
      * Returns the HashMap key set
      * The key set corresponds to the nodes that were analyzed by the metric
-     * 
+     *
      * @return Set<String>
      */
     public Set<String> getNodeNamesSet() {

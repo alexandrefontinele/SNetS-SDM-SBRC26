@@ -7,21 +7,21 @@ import java.util.List;
  * Articles:
  *     - (2012) Spectrum allocation policy modeling for elastic optical networks
  *     - (2023) Impairment- and fragmentation-aware, energy-efficient dynamic RMSCA for SDM-EONs
- * 
+ *
  * @author Iallen
  */
 public class ComputesFragmentation {
 
 	/**
 	 * This method calculates the external fragmentation
-	 * 
-	 * @param freeSpectrumBands List<int[]> free spectrum band list     
+	 *
+	 * @param freeSpectrumBands List<int[]> free spectrum band list
 	 * @return double
 	 */
     public double externalFragmentation(List<int[]> freeSpectrumBands) {
         int aux[] = {0, 0};
         double totalFree = 0.0;
-        
+
         for (int[] faixa : freeSpectrumBands) {
             if (faixa[1] - faixa[0] > aux[1] - aux[0]) {
                 aux = faixa;
@@ -37,7 +37,7 @@ public class ComputesFragmentation {
 
         return fe;
     }
-    
+
     /**
      * This method calculates the relative fragmentation
      *
@@ -48,7 +48,7 @@ public class ComputesFragmentation {
     public double relativeFragmentation(List<int[]> freeSpectrumBands, int c) {
         int freeC = 0;
         int totalFree = 0;
-        
+
         for (int[] faixa : freeSpectrumBands) {
             int auxT = (faixa[1] - faixa[0] + 1);
             int auxF = auxT / c;
@@ -61,16 +61,16 @@ public class ComputesFragmentation {
 
         return f_c;
     }
-    
+
     /**
 	 * This method calculates the entropy external fragmentation
-	 * 
-	 * @param freeSpectrumBands List<int[]> free spectrum band list     
+	 *
+	 * @param freeSpectrumBands List<int[]> free spectrum band list
 	 * @return double
 	 */
     public double entropyExternalFragmentation(List<int[]> freeSpectrumBands, int totalNumberOfSlots) {
         double sumFrag = 0.0;
-        
+
         for (int[] faixa : freeSpectrumBands) {
             int tamFaixa = (faixa[1] - faixa[0] + 1);
             double logv = (double)totalNumberOfSlots / (double)tamFaixa;
@@ -79,7 +79,7 @@ public class ComputesFragmentation {
 			}
             sumFrag += ((double)tamFaixa / (double)totalNumberOfSlots) * Math.log(logv);
         }
-        
+
         return sumFrag;
     }
 

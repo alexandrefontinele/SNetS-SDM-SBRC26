@@ -25,6 +25,12 @@ public class Grooming {
         return res;
     }
 
+    /**
+     * Checks whether be expanded.
+     * @param circuit the circuit.
+     * @param rfc the rfc.
+     * @return true if the condition is met; false otherwise.
+     */
     public static boolean canBeExpanded(Circuit circuit, RequestForConnection rfc) {
         int[] exp = Grooming.circuitExpansiveness(circuit);
         int circExCap = exp[0] + exp[1];

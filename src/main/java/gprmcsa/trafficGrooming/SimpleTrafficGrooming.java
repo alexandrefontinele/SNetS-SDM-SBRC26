@@ -17,6 +17,12 @@ import util.IntersectionFreeSpectrum;
  */
 public class SimpleTrafficGrooming implements TrafficGroomingAlgorithmInterface {
 
+	/**
+	 * Returns the search circuits for grooming.
+	 * @param rfc the rfc.
+	 * @param cp the cp.
+	 * @return true if the condition is met; false otherwise.
+	 */
 	@Override
 	public boolean searchCircuitsForGrooming(RequestForConnection rfc, ControlPlane cp) throws Exception {
 
@@ -24,43 +30,43 @@ public class SimpleTrafficGrooming implements TrafficGroomingAlgorithmInterface 
 		List<Circuit> activeCircuits = cp.searchForActiveCircuits(rfc.getPair().getSource().getName(), rfc.getPair().getDestination().getName());
 
 		for (Circuit circuit : activeCircuits) {
-			
+
 			// Investigate if the active circuit is able to accommodate the new request
-			
+
 			// How many more slots are needed?
 			int numFinalSlots = circuit.getModulation().requiredSlots(circuit.getRequiredBitRate() + rfc.getRequiredBitRate());
 			int numCurrentSlots = circuit.getSpectrumAssigned()[1] - circuit.getSpectrumAssigned()[0] + 1;
 			int numMoreSlots = numFinalSlots - numCurrentSlots;
-			
+
 			// You can add without increasing the number of slots
 			if(numMoreSlots == 0){
 				circuit.addRequest(rfc);
 				rfc.getCircuits().add(circuit);
-				
+
 				return true;
 			}
-			
+
 			// Is it possible to expand the channel?
 			List<int[]> composition = IntersectionFreeSpectrum.merge(circuit.getRoute(), circuit.getGuardBand(), circuit.getIndexCore());
-			
+
 			int[] bandFreeAdjInferior = IntersectionFreeSpectrum.bandAdjacentDown(circuit.getSpectrumAssigned(), composition, circuit.getGuardBand());
 			int numFreeSlotsDown = 0;
-			
+
 			if(bandFreeAdjInferior != null){
 				numFreeSlotsDown = bandFreeAdjInferior[1] - bandFreeAdjInferior[0] + 1;
 			}
-			
+
 			int[] bandFreeAdjSuperior = IntersectionFreeSpectrum.bandAdjacentUpper(circuit.getSpectrumAssigned(), composition, circuit.getGuardBand());
 			int numFreeSlotsUp = 0;
-			
+
 			if(bandFreeAdjSuperior != null){
 				numFreeSlotsUp = bandFreeAdjSuperior[1] - bandFreeAdjSuperior[0] + 1;
 			}
-			
+
 			int totalNumAdjFreeSlots = numFreeSlotsUp + numFreeSlotsDown;
-			
+
 			if(numMoreSlots < totalNumAdjFreeSlots){ // Yes, it is possible expands the channel to accommodate the new request
-				
+
 				// Expand this channel to accommodate the new request
 				int expansion[] = decideToExpand(numMoreSlots, bandFreeAdjInferior, bandFreeAdjSuperior);
 
@@ -73,17 +79,17 @@ public class SimpleTrafficGrooming implements TrafficGroomingAlgorithmInterface 
 				}
 			}
 		}
-		
+
 		// Failed to aggregation the new request.
 		// Try to create a new circuit to accommodate that.
 		Circuit circuit = cp.createNewCircuit(rfc);
 
 		return cp.establishCircuit(circuit);
 	}
-	
+
 	/**
 	 * This method decides how to expand the channel to accommodate new connections.
-	 * 
+	 *
 	 * @param numMoreSlots int - Number of slots that are still needed to establish the circuit
 	 * @param upperFreeSlots int
 	 * @param lowerFreeSlots int
@@ -110,17 +116,22 @@ public class SimpleTrafficGrooming implements TrafficGroomingAlgorithmInterface 
 			res[0] = numLowerFreeSlots;
 			res[1] = numMoreSlots - numLowerFreeSlots;
 		}
-		
+
 		return res;
 	}
 
+	/**
+	 * Executes the finish connection operation.
+	 * @param rfc the rfc.
+	 * @param cp the cp.
+	 */
 	@Override
 	public void finishConnection(RequestForConnection rfc, ControlPlane cp) throws Exception {
 		Circuit circuit = rfc.getCircuits().get(0);
-		
+
 		if(circuit.getRequests().size() == 1){ // The connection being terminated is the last to use this channel.
 			cp.releaseCircuit(circuit);
-			
+
 		}else{ // Reduce the number of slots allocated for this channel if it is possible.
 
 			int numFinalSlots = circuit.getModulation().requiredSlots(circuit.getRequiredBitRate() - rfc.getRequiredBitRate());

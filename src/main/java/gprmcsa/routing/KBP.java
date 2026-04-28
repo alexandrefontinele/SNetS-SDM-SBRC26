@@ -20,11 +20,11 @@ import network.Node;
 import simulationControl.Util;
 
 /**
- * This class serves to compute the k shortest paths for all pairs of source (s) and destination (d) nodes 
+ * This class serves to compute the k shortest paths for all pairs of source (s) and destination (d) nodes
  * of a given network topology considering the links and a given weight for each link.
- * 
+ *
  * K Balanced Paths (KBP)
- * 
+ *
  * @author Iallen
  */
 public class KBP implements KRoutingAlgorithmInterface {
@@ -42,7 +42,7 @@ public class KBP implements KRoutingAlgorithmInterface {
     private HashMap<String, List<Route>> routesForAllPairs;
 
     private Util util;
-    
+
     /**
      * Constructor
      */
@@ -53,26 +53,26 @@ public class KBP implements KRoutingAlgorithmInterface {
 
     /**
      * Compute the k shortest routes for each pair(s, d)
-     * 
+     *
      * @param mesh Mesha - network topology
      * @param k    int - number of routes to be computed for each pair(s, d)
      */
     public void computeAllRoutes(Mesh mesh, int k) {
     	this.util = mesh.getUtil();
     	this.kgpWeights = mesh.getOthersConfig().getKbpWeights();
-    	
+
     	this.k = k;
     	this.routesForAllPairs = new HashMap<>();
-        
+
         for (Node n1 : mesh.getNodeList()) {
             for (Node n2 : mesh.getNodeList()) {
                 if (n1 == n2)
                     continue;
-                
+
                 routesForAllPairs.put(n1.getName() + DIV + n2.getName(), this.computeRoutes(n1, n2, mesh));
             }
         }
-        
+
         saveKRoutesByPar(mesh.getNodeList());
     }
 
@@ -86,6 +86,12 @@ public class KBP implements KRoutingAlgorithmInterface {
      */
     private List<Route> computeRoutes(Node n1, Node n2, Mesh mesh) {
         Comparator<Route> kgpComparator = new Comparator<Route>() {
+            /**
+             * Returns the compare.
+             * @param o1 the o1.
+             * @param o2 the o2.
+             * @return the result of the operation.
+             */
             @Override
             public int compare(Route o1, Route o2) {
                 int res = getRouteWeight(o1).compareTo(getRouteWeight(o2));
@@ -93,7 +99,7 @@ public class KBP implements KRoutingAlgorithmInterface {
                 return res;
             }
         };
-        
+
         TreeSet<Route> chosenRoutes = new TreeSet<>(kgpComparator);
         TreeSet<Route> routesUnderConstruction = new TreeSet<>(kgpComparator);
 
@@ -117,7 +123,7 @@ public class KBP implements KRoutingAlgorithmInterface {
                     highestAmongShortest = getRouteWeight(chosenRoutes.last());
                 }
                 continue;
-                
+
             }else {
                 if (getRouteWeight(expand) <= highestAmongShortest) { //  Search more routes from this
 
@@ -135,6 +141,11 @@ public class KBP implements KRoutingAlgorithmInterface {
         return new ArrayList<Route>(chosenRoutes);
     }
 
+    /**
+     * Returns the route weight.
+     * @param r the r.
+     * @return the route weight.
+     */
     private Double getRouteWeight(Route r){
         double res = r.getDistanceAllLinks();
         for(Link l: r.getLinkList()){
@@ -150,7 +161,7 @@ public class KBP implements KRoutingAlgorithmInterface {
 
     /**
      * Check if a given route has a loop
-     * 
+     *
      * @param r Route
      * @return boolean
      */
@@ -166,7 +177,7 @@ public class KBP implements KRoutingAlgorithmInterface {
 
     /**
      * Returns the k shortest paths between two nodes
-     * 
+     *
      * @param n1 Node
      * @param n2 Node
      * @return List<Route>
@@ -174,15 +185,15 @@ public class KBP implements KRoutingAlgorithmInterface {
     public List<Route> getRoutes(Node n1, Node n2) {
         return this.routesForAllPairs.get(n1.getName() + DIV + n2.getName());
     }
-    
+
     /**
      * This method saves in files all the routes for all the pairs.
-     * 
+     *
      * @param nodeList Vector<Node>
      */
     private void saveKRoutesByPar(Vector<Node> nodeList) {
     	List<String> routesList = new ArrayList<String>();
-		
+
 		for(int i = 0; i < nodeList.size(); i++){
 			Node source = nodeList.get(i);
 
@@ -205,21 +216,21 @@ public class KBP implements KRoutingAlgorithmInterface {
                 }
             }
 		}
-		
+
 		Gson gson = new GsonBuilder().create();
         String json = gson.toJson(routesList);
-        
+
         try {
         	String separator = System.getProperty("file.separator");
-        	
+
         	FileWriter fw = new FileWriter(util.projectPath + separator + "kRoutesByPar.txt");
 			BufferedWriter out = new BufferedWriter(fw);
-            
+
 			out.append(json);
-			
+
 			out.close();
 			fw.close();
-            
+
         } catch (Exception ex) {
         	ex.printStackTrace();
         }
@@ -227,7 +238,7 @@ public class KBP implements KRoutingAlgorithmInterface {
 
     /**
 	 * Returns the route list for all pairs
-	 * 
+	 *
 	 * @return Vector<Route>
 	 */
     public HashMap<String, List<Route>> getRoutesForAllPairs() {

@@ -5,7 +5,7 @@ import java.util.Vector;
 
 /**
  * This class represents the OXC of the network
- * 
+ *
  * @author Iallen
  */
 public class Oxc implements Serializable {
@@ -22,7 +22,7 @@ public class Oxc implements Serializable {
         this.linksList = new Vector<Link>();
         this.name = name;
     }
-    
+
     /**
      * Getter for property name
      *

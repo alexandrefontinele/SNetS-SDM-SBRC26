@@ -15,13 +15,22 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Represents the ServerM component.
+ */
 public class ServerM extends UnicastRemoteObject implements ServerMInterface {
 
     private List<ServerSInterface> lazyServers = new ArrayList<>();
 
+    /**
+     * Creates a new instance of ServerM.
+     */
     protected ServerM() throws RemoteException {
     }
 
+    /**
+     * Executes the run server m operation.
+     */
     public static void runServerM(){
         try {
             java.rmi.registry.LocateRegistry.createRegistry(1099);
@@ -37,12 +46,22 @@ public class ServerM extends UnicastRemoteObject implements ServerMInterface {
         }
     }
 
+    /**
+     * Executes the register operation.
+     * @param server the server.
+     */
     @Override
     public void register(ServerSInterface server) throws RemoteException {
         System.out.println(server.getName() + " registered");
         lazyServers.add(server);
     }
 
+    /**
+     * Returns the simulation bundle request.
+     * @param simReqJSON the simReqJSON.
+     * @param cpci the cpci.
+     * @return the result of the operation.
+     */
     @Override
     public String simulationBundleRequest(String simReqJSON, ClientProgressCallbackInterface cpci) throws Exception {
         Gson gson = new GsonBuilder().create();
@@ -96,6 +115,9 @@ public class ServerM extends UnicastRemoteObject implements ServerMInterface {
             this.simulationQueue = simulationQueue;
         }
 
+        /**
+         * Runs the operation.
+         */
         @Override
         public void run() {
             try {

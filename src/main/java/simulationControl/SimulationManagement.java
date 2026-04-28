@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 
 /**
  * This class is responsible for managing the executions of the simulations
- * 
+ *
  * @author Iallen
  */
 public class SimulationManagement {
@@ -27,15 +27,15 @@ public class SimulationManagement {
     private List<List<Simulation>> simulations;
     private int done;
     private int numOfSimulations;
-    
+
     /**
      * Stores the results for all points with all replicas
      */
     private List<List<Measurements>> mainMeasuremens;
-    
+
     /**
      * Return the mainMeasuremens
-     * 
+     *
      * @return List<List<Measurements>>
      */
     public List<List<Measurements>> getMainMeasuremens(){
@@ -53,7 +53,7 @@ public class SimulationManagement {
         done = 0;
         numOfSimulations = 0;
         mainMeasuremens = new ArrayList<>();
-        
+
         for(List<Simulation> loadPoint : simulations){
             List<Measurements> aux = new ArrayList<>();
             mainMeasuremens.add(aux);
@@ -70,10 +70,10 @@ public class SimulationManagement {
      */
     public static List<List<Simulation>> createAllSimulations(SimulationRequest sr){
         Util util = new Util();
-        
+
         String separator = System.getProperty("file.separator");
         String filesPath = sr.getPath() + separator + sr.getName();
-        
+
         util.projectPath = filesPath;
 
         NetworkConfig nc = sr.getNetworkConfig();
@@ -124,10 +124,13 @@ public class SimulationManagement {
 
         ExecutorService executor = Executors.newScheduledThreadPool(simulationRequest.getSimulationConfig().getThreads());
         done = 0;
-        
+
         for(List<Simulation> loadPoint : simulations){
             for(Simulation replication : loadPoint){
                 executor.execute(new Runnable() {
+                    /**
+                     * Runs the operation.
+                     */
                     @Override
                     public void run() {
                         try {
@@ -143,7 +146,7 @@ public class SimulationManagement {
                 });
             }
         }
-        
+
         while(done<numOfSimulations){ //wait untill all simulations have done
             try {
                 Thread.sleep(200);
@@ -161,8 +164,15 @@ public class SimulationManagement {
 
     public static interface SimulationProgressListener {
 
+        /**
+         * Executes the on simulation progress update operation.
+         * @param progress the progress.
+         */
         public void onSimulationProgressUpdate(double progress);
 
+        /**
+         * Executes the on simulation finished operation.
+         */
         public void onSimulationFinished();
     }
 

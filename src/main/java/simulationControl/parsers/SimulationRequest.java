@@ -2,11 +2,11 @@ package simulationControl.parsers;
 
 /**
  * This class represents the request for a simulation when the simulator is in server mode.
- * 
+ *
  * Created by Iallen on 23/05/2017.
  */
 public class SimulationRequest {
-	
+
 	private String path;
     private String name;
 
@@ -19,10 +19,10 @@ public class SimulationRequest {
     private String status;
     private Double progress = 0.0;
     private Result result = new Result();
-    
+
     /**
      * This class represents the results obtained by the performance metrics in the execution of the simulation
-     * 
+     *
      * @author Iallen
      */
     public static class Result {
@@ -55,7 +55,7 @@ public class SimulationRequest {
 
     /**
      * Return the result
-     * 
+     *
      * @return Result
      */
     public Result getResult() {
@@ -64,7 +64,7 @@ public class SimulationRequest {
 
     /**
      * Sets the result
-     * 
+     *
      * @param result Result
      */
     public void setResult(Result result) {
@@ -73,7 +73,7 @@ public class SimulationRequest {
 
     /**
      * Returns the networkConfig
-     * 
+     *
      * @return NetworkConfig
      */
     public NetworkConfig getNetworkConfig() {
@@ -82,7 +82,7 @@ public class SimulationRequest {
 
     /**
      * Sets the networkConfig
-     * 
+     *
      * @param networkConfig NetworkConfig
      */
     public void setNetworkConfig(NetworkConfig networkConfig) {
@@ -91,7 +91,7 @@ public class SimulationRequest {
 
     /**
      * Returns the trafficConfig
-     * 
+     *
      * @return trafficConfig
      */
     public TrafficConfig getTrafficConfig() {
@@ -100,7 +100,7 @@ public class SimulationRequest {
 
     /**
      * Sets the trafficConfig
-     * 
+     *
      * @param trafficConfig TrafficConfig
      */
     public void setTrafficConfig(TrafficConfig trafficConfig) {
@@ -109,7 +109,7 @@ public class SimulationRequest {
 
     /**
      * Returns the simulationConfig
-     * 
+     *
      * @return SimulationConfig
      */
     public SimulationConfig getSimulationConfig() {
@@ -118,7 +118,7 @@ public class SimulationRequest {
 
     /**
      * Sets the simulationConfig
-     * 
+     *
      * @param simulationConfig SimulationConfig
      */
     public void setSimulationConfig(SimulationConfig simulationConfig) {
@@ -127,7 +127,7 @@ public class SimulationRequest {
 
     /**
      * Returns the physicalLayerConfig
-     * 
+     *
 	 * @return the physicalLayerConfig
 	 */
 	public PhysicalLayerConfig getPhysicalLayerConfig() {
@@ -136,7 +136,7 @@ public class SimulationRequest {
 
 	/**
 	 * Sets the physicalLayerConfig
-	 * 
+	 *
 	 * @param physicalLayerConfig the physicalLayerConfig to set
 	 */
 	public void setPhysicalLayerConfig(PhysicalLayerConfig physicalLayerConfig) {
@@ -145,7 +145,7 @@ public class SimulationRequest {
 
 	/**
      * Returns the status
-     * 
+     *
      * @return String
      */
     public String getStatus() {
@@ -154,7 +154,7 @@ public class SimulationRequest {
 
     /**
      * Sets the status
-     * 
+     *
      * @param status String
      */
     public void setStatus(String status) {
@@ -163,20 +163,24 @@ public class SimulationRequest {
 
     /**
      * Returns the name
-     * 
+     *
      * @return String name
      */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name.
+     * @param name the name.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
      * Returns the progress
-     * 
+     *
      * @return Double
      */
     public Double getProgress() {
@@ -185,7 +189,7 @@ public class SimulationRequest {
 
     /**
      * Sets the progress
-     * 
+     *
      * @param progress Double
      */
     public void setProgress(Double progress) {
@@ -194,7 +198,7 @@ public class SimulationRequest {
 
     /**
      * Returns the OthersConfig
-     * 
+     *
      * @return OthersConfig
      */
     public OthersConfig getOthersConfig() {
@@ -203,29 +207,29 @@ public class SimulationRequest {
 
     /**
      * Sets the OthersConfig
-     * 
+     *
      * @param othersConfig OthersConfig
      */
     public void setOthersConfig(OthersConfig othersConfig) {
         this.othersConfig = othersConfig;
     }
-    
+
     /**
      * Returns the path
-     * 
+     *
      * @return String
      */
 	public String getPath() {
 		return path;
 	}
-	
+
 	/**
 	 * Sets the path
-	 * 
+	 *
 	 * @param path String
 	 */
 	public void setPath(String path) {
 		this.path = path;
 	}
-    
+
 }

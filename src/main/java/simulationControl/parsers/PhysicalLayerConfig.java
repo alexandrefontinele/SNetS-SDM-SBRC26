@@ -1,36 +1,36 @@
 package simulationControl.parsers;
 
 /**
- * This class represents the physical layer configuration file, its representation in entity form is 
+ * This class represents the physical layer configuration file, its representation in entity form is
  * important for the storage and transmission of this type of configuration in the JSON format.
- * 
+ *
  * @author Alexandre.
  */
 public class PhysicalLayerConfig {
 
 	private int physicalLayerModel;   // 1 = Model Johannisson or 2 (or another value) = Model Habibi
 	private int crosstalkModel; //0 = Crosstalk separate from other physical layer effects or 1 = Crosstalk with other physical layer effects
-	
+
 	// Allows you to enable or disable transmission quality computing
     private boolean activeQoT; // Active the QoTN
 	private boolean activeQoTForOther; // Active the QoTO
-	
+
 	private boolean activeASE; // Active the ASE noise of the amplifier
 	private boolean activeNLI; // Active the nonlinear noise in the fibers
-	
+
 	private boolean activeXT; // Active the Crosstalk
 	private boolean activeXTForOther; // Active the Crosstalk on others circuits
-	
+
 	private double rateOfFEC; // Rate of FEC (Forward Error Correction), The most used rate is 7% which corresponds to the BER of 3.8E-3
 	private int typeOfTestQoT; // 0, To check for the SNR threshold (Signal-to-Noise Ratio), or another value, to check for the BER threshold (Bit Error Rate)
-	
+
 	private double power;             // Power per channel, dBm
 	private double spanLength;        // L, Size of a span, km
 	private double fiberLoss;         // alpha, dB/km, Fiber loss
 	private double fiberNonlinearity; // gamma, Fiber nonlinearity
 	private double fiberDispersion;   // beta2, ps^2 = E-24, Dispersion parameter
 	private double centerFrequency;   // v, Frequency of light
-	
+
 	private double constantOfPlanck;                  // h, Constant of Planck
 	private double noiseFigureOfOpticalAmplifier;     // NF, Amplifier noise figure, dB
 	private double powerSaturationOfOpticalAmplifier; //pSat, Saturation power of the amplifier, dBm
@@ -38,19 +38,19 @@ public class PhysicalLayerConfig {
 	private double noiseFactorModelParameterA2;       // A2, Amplifier noise factor parameter
 	private int typeOfAmplifierGain;                  // Type of amplifier gain, 0 to fixed gain and 1 to saturated gain
 	private double amplificationFrequency;            // Frequency used for amplification
-	
+
 	private double switchInsertionLoss; // dB
-	
+
 	private boolean fixedPowerSpectralDensity; // To enable or disable fixed power spectral density
 	private double referenceBandwidthForPowerSpectralDensity; // Reference bandwidth for power spectral density
-	
+
 	private double propagationConstant; // Beta, propagation constant, 1/m
 	private double bendingRadius;       // R, Bending radius, m
 	private double couplingCoefficient; // k, Coupling coefficient, m^-1
 	private double corePitch;           // Lambda, Core pitch, m
-	
+
 	private double polarizationModes; // Number of polarization modes
-	
+
 	/**
 	 * @return boolean the activeQoT
 	 */

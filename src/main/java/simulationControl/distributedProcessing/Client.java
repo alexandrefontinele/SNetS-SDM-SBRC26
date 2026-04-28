@@ -13,8 +13,17 @@ import com.google.gson.GsonBuilder;
 import simulationControl.SimulationFileManager;
 import simulationControl.parsers.SimulationRequest;
 
+/**
+ * Represents the Client component.
+ */
 public class Client {
 
+    /**
+     * Executes the run client operation.
+     * @param serverMLocation the serverMLocation.
+     * @param path the path.
+     * @param manyPaths the manyPaths.
+     */
     public static void runClient(String serverMLocation, String path, boolean manyPaths){
         //Reports that there are several simulation folders
     	if(manyPaths)
@@ -35,7 +44,7 @@ public class Client {
 
             for (File folder : subFolders) {
                 String folderTemp = folder.getAbsolutePath();
-                
+
                 runClient(serverMLocation, folderTemp);
             }
     	}
@@ -43,9 +52,14 @@ public class Client {
     	{
     		runClient(serverMLocation, path);
     	}
-    	
+
     }
-    
+
+    /**
+     * Executes the run client operation.
+     * @param serverMLocation the serverMLocation.
+     * @param path the path.
+     */
     public static void runClient(String serverMLocation, String path){
     	try {
             ServerMInterface server = (ServerMInterface) Naming.lookup("//"+serverMLocation+"/ServerM");
@@ -65,10 +79,10 @@ public class Client {
             String simReqJSON = gson.toJson(sr);
             simReqJSON = server.simulationBundleRequest(simReqJSON, new ClientProgressCallback());
             sr = gson.fromJson(simReqJSON,SimulationRequest.class);
-            
+
             System.out.println("Saving results.");
             sfm.writeSimulation(path, sr);
-            
+
             System.out.println("Simulation ends.");
 
         }catch (RemoteException ex){
@@ -83,13 +97,17 @@ public class Client {
     }
 
     public static class ClientProgressCallback extends UnicastRemoteObject implements ClientProgressCallbackInterface {
-    	
+
     	private double progress = 0;
-    	
+
         protected ClientProgressCallback() throws RemoteException {
 
         }
 
+        /**
+         * Updates the progress.
+         * @param progress the progress.
+         */
         @Override
         public void updateProgress(double progress) throws RemoteException {
         	if (this.progress != progress) {

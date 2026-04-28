@@ -6,10 +6,13 @@ import java.io.Serializable;
 
 /**
  * This class represents the events that are executed by the simulator event machine
- * 
+ *
  * @author Iallen
  */
 @SuppressWarnings("serial")
+/**
+ * Represents the Event component.
+ */
 public class Event implements Serializable {
 
     private Object object;
@@ -32,7 +35,7 @@ public class Event implements Serializable {
 
     /**
      * Configure event identifier
-     * 
+     *
      * @param x double
      */
     public void setId(double x) {
@@ -41,13 +44,13 @@ public class Event implements Serializable {
 
     /**
      * Returns the event identifier
-     * 
+     *
      * @return double
      */
     public double getId() {
         return id;
     }
-    
+
     /**
      * Returns who is the event listener.
      *

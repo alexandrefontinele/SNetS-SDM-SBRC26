@@ -10,53 +10,61 @@ import network.Core;
 import network.Link;
 
 /**
- * O gatilho é o bloqueio do crosstalk Seleciona os circuitos ativos que estao
- * causando crosstalk no novo circuito a ser estabelecido Realoca o circuito
- * ativo para nucleos não vizinhos do novo circuito A cada realocacao, tenta-se
- * atender o novo circuito Quando o novo circuito for atendido, após
- * realocacoes, o algoritmo é finalizado
+ * The trigger is crosstalk blocking. It selects the active circuits that are
+ * causing crosstalk on the new circuit to be established. The selected active
+ * circuits are reallocated to cores neighboring the new circuit. After each
+ * reallocation, the algorithm tries again to serve the new circuit. The
+ * procedure finishes once the new circuit is successfully established.
  *
- * Difenrecial do Alfa_v1:
- * 
- * Não tente restabeler a requisição bloqueada.
- * Considera apenas nucleos nao adjacentes a requisicao bloqueada para realocacao do circuito
- * 
+ * Difference from Alfa_v1:
+ *
+ * Do not try to re-establish the blocked request.
+ * It considers only non-adjacent cores of the blocked request for circuit reallocation.
+ *
  * @author gustavo
  *
  */
 public class FastSwitching_Alfa_v2 implements ReallocationAlgorithmInterface {
 
-	// uso do arraylist facilita a ordenacao da lista
+	// using ArrayList makes list sorting easier
 	private ArrayList<Circuit> selectedCircuits;
-	private ArrayList<Core> coresAdjacents;// nucleos adjacentes
-	private ArrayList<Core> coresNoAdjacents;// nucleos nao adjacentes que nao seja o do centro
+	private ArrayList<Core> coresAdjacents;// adjacent cores
+	private ArrayList<Core> coresNoAdjacents;// non-adjacent cores other than the center core
 	private SortListCircuits sortListCircuits;
 	private FastSwitching fastSwitching;
 
+	/**
+	 * Creates a new instance of FastSwitching_Alfa_v2.
+	 */
 	public FastSwitching_Alfa_v2() {
 		this.sortListCircuits = new SortListCircuits();
 		this.fastSwitching = new FastSwitching();
 	}
 
+	/**
+	 * Selects the actives circuits.
+	 * @param cp the cp.
+	 * @param request the request.
+	 */
 	@Override
 	public void selectActivesCircuits(ControlPlane cp, Circuit request) {
 
 		this.selectedCircuits = new ArrayList<>();
 
-		// indice do nucleo do novo circuito
+		// index of the new circuit core
 		int indiceNucleo = request.getIndexCore();
 
 		/*
-		 * Circuitos que estao nos nucleos vizinhos do nucleo do novo circuito Seleção
-		 * dos circuitos que tem espectro em comum, ou seja, que causam espectro
+		 * Circuits that are on neighboring cores of the new circuit core. Selection
+		 * of circuits that share spectrum, that is, those that cause interference
 		 */
 		for (Link enlace : request.getRoute().getLinkList()) {
 			for (Core core : enlace.getAdjacentCores(indiceNucleo)) {
-				// adicionando nucleo adjacente a lista, para uso futuro
+				// adding the adjacent core to the list for future use
 				for (Circuit circuit : core.getCircuitList()) {
-					// verifica se o circuito já está na lista de circuitos selecionados, se nao,
-					// adiciona-os
-					// verifica se circuito ativo tem slots em comum com novo circuito
+					// checks whether the circuit is already in the list of selected circuits; if not,
+					// add them
+					// check whether the active circuit shares slots with the new circuit
 					if (!selectedCircuits.contains(circuit)) {
 						if (espectroEmComum(request, circuit)) {
 							selectedCircuits.add(circuit);
@@ -69,46 +77,59 @@ public class FastSwitching_Alfa_v2 implements ReallocationAlgorithmInterface {
 
 		}
 
-		// ordenando a lista de circuitos selecionados
+		// sorting the selected circuit list
 		this.sortListCircuits.sort(selectedCircuits, "hops", cp);
 
 	}
 
+	/**
+	 * Executes the choose new resources for selected circuits operation.
+	 * @param cp the cp.
+	 */
 	@Override
 	public void chooseNewResourcesForSelectedCircuits(ControlPlane cp) {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Executes the traffic migration operation.
+	 */
 	@Override
 	public void trafficMigration() {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Returns the strategy.
+	 * @param requisicao the request.
+	 * @param cp the cp.
+	 * @return true if the condition is met; false otherwise.
+	 */
 	@Override
 	public boolean strategy(Circuit requisicao, ControlPlane cp) {
 
 		this.coresAdjacents = new ArrayList<>();
 		this.coresNoAdjacents = new ArrayList<>();
 
-		// nao fazer fast switching caso a requisicao for do nucleo central
+		// do not perform fast switching when the request is in the central core
 		if (requisicao.getIndexCore() == 0) {
 			return false;
 		}
 
-		// selecionar circuitos
+		// select circuits
 		this.selectActivesCircuits(cp, requisicao);
 
-		// nao foi selecionado nenhum circuito para a realocacao
+		// no circuit was selected for reallocation
 		if (this.selectedCircuits.size() == 0) {
 			return false;
 		}
 
-		// lista de cores adjacentes
+		// list of adjacent cores
 		this.coresAdjacents = requisicao.getRoute().getLinkList().get(0).getAdjacentCores(requisicao.getIndexCore());
 
-		// popular a lista de nucleos nao adjacentes
+		// populate the list of non-adjacent cores
 		ArrayList<Core> coreList = requisicao.getRoute().getLinkList().get(0).getCores();
 		for (Core c : coreList) {
 			if (!coresAdjacents.contains(c) && c.getId() != requisicao.getIndexCore()) {
@@ -116,8 +137,8 @@ public class FastSwitching_Alfa_v2 implements ReallocationAlgorithmInterface {
 			}
 		}
 
-		// percorrendo a lista de circuitos para tentar realocar
-		// tentar realocar para nucleo nao vizinho
+		// iterating over the circuit list to try reallocation
+		// try to reallocate to a non-neighboring core
 
 		for (Circuit circuit : this.selectedCircuits) {
 
@@ -127,10 +148,10 @@ public class FastSwitching_Alfa_v2 implements ReallocationAlgorithmInterface {
 
 					boolean sucess = this.fastSwitching.execute(circuit, coreNoAdjacent.getId(), cp);
 
-					// sucesso na realocacao - não precisa tentar realocar para outros nucleos
+					// successful reallocation - there is no need to try reallocating to other cores
 					if (sucess) {
 
-						break;// para pegar o proximo circuito, ja que o circuito foi realocado
+						break;// to process the next circuit, since the circuit was reallocated
 					}
 
 				} catch (Exception e) {
@@ -145,8 +166,8 @@ public class FastSwitching_Alfa_v2 implements ReallocationAlgorithmInterface {
 	}
 
 	/**
-	 * verifica se tem slots em comum entre dois circuitos de nucleos diferentes
-	 * 
+	 * checks se tem slots em comum entre dois circuitos de cores diferentes
+	 *
 	 */
 	protected boolean espectroEmComum(Circuit novoC, Circuit c) {
 

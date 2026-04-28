@@ -4,9 +4,9 @@ import simulator.Event;
 
 
 /**
- * Interface of classes that deal with the execution of events in the simulator by changing the state 
+ * Interface of classes that deal with the execution of events in the simulator by changing the state
  * of the system
- * 
+ *
  * @author Iallen
  */
 public interface EventListener {

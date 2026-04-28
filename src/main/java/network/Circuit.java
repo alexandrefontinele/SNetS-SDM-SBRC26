@@ -10,11 +10,11 @@ import java.util.List;
 
 /**
  * This class represents an established transparent circuit in an optical network
- * 
+ *
  * @author Iallen
  */
 public class Circuit implements Comparable<Object>, Serializable, Cloneable {
-	
+
 	//To identify the type of circuit blocking
 	public static final int NO_BLOCKING = 0;
 	public static final int BY_LACK_TX = 1;
@@ -51,13 +51,13 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 	protected double launchPowerLinear;
 	protected double powerConsumption;
 
-	protected int spectrumUtilizationAbsolut[]; // Para calcular os valores de utilização de espectro para Machine Learning
-	protected int spectrumUtilizationWeighted[]; // Para calcular os valores de utilização de espectro para Machine Learning
-	protected int spectrumUtilizationInRoute[]; // Para calcular os valores de utilização de espectro para Machine Learning
-	protected double averageXT[]; // Para calcular a média de XT para Machine Learning
-	
-	protected double peso; //Variavel para uso diverso em algoritmos RMCSA
-	
+	protected int spectrumUtilizationAbsolut[]; // To calculate spectrum-utilization values for Machine Learning
+	protected int spectrumUtilizationWeighted[]; // To calculate spectrum-utilization values for Machine Learning
+	protected int spectrumUtilizationInRoute[]; // To calculate spectrum-utilization values for Machine Learning
+	protected double averageXT[]; // To calculate the average XT for Machine Learning
+
+	protected double peso; //Variable for miscellaneous use in RMCSA algorithms
+
 	/**
 	 * Instantiates a circuit with the list of requests answered by it in empty
 	 */
@@ -69,32 +69,32 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 		this.QoTForOther = true; // Assuming that it is admissible for the other requirements
 		this.xtAdmissible = true;
 		this.xtAdmissibleInOther = true;
-		
+
 		this.launchPowerLinear = Double.POSITIVE_INFINITY;
 		this.indexCore = -1; //For core selection error checking
 		this.guardBand = -1; //For guard band selection error checking
-		
+
 		this.peso = 0.0;
-		
+
 		setSNR(PhysicalLayer.maxOSNR);
 		setXt(Crosstalk.lowestXT);
 	}
-	
+
 	/**
 	 * This method initializes the information for Machine Learning
-	 * 
+	 *
 	 * @param numberOfCores int
 	 */
 	public void initializesInfoForMachineLearning(int numberOfCores) {
-		this.spectrumUtilizationAbsolut = new int[numberOfCores]; // Para calcular os valores de utilização de espectro para Machine Learning
-		this.spectrumUtilizationWeighted = new int[numberOfCores]; // Para calcular os valores de utilização de espectro para Machine Learning
-		this.spectrumUtilizationInRoute = new int[numberOfCores]; // Para calcular os valores de utilização de espectro para Machine Learning
-		this.averageXT = new double[numberOfCores]; // Para calcular a média de XT para Machine Learning
+		this.spectrumUtilizationAbsolut = new int[numberOfCores]; // To calculate spectrum-utilization values for Machine Learning
+		this.spectrumUtilizationWeighted = new int[numberOfCores]; // To calculate spectrum-utilization values for Machine Learning
+		this.spectrumUtilizationInRoute = new int[numberOfCores]; // To calculate spectrum-utilization values for Machine Learning
+		this.averageXT = new double[numberOfCores]; // To calculate the average XT for Machine Learning
 	}
 
 	/**
 	 * Returns the source and destination pair of the circuit
-	 * 
+	 *
 	 * @return the pair - Pair
 	 */
 	public Pair getPair() {
@@ -103,7 +103,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Sets the source and destination pair of the circuit
-	 * 
+	 *
 	 * @param pair the pair to set
 	 */
 	public void setPair(Pair pair) {
@@ -112,7 +112,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the route used by the circuit
-	 * 
+	 *
 	 * @return the route
 	 */
 	public Route getRoute() {
@@ -121,7 +121,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Configures the route used by the
-	 * 
+	 *
 	 * @param route the route to set
 	 */
 	public void setRoute(Route route) {
@@ -130,7 +130,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the total bit rate used by the circuit
-	 * 
+	 *
 	 * @return the requiredBitRate
 	 */
 	public double getRequiredBitRate() {
@@ -145,7 +145,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Compute the residual capacity of circuit in terms of bit rate
-	 * 
+	 *
 	 * @return
 	 */
 	public double getResidualCapacity() {
@@ -156,7 +156,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the source node of the circuit
-	 * 
+	 *
 	 * @return
 	 */
 	public Node getSource() {
@@ -165,7 +165,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the destination node of the circuit
-	 * 
+	 *
 	 * @return Node
 	 */
 	public Node getDestination() {
@@ -174,7 +174,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the spectrum band allocated by the circuit
-	 * 
+	 *
 	 * @return int[]
 	 */
 	public int[] getSpectrumAssigned() {
@@ -183,7 +183,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Configures the spectrum band allocated by the circuit
-	 * 
+	 *
 	 * @param sa int[]
 	 */
 	public void setSpectrumAssigned(int sa[]) {
@@ -195,7 +195,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the modulation format used by the circuit
-	 * 
+	 *
 	 * @return the modulation - Modulation
 	 */
 	public Modulation getModulation() {
@@ -204,7 +204,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Configures the modulation format used by the circuit
-	 * 
+	 *
 	 * @param modulation the modulation to set - Modulation
 	 */
 	public void setModulation(Modulation modulation) {
@@ -213,7 +213,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Adds a given request to the list of requests answered by the circuit
-	 * 
+	 *
 	 * @param rfc RequestForConnection
 	 */
 	public void addRequest(RequestForConnection rfc) {
@@ -222,7 +222,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Removes a given request from the list of requests served by the circuit
-	 * 
+	 *
 	 * @param rfc
 	 */
 	public void removeRequest(RequestForConnection rfc) {
@@ -231,25 +231,25 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the list of requests answered by the circuit
-	 * 
+	 *
 	 * @return List<RequestForConnection>
 	 */
 	public List<RequestForConnection> getRequests() {
 		return requests;
 	}
-	
+
 	/**
      * Sets the list of requests answered by the circuit
-     * 
+     *
      * @param requests
      */
     public void setRequests(List<RequestForConnection> requests) {
     	this.requests = requests;
     }
-	
+
 	/**
 	 * Returns the SNR
-	 * 
+	 *
 	 * @return the SNR double
 	 */
 	public double getSNR() {
@@ -258,7 +258,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Sets the SNR
-	 * 
+	 *
 	 * @param SNR the SNR to set double
 	 */
 	public void setSNR(double SNR) {
@@ -268,7 +268,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the QoT
-	 * 
+	 *
 	 * @return the QoT boolean
 	 */
 	public boolean isQoT() {
@@ -277,7 +277,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Sets the QoT
-	 * 
+	 *
 	 * @param QoT the QoT to set boolean
 	 */
 	public void setQoT(boolean QoT) {
@@ -286,7 +286,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Return if circuit is blocked
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public boolean isWasBlocked() {
@@ -295,7 +295,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Sets if circuit is blocked
-	 * 
+	 *
 	 * @param wasBlocked
 	 */
 	public void setWasBlocked(boolean wasBlocked) {
@@ -304,7 +304,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the type of blockage suffered by the circuit
-	 * 
+	 *
 	 * @return int
 	 */
 	public int getBlockCause() {
@@ -313,7 +313,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Sets the type of blockage suffered by the circuit
-	 * 
+	 *
 	 * @param blockCause int
 	 */
 	public void setBlockCause(int blockCause) {
@@ -322,7 +322,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns if the QoTO is acceptable or not
-	 * 
+	 *
 	 * @return the QoTForOther
 	 */
 	public boolean isQoTForOther() {
@@ -331,7 +331,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Sets if the QoTO is acceptable or not
-	 * 
+	 *
 	 * @param qoTForOther the qoTForOther to set
 	 */
 	public void setQoTForOther(boolean QoTForOther) {
@@ -341,7 +341,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 	/**
 	 * This method returns the spectrum allocated by the circuit on a link
 	 * Can change according to the type of circuit
-	 * 
+	 *
 	 * @param link - Link
 	 * @return int[]
 	 */
@@ -352,18 +352,18 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 	/**
 	 * This method that returns the modulation format used in a given route link
 	 * Can change according to the type of circuit
-	 * 
+	 *
 	 * @param link - Link
 	 * @return Modulation
 	 */
 	public Modulation getModulationByLink(Link link) {
 		return getModulation();
 	}
-	
+
 	/**
 	 * This method that returns the index core used in a given route link
 	 * Can change according to the type of circuit
-	 * 
+	 *
 	 * @param link - Link
 	 * @return Modulation
 	 */
@@ -373,7 +373,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the power consumption by circuit
-	 * 
+	 *
 	 * @return the powerConsumption
 	 */
 	public double getPowerConsumption() {
@@ -382,7 +382,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Sets the power consumption by circuit
-	 * 
+	 *
 	 * @param powerConsumption the powerConsumption to set
 	 */
 	public void setPowerConsumption(double powerConsumption) {
@@ -425,7 +425,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the total bit rate of the circuit
-	 * 
+	 *
 	 * @return double
 	 */
 	public double getBandwidth() {
@@ -434,7 +434,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the launch power
-	 * 
+	 *
 	 * @return double
 	 */
 	public double getLaunchPowerLinear() {
@@ -443,7 +443,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Sets the launch power
-	 * 
+	 *
 	 * @param launchPowerLinear double
 	 */
 	public void setLaunchPowerLinear(double launchPowerLinear) {
@@ -452,7 +452,7 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Returns the guard band
-	 * 
+	 *
 	 * @return int
 	 */
 	public int getGuardBand() {
@@ -464,17 +464,25 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 	/**
 	 * Sets the guard band
-	 * 
+	 *
 	 * @param guardBand int
 	 */
 	public void setGuardBand(int guardBand) {
 		this.guardBand = guardBand;
 	}
 
+	/**
+	 * Returns the string representation of this object.
+	 * @return the result.
+	 */
 	public String toString() {
 		return "(s:" + pair.getSource().getName() + " d:" + pair.getDestination().getName() + ")";
 	}
 
+	/**
+	 * Returns the index core.
+	 * @return the index core.
+	 */
 	public int getIndexCore() {
 		if (indexCore == -1) {
 			System.err.println("Core not selected.");
@@ -482,69 +490,137 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 		return indexCore;
 	}
 
+	/**
+	 * Sets the index core.
+	 * @param indexCore the indexCore.
+	 */
 	public void setIndexCore(int indexCore) {
 		this.indexCore = indexCore;
 	}
 
+	/**
+	 * Returns the xt.
+	 * @return the xt.
+	 */
 	public double getXt() {
 		return xt;
 	}
 
+	/**
+	 * Sets the xt.
+	 * @param xt the xt.
+	 */
 	public void setXt(double xt) {
 		this.xt = xt;
 		this.xt_linear = PhysicalLayer.ratioOfDB(xt);
 	}
 
+	/**
+	 * Sets the xt admissible.
+	 * @param xtAdmissible the xtAdmissible.
+	 */
 	public void setXtAdmissible(boolean xtAdmissible) {
 		this.xtAdmissible = xtAdmissible;
 	}
 
+	/**
+	 * Returns the xt admissible.
+	 * @return true if the condition is met; false otherwise.
+	 */
 	public boolean getXtAdmissible() {
 		return this.xtAdmissible;
 	}
- 
+
+	/**
+	 * Sets the xt admissible in other.
+	 * @param xtAdmissibleInOther the xtAdmissibleInOther.
+	 */
 	public void setXtAdmissibleInOther(boolean xtAdmissibleInOther) {
 		this.xtAdmissibleInOther = xtAdmissibleInOther;
 	}
-	
+
+	/**
+	 * Returns the xt admissible in other.
+	 * @return true if the condition is met; false otherwise.
+	 */
 	public boolean getXtAdmissibleInOther() {
 		return this.xtAdmissibleInOther;
 	}
-	
+
+	/**
+	 * Executes the refresh spectrum utilization absolut unit operation.
+	 * @param core the core.
+	 * @param valor the valor.
+	 */
 	public void refreshSpectrumUtilizationAbsolutUnit(int core, int valor) {
 		this.spectrumUtilizationAbsolut[core] = valor;
 	}
 
+	/**
+	 * Returns the spectrum utilization absolut.
+	 * @return the spectrum utilization absolut.
+	 */
 	public int[] getSpectrumUtilizationAbsolut() {
 		return spectrumUtilizationAbsolut;
 	}
 
+	/**
+	 * Executes the refresh spectrum utilization weighted unit operation.
+	 * @param core the core.
+	 * @param valor the valor.
+	 */
 	public void refreshSpectrumUtilizationWeightedUnit(int core, int valor) {
 		this.spectrumUtilizationWeighted[core] = valor;
 	}
 
+	/**
+	 * Returns the spectrum utilization weighted.
+	 * @return the spectrum utilization weighted.
+	 */
 	public int[] getSpectrumUtilizationWeighted() {
 		return spectrumUtilizationWeighted;
 	}
 
+	/**
+	 * Executes the refresh spectrum utilization in route unit operation.
+	 * @param core the core.
+	 * @param valor the valor.
+	 */
 	public void refreshSpectrumUtilizationInRouteUnit(int core, int valor) {
 		this.spectrumUtilizationInRoute[core] = valor;
 	}
 
+	/**
+	 * Returns the spectrum utilization in route.
+	 * @return the spectrum utilization in route.
+	 */
 	public int[] getSpectrumUtilizationInRoute() {
 		return spectrumUtilizationInRoute;
 	}
-	
+
+	/**
+	 * Executes the refresh average xt operation.
+	 * @param core the core.
+	 * @param valor the valor.
+	 */
 	public void refreshAverageXt(int core, double valor) {
 		this.averageXT[core] = valor;
 	}
-	
+
+	/**
+	 * Returns the average xt.
+	 * @return the average xt.
+	 */
 	public double[] getAverageXt() {
 		return averageXT;
 	}
 
-	// Classe para informar a modulação no padrão de ML, no formato 0 0 0
-	// adicionado por Jurandir
+	// Class used to represent modulation in the ML format, in the form 0 0 0
+	// added by Jurandir
+	/**
+	 * Returns the modulation ml.
+	 * @return the modulation ml.
+	 */
 	public int[] getModulationML() {
 		int[] mod = new int[3];
 
@@ -586,41 +662,69 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 
 		return mod;
 	}
-	
+
+	/**
+	 * Returns the peso.
+	 * @return the peso.
+	 */
 	public double getPeso() {
 		return peso;
 	}
-	
+
+	/**
+	 * Sets the peso.
+	 * @param peso the peso.
+	 */
 	public void setPeso(double peso) {
 		this.peso = peso;
 	}
 
+	/**
+	 * Creates and returns a copy of this object.
+	 * @return the result.
+	 */
 	@Override
 	public Circuit clone() throws CloneNotSupportedException {
 		return (Circuit) super.clone();
 	}
 
+	/**
+	 * Returns the sn rlinear.
+	 * @return the sn rlinear.
+	 */
 	public double getSNRlinear() {
 		return SNR_linear;
 	}
 
+	/**
+	 * Sets the sn rlinear.
+	 * @param sNR_linear the sNR_linear.
+	 */
 	public void setSNRlinear(double sNR_linear) {
 		this.SNR_linear = sNR_linear;
 		this.SNR = PhysicalLayer.ratioForDB(SNR_linear);
 	}
 
+	/**
+	 * Returns the x tlinear.
+	 * @return the x tlinear.
+	 */
 	public double getXTlinear() {
 		return xt_linear;
 	}
 
+	/**
+	 * Sets the x tlinear.
+	 * @param xt_linear the xt_linear.
+	 */
 	public void setXTlinear(double xt_linear) {
 		this.xt_linear = xt_linear;
 		this.xt = PhysicalLayer.ratioForDB(xt_linear);
 	}
 
 	/**
-	 * Ordenar lista de circuito de acordo com algum criterio
-	 * 
+	 * Sort a list of circuits according to a given criterion
+	 *
 	 * @param otherCircuit
 	 * @param criterio
 	 * @return
@@ -628,14 +732,14 @@ public class Circuit implements Comparable<Object>, Serializable, Cloneable {
 //	public int compareTo(Circuit otherCircuit) {
 //
 //		String criterio = "hops";
-//		System.out.println("Entrou aqui");
+//		System.out.println("Entered here");
 //		if (criterio.equals("hops")) {
 //			if (this.route.getHops() > otherCircuit.getRoute().getHops()) {
-//				System.out.println(" Entrou aqui papai" );
+//				System.out.println(" Entered here - parent" );
 //				return -1;
 //			}
 //			if (this.route.getHops() <= otherCircuit.getRoute().getHops()) {
-//				System.out.println(" Entrou aqui mamae" );
+//				System.out.println(" Entered here - mother" );
 //				return 1;
 //			}
 //		}

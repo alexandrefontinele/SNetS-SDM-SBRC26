@@ -5,21 +5,24 @@ import java.io.Serializable;
 import network.Core;
 
 /**
- * Equacao da medida de fragmentacao Spectrum Compactness retirada do artigo <Crosstalk-Aware Spectrum Defragmentation Based on Spectrum Compactness in Space Division Multiplexing Enabled Elastic Optical Networks With Multicore Fiber >
+ * Equation of the Spectrum Compactness fragmentation measure extracted from the paper <Crosstalk-Aware Spectrum Defragmentation Based on Spectrum Compactness in Space Division Multiplexing Enabled Elastic Optical Networks With Multicore Fiber >
  * @author gustavo
  *
  */
 
 public class SpectrumCompactness implements Serializable {
-	
-	private int indexSlotMaxOcup; // maior indice de slot ocupado
-	private int indexSlotMinOcup; // menor indice de slot ocupado
-	private double amountSlotsOcup; // quantidade de slots ocupados
-	private double amountSlotsFree; // quantidade de slots livres
-	private int amountOfFreeFragments; // quantidade de fragmentos (blocos) de slots livres
-	private double sc; // resultado do calculo do spectrum compactness
-	
 
+	private int indexSlotMaxOcup; // highest occupied slot index
+	private int indexSlotMinOcup; // lowest occupied slot index
+	private double amountSlotsOcup; // number of occupied slots
+	private double amountSlotsFree; // number of free slots
+	private int amountOfFreeFragments; // number of free-slot fragments (blocks)
+	private double sc; // resultado do calculo do spectrum compactness
+
+
+	/**
+	 * Creates a new instance of SpectrumCompactness.
+	 */
 	public SpectrumCompactness(){
 		this.indexSlotMaxOcup = -1;
 		this.indexSlotMinOcup = 99999;
@@ -27,46 +30,46 @@ public class SpectrumCompactness implements Serializable {
 		this.amountSlotsFree = 0;
 		this.amountSlotsOcup = 0;
 	}
-	
+
 	/**
-	 * calcula spectrum compactness de um nucleo
-	 * returna -1 caso o nucleo nao tenha ocupacao
+	 * calculates the spectrum compactness of a core
+	 * returns -1 if the core has no occupancy
 	 * @param c
 	 * @return
 	 */
 	public double compute(Core c) {
-		// o calculo é feito apenas se o nucleo tem alguma ocupacao
+		// the calculation is performed only if the core has some occupancy
 		if (!isCoreOccupied(c)) {
 			return -1;
 		}
-		// para garantir, reseto todas as variaveis
-		
+		// to be safe, reset all variables
+
 		resetAttributes();
-		
-		// zerando o valor do atributo spectrum compactness
+
+		// resetting the spectrum compactness attribute value
 		this.sc = 0;
-		
+
 		// numero de blocos de slots livres - fragmentos
 		this.amountOfFreeFragments = c.getSpectrum().getFreeSpectrumBands().size();
-		
+
 		// somatorio de slots livres
 		for (int[] freeBand : c.getSpectrum().getFreeSpectrumBands()) {
 			this.amountSlotsFree = this.amountSlotsFree + (freeBand[1] - freeBand[0] + 1);
 		}
-		
+
 		// somatorio de slots ocupados
 		this.amountSlotsOcup = c.getSpectrum().getNumOfSlots() - this.amountSlotsFree;
-		
-		// menor indice de slot ocupado
+
+		// lowest occupied slot index
 		int indexSlotMinFree = c.getSpectrum().getFreeSpectrumBands().get(0)[0];
 		if (indexSlotMinFree == 1) {
 			this.indexSlotMinOcup = c.getSpectrum().getFreeSpectrumBands().get(0)[1] + 1;
 		}else {
 			this.indexSlotMinOcup = 1;
 		}
-		
-		
-		// maior indice de slot ocupado
+
+
+		// highest occupied slot index
 		int sizeList = c.getSpectrum().getFreeSpectrumBands().size();
 		int indexSlotMaxFree = c.getSpectrum().getFreeSpectrumBands().get(sizeList-1)[1];
 		if (indexSlotMaxFree == c.getNumOfSlots()) {
@@ -74,14 +77,17 @@ public class SpectrumCompactness implements Serializable {
 		}else {
 			this.indexSlotMaxOcup = c.getNumOfSlots();
 		}
-		
-		
-		
+
+
+
 		sc = ((indexSlotMaxOcup - indexSlotMinOcup +1)/amountSlotsOcup)*(amountSlotsFree/amountOfFreeFragments);
-		
+
 		return sc;
 	}
-	
+
+	/**
+	 * Resets the attributes.
+	 */
 	public void resetAttributes() {
 		// TODO Auto-generated method stub
 		this.indexSlotMaxOcup = -1;
@@ -90,9 +96,9 @@ public class SpectrumCompactness implements Serializable {
 		this.amountSlotsFree = 0;
 		this.amountSlotsOcup = 0;
 	}
-	
+
 	/**
-	 * verifica se o nucleo tem slots ocupados
+	 * checks whether the core has occupied slots
 	 * @param c
 	 * @return
 	 */
@@ -101,10 +107,10 @@ public class SpectrumCompactness implements Serializable {
 		if (c.getUsedSlots() > 0) {
 			return true;
 		}
-		
+
 		return false;
 
 	}
-	
-	
+
+
 }

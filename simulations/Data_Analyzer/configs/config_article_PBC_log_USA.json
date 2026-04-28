@@ -1,0 +1,157 @@
+{
+  "language": "pt",
+  "init_load": 500,
+  "load_step": 250,
+  "replications": 0,
+  "confidence": "95%",
+  "ci_method": "t-Student",
+  "bootstrap": 2000,
+  "axis_font": 19,
+  "tick_font": 14,
+  "legend_font": 14,
+  "axis_text_bold": false,
+  "tick_text_bold": false,
+  "x_left_margin": 50,
+  "x_right_margin": 50,
+  "x_margin_bar": 1.0,
+  "y_bottom_margin_linear": 0.01,
+  "y_top_margin_linear": 0.01,
+  "y_bottom_margin_log": 0.8,
+  "y_top_margin_log": 1.2,
+  "log_error_mode": "Mark truncated lower error",
+  "y_grid_mode": "Major lines only",
+  "algorithm_aliases": {
+    "APAmem": "APAmen",
+    "APAmen": "APAmen",
+    "APAnoMem": "APAnoMen",
+    "APAnoMen": "APAnoMen",
+    "APAmin": "APAmen",
+    "CPA": "CPA",
+    "CPSD": "CPSD",
+    "EnPA": "EnPA",
+    "EPA": "EPA",
+    "IMPA": "IMPA",
+    "PABS": "PABS"
+  },
+  "line_styles": {
+    "APAmen": {
+      "color": "#1f77b4",
+      "marker": "o",
+      "linestyle": "solid"
+    },
+    "APAmem": {
+      "color": "#1f77b4",
+      "marker": "o",
+      "linestyle": "solid"
+    },
+    "APAnoMen": {
+      "color": "#00ff40",
+      "marker": "s",
+      "linestyle": "dash"
+    },
+    "APAnoMem": {
+      "color": "#00ff40",
+      "marker": "s",
+      "linestyle": "dash"
+    },
+    "CPA": {
+      "color": "#0072ff",
+      "marker": "D",
+      "linestyle": "dot"
+    },
+    "CPSD": {
+      "color": "#8b5a2b",
+      "marker": "v",
+      "linestyle": "long_dash"
+    },
+    "EnPA": {
+      "color": "#8b008b",
+      "marker": "P",
+      "linestyle": "dashdot"
+    },
+    "EPA": {
+      "color": "#ff9966",
+      "marker": "X",
+      "linestyle": "dense_dotted"
+    },
+    "IMPA": {
+      "color": "#008b45",
+      "marker": "*",
+      "linestyle": "solid"
+    },
+    "PABS": {
+      "color": "#ff0000",
+      "marker": "h",
+      "linestyle": "dash_dot_dot"
+    }
+  },
+  "component_labels": {
+    "pt": {
+      "QoTN": "OSNRN",
+      "QoTO": "OSNRO",
+      "crosstalk": "XTN",
+      "crosstalk in other": "XTO",
+      "fragmentation": "Frag",
+      "lack of transmitters": "Tx",
+      "lack of receivers": "Rx",
+      "other": "Outros"
+    },
+    "en": {
+      "QoTN": "OSNRN",
+      "QoTO": "OSNRO",
+      "crosstalk": "XTN",
+      "crosstalk in other": "XTO",
+      "fragmentation": "Frag",
+      "lack of transmitters": "Tx",
+      "lack of receivers": "Rx",
+      "other": "Other"
+    }
+  },
+  "percent_component_labels": {
+    "pt": {
+      "QoTN": "OSNRN",
+      "QoTO": "OSNRO",
+      "crosstalk": "XTN",
+      "crosstalk in other": "XTO",
+      "fragmentation": "Frag",
+      "lack of transmitters": "Tx",
+      "lack of receivers": "Rx",
+      "other": "Outros"
+    },
+    "en": {
+      "QoTN": "OSNRN",
+      "QoTO": "OSNRO",
+      "crosstalk": "XTN",
+      "crosstalk in other": "XTO",
+      "fragmentation": "Frag",
+      "lack of transmitters": "Tx",
+      "lack of receivers": "Rx",
+      "other": "Other"
+    }
+  },
+  "input": "USA",
+  "output": "outputs/article/PBC_log_USA.svg",
+  "ci_output": "outputs/article/PBC_log_USA_ci.csv",
+  "best_output": "outputs/article/PBC_log_USA_best.csv",
+  "metric_type": [
+    "BlockingProbability"
+  ],
+  "metric": "Blocking probability",
+  "plot": "line",
+  "log_scale": true,
+  "legend_position": "Inside (lower right)",
+  "graph_texts": {
+    "pt": {
+      "line_x": "Carga da rede (Erlangs)",
+      "line_y": "Probabilidade de Bloqueio de Circuito (log10)",
+      "line_y_log": "Probabilidade de Bloqueio de Circuito (log10)",
+      "line_title": ""
+    },
+    "en": {
+      "line_x": "Network load (Erlangs)",
+      "line_y": "Probabilidade de Bloqueio de Circuito (log10)",
+      "line_y_log": "Probabilidade de Bloqueio de Circuito (log10)",
+      "line_title": ""
+    }
+  }
+}

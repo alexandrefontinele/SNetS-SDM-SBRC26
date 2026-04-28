@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  * This class represents the network request generator
- * 
+ *
  * @author Iallen
  */
 public class RequestGenerator implements Serializable {
@@ -18,14 +18,14 @@ public class RequestGenerator implements Serializable {
   private Pair pair;
   private double bandwidth; // In bits per second (bps)
   private double holdRate;
-  private double arrivedRate;  
+  private double arrivedRate;
   private double incLoad;
   private double atualTimeHours;
   private  RandGenerator randGenerator;
 
   /**
    * Creates a new instance of RequestGenerator
-   * 
+   *
    * @param pair Pair
    * @param bandwidth double
    * @param holdRate double
@@ -35,7 +35,7 @@ public class RequestGenerator implements Serializable {
    */
   public RequestGenerator(Pair pair, double bandwidth, double holdRate, double arrivedRate,double incLoad, RandGenerator randGenerator) {
     this.pair = pair;
-    this.bandwidth = bandwidth;	  
+    this.bandwidth = bandwidth;
 	this.holdRate = holdRate;
     this.arrivedRate = arrivedRate;
     this.incLoad = incLoad;
@@ -44,9 +44,9 @@ public class RequestGenerator implements Serializable {
   }
 
   /**
-   * Schedule a new connection request, the method will calculate the instant 
+   * Schedule a new connection request, the method will calculate the instant
    * of the next request and schedule the corresponding event
-   * 
+   *
    * @param em EventMachine
    * @param arriveRequest ArriveRequestForConexionListener
    */
@@ -67,7 +67,7 @@ public class RequestGenerator implements Serializable {
 
   /**
    * Returns the arrival rate of requests
-   * 
+   *
    * @return double
    */
   public double getArrivedRate() {
@@ -84,7 +84,7 @@ public class RequestGenerator implements Serializable {
 
   /**
    * Configures the arrival rate of requests
-   * 
+   *
    * @param arrivedRate double
    */
   public void setArrivedRate(double arrivedRate) {
@@ -93,7 +93,7 @@ public class RequestGenerator implements Serializable {
 
   /**
    * Configures the hold rate of requests
-   * 
+   *
    * @param holdRate double
    */
   public void setHoldRate(double holdRate) {
@@ -102,7 +102,7 @@ public class RequestGenerator implements Serializable {
 
   /**
    * Returns the increment value for the arrival rate
-   * 
+   *
    * @return double
    */
   public double getIncLoad() {
@@ -111,7 +111,7 @@ public class RequestGenerator implements Serializable {
 
   /**
    * Sets the increment value for the arrival rate
-   * 
+   *
    * @param incLoad double
    */
   public void setIncLoad(double incLoad) {
@@ -120,7 +120,7 @@ public class RequestGenerator implements Serializable {
 
   /**
 	 * Returns the pair
-	 * 
+	 *
 	 * @return Pair the pair
 	 */
   public Pair getPair() {
@@ -129,16 +129,16 @@ public class RequestGenerator implements Serializable {
 
   /**
 	 * Sets the pair
-	 * 
+	 *
 	 * @param pair Pair the pair to set
 	 */
   public void setPair(Pair pair) {
 	  this.pair = pair;
   }
-  
+
   /**
 	 * Returns the bandwidth
-	 * 
+	 *
 	 * @return double the bandwidth
 	 */
   public double getBandwidth() {
@@ -147,20 +147,20 @@ public class RequestGenerator implements Serializable {
 
   /**
 	 * Sets the bandwidth
-	 * 
+	 *
 	 * @param bandwidth double the bandwidth to set
 	 */
   public void setBandwidth(double bandwidth) {
 	  this.bandwidth = bandwidth;
   }
-  
+
   /**
 	 * Increases the arrival rate
-	 * 
+	 *
 	 * @param mult int
 	 */
   public void incArrivedRate(int mult){
 	  this.arrivedRate = this.arrivedRate + mult * this.incLoad;
   }
-  
+
 }

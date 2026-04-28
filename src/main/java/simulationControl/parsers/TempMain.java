@@ -12,6 +12,10 @@ import java.util.Scanner;
  */
 public class TempMain {
 
+    /**
+     * Runs the application entry point.
+     * @param args[] the args[].
+     */
     public static void main(String args[]){
 
         String path  = "./simulations/old/usa_cs/network";
@@ -43,7 +47,7 @@ public class TempMain {
 
             Gson gson = new GsonBuilder().create();
             System.out.println(gson.toJson(nc));
-            
+
             sc.close();
 
         } catch (FileNotFoundException e) {

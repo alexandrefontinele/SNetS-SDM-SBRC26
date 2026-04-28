@@ -30,7 +30,7 @@ public class RelativeFragmentation extends Measurement {
 
     /**
      * Creates a new instance of RelativeFragmentation
-     * 
+     *
      * @param loadPoint int
      * @param rep int
      * @param mesh Mesh
@@ -40,7 +40,7 @@ public class RelativeFragmentation extends Measurement {
 
         relativeFrag = new HashMap<>();
         numberObservations = 0;
-        
+
 		resultManager = new RelativeFragmentationResultManager();
     }
 
@@ -52,25 +52,29 @@ public class RelativeFragmentation extends Measurement {
      * @param request RequestForConnection
      */
     public void addNewObservation(ControlPlane cp, boolean success, RequestForConnection request) {
-    	
+
     	if(relativeFrag.isEmpty()) {
 	    	Set<Double> bitRateList = cp.getMesh().getUtil().bitRateList;
 	    	List<Modulation> avaliableModulations = cp.getMesh().getAvaliableModulations();
-	    	
+
 	    	for(Double bitRate : bitRateList) {
 	    		for (int m = avaliableModulations.size()-1; m >= 0; m--) {
 	    			Modulation mod = avaliableModulations.get(m);
-	    			
+
 	    			int slotsNumber = mod.requiredSlots(bitRate);
 	    			relativeFrag.put(slotsNumber, 0.0);
 	    		}
 	    	}
     	}
-    	
+
         this.observationLinks(cp.getMesh());
         numberObservations++;
     }
 
+    /**
+     * Returns the file name.
+     * @return the file name.
+     */
     @Override
     public String getFileName() {
         return SimulationRequest.Result.FILE_RELATIVE_FRAGMENTATION;
@@ -93,18 +97,18 @@ public class RelativeFragmentation extends Measurement {
     private void observationAllLinks(Integer c, Mesh mesh) {
     	ComputesFragmentation cf = new ComputesFragmentation();
         double averageFragLink = 0.0;
-        
+
         for (Link link : mesh.getLinkList()) {
         	double fragAllCores = 0.0;
-        	
+
         	for (Core core: link.getCores()) {
         		fragAllCores += cf.relativeFragmentation(core.getFreeSpectrumBands(0), c);
         	}
-        	
+
         	fragAllCores = fragAllCores / link.getNumberOfCores();
         	averageFragLink += fragAllCores;
         }
-        
+
         averageFragLink = averageFragLink / ((double) mesh.getLinkList().size());
 
         double fCurrent = this.relativeFrag.get(c);
@@ -113,9 +117,9 @@ public class RelativeFragmentation extends Measurement {
     }
 
     /**
-     * Returns the list of configured C values for the realization of observations relative 
+     * Returns the list of configured C values for the realization of observations relative
      * of relative fragmentation
-     * 
+     *
      * @return
      */
     public List<Integer> getCList() {
@@ -124,7 +128,7 @@ public class RelativeFragmentation extends Measurement {
 
     /**
      * Returns the average relative fragmentation
-     * 
+     *
      * @param c int
      * @return double
      */

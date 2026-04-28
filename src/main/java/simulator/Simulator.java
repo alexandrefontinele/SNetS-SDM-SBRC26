@@ -7,7 +7,7 @@ import simulator.eventListeners.ArriveRequestForConexionListener;
 
 /**
  * This class is responsible for instantiating the event machine.
- * 
+ *
  * @author Iallen
  */
 public class Simulator {
@@ -56,16 +56,16 @@ public class Simulator {
 
     /**
      * Returns the event machine
-     * 
+     *
      * @return EventMachine
      */
     public EventMachine getEventMachine() {
         return this.eMachine;
     }
-    
+
     /**
      * Returns the simulation
-     * 
+     *
      * @return Simulation
      */
     public Simulation getSimulation() {

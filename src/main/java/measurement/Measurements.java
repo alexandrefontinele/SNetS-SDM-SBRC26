@@ -10,10 +10,13 @@ import java.io.Serializable;
 
 /**
  * This class manages the performance metrics used in the simulations.
- * 
+ *
  * @author Iallen
  */
 @SuppressWarnings("serial")
+/**
+ * Represents the Measurements component.
+ */
 public class Measurements implements Serializable {
 
 	/**
@@ -25,27 +28,27 @@ public class Measurements implements Serializable {
      * Indicates whether the simulation is in the transient phase or not
      */
     private boolean transientStep;
-    
+
     /**
      * Used to count the number of requests generated until then, objective of verifying the transient state
      */
-	private double numGeneratedReq;  
-	
+	private double numGeneratedReq;
+
 	/**
      * Replication number
      */
     private int replication;
-    
+
     /**
      * Loading point
      */
     private int loadPoint;
-    
+
     /**
      * The network mesh
      */
     private Mesh mesh;
-    
+
     /**
      * List of performance metrics
      */
@@ -55,15 +58,15 @@ public class Measurements implements Serializable {
 	 * Ajust this!
 	 */
 	private ConsumedEnergy consumedEnergyMetric;
-    
+
     /**
      * List of metrics to be considered during the simulation
      */
     private SimulationConfig.Metrics measuringMetrics;
-    
+
     /**
      * Creates a new instance of Measurements
-     * 
+     *
      * @param numMinRequest int
      * @param loadPoint int
      * @param replication int
@@ -73,24 +76,24 @@ public class Measurements implements Serializable {
         this.loadPoint = loadPoint;
         this.replication = replication;
     	this.transientStep = true;
-        this.numMinRequest = numMinRequest;  
+        this.numMinRequest = numMinRequest;
         this.mesh = mesh;
-        
+
         this.measuringMetrics = measuringMetrics;
-        
+
         initializeMetrics(mesh);
     }
-    
+
     /**
      * Initialize the metrics
-     * 
+     *
      * @param mesh Mesh
      */
     private void initializeMetrics(Mesh mesh){
     	this.numGeneratedReq = 0.0;
-    	
+
         this.metricsList = new ArrayList<Measurement>();
-        
+
         // Activates the metrics set up in the SimulationConfig file
 		if(measuringMetrics.BlockingProbability){
 			BlockingProbability probabilidadeDeBloqueio = new BlockingProbability(loadPoint, replication, mesh.getUtil());
@@ -142,10 +145,10 @@ public class Measurements implements Serializable {
 			this.metricsList.add(physicalLayerStatistics);
 		}
     }
-    
+
     /**
      * Adds a new note for all enabled performance metrics
-     * 
+     *
      * @param cp ControlPlane
      * @param success boolean
      * @param request RequestForConnection
@@ -158,7 +161,7 @@ public class Measurements implements Serializable {
 
     /**
      * Returns the replication
-     * 
+     *
      * @return int
      */
     public int getReplication() {
@@ -169,9 +172,9 @@ public class Measurements implements Serializable {
      * Increases the number of generated requests.
      */
     public void incNumGeneratedReq() {
-        this.numGeneratedReq++;      
+        this.numGeneratedReq++;
     }
-    
+
     /**
      * Verify the transient phase
      *
@@ -187,7 +190,7 @@ public class Measurements implements Serializable {
     /**
      * Responsible for determining the end of the simulation.
      * If it returns true no event should be scheduled, but those already scheduled will be performed.
-     * 
+     *
      * @return boolean
      */
     public boolean finished() {
@@ -196,23 +199,23 @@ public class Measurements implements Serializable {
         }
         return false;
     }
-    
+
     /**
      * Request the list of performance metrics
-     * 
+     *
  	 * @return List<Measurement> metrics
  	 */
  	public List<Measurement> getMetrics(){
  		return metricsList;
  	}
- 	
+
  	/**
 	 * @return the measuringMetrics
 	 */
 	public SimulationConfig.Metrics getMeasuringMetrics() {
 		return measuringMetrics;
 	}
-	
+
 	/**
 	 * Returns the consumedEnergyMetric
 	 * @return consumedEnergyMetric
@@ -220,7 +223,7 @@ public class Measurements implements Serializable {
 	public ConsumedEnergy getConsumedEnergyMetric() {
 		return consumedEnergyMetric;
 	}
-	
+
 	/**
 	 * Sets the consumedEnergyMetric
 	 * @param consumedEnergyMetric
@@ -228,7 +231,7 @@ public class Measurements implements Serializable {
 	public void setConsumedEnergyMetric(ConsumedEnergy consumedEnergyMetric) {
 		this.consumedEnergyMetric = consumedEnergyMetric;
 	}
-	
+
 	/**
 	 * Returns the loadPoint
 	 * @return loadPoint
@@ -236,7 +239,7 @@ public class Measurements implements Serializable {
 	public int getLoadPoint() {
 		return loadPoint;
 	}
-	
+
 	/**
 	 * Returns the transientStep
 	 * @return transientStep
@@ -244,7 +247,7 @@ public class Measurements implements Serializable {
 	public boolean isTransientStep() {
 		return transientStep;
 	}
-	
+
 	/**
 	 * Returns the numGeneratedReq
 	 * @return numGeneratedReq
@@ -252,7 +255,7 @@ public class Measurements implements Serializable {
 	public double getNumGeneratedReq() {
 		return numGeneratedReq;
 	}
-	
+
 	/**
 	 * Returns the numMinRequest
 	 * @return numMinRequest
@@ -260,6 +263,6 @@ public class Measurements implements Serializable {
 	public int getNumMinRequest() {
 		return numMinRequest;
 	}
-	
-	
+
+
 }

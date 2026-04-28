@@ -8,9 +8,16 @@ import request.RequestForConnection;
 
 import java.util.Map;
 
+/**
+ * Represents the AuxiliaryGraphGrooming_SSTG1 component.
+ */
 public class AuxiliaryGraphGrooming_SSTG1 extends AuxiliaryGraphGrooming{
     private int sigmaExpansiveness=0;
 
+    /**
+     * Executes the init operation.
+     * @param cp the cp.
+     */
     @Override
     protected void init(ControlPlane cp) {
         super.init(cp);
@@ -18,6 +25,11 @@ public class AuxiliaryGraphGrooming_SSTG1 extends AuxiliaryGraphGrooming{
         this.sigmaExpansiveness = Integer.parseInt((String)uv.get("sigmaExpansiveness"));
     }
 
+    /**
+     * Executes the finish connection operation.
+     * @param rfc the rfc.
+     * @param cp the cp.
+     */
     @Override
     public void finishConnection(RequestForConnection rfc, ControlPlane cp) throws Exception {
         for (Circuit circuit : rfc.getCircuits()) {
@@ -31,6 +43,13 @@ public class AuxiliaryGraphGrooming_SSTG1 extends AuxiliaryGraphGrooming{
         }
     }
 
+    /**
+     * Returns the decide to expand.
+     * @param numMoreSlots the numMoreSlots.
+     * @param numLowerFreeSlots the numLowerFreeSlots.
+     * @param numUpperFreeSlots the numUpperFreeSlots.
+     * @return the result of the operation.
+     */
     @Override
     protected int[] decideToExpand(int numMoreSlots, int numLowerFreeSlots, int numUpperFreeSlots) {
         int eu=0, ed=0;
@@ -81,6 +100,12 @@ public class AuxiliaryGraphGrooming_SSTG1 extends AuxiliaryGraphGrooming{
         return res;
     }
 
+    /**
+     * Executes the retract circuit operation.
+     * @param circuit the circuit.
+     * @param numFinalSlots the numFinalSlots.
+     * @param cp the cp.
+     */
     protected void retractCircuit(Circuit circuit, int numFinalSlots, ControlPlane cp){
         int numCurrentSlots = circuit.getSpectrumAssigned()[1] - circuit.getSpectrumAssigned()[0] + 1;
         int release = numCurrentSlots - numFinalSlots;
@@ -106,7 +131,7 @@ public class AuxiliaryGraphGrooming_SSTG1 extends AuxiliaryGraphGrooming{
                 release-=aux;
             }
 
-            if(release>0){//ainda há slots para liberar
+            if(release>0){//there are still slots to release
                 int aux = -1*(dd+rd);
                 aux = Math.min(aux,release-release/2);
                 rd+=aux;

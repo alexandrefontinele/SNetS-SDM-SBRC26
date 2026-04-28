@@ -8,12 +8,15 @@ import java.util.Vector;
 /**
  * This class represents the simulator event machine.
  * It is responsible for managing the events that are created during a simulation.
- * 
+ *
  * @author Iallen
  */
 @SuppressWarnings("serial")
+/**
+ * Represents the EventMachine component.
+ */
 public class EventMachine implements Serializable {
-	
+
     private Vector<Event> eventList;
     private double countEvent = 0;
 

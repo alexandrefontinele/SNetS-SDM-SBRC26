@@ -9,11 +9,11 @@ import network.ControlPlane;
 
 /**
  * This interface should be implemented by classes of spectrum assignment algorithms independent of the routing.
- * 
+ *
  * @author Iallen
  */
 public interface SpectrumAssignmentAlgorithmInterface extends Serializable {
-	
+
 	/**
 	 * This method assigns a range of spectrum and returns true.
      * If it is not possible to do the assignment, it should return false.
@@ -25,10 +25,10 @@ public interface SpectrumAssignmentAlgorithmInterface extends Serializable {
 	 * @return boolean
 	 */
 	public boolean assignSpectrum(int numberOfSlots, Circuit circuit, ControlPlane cp, int indexCore);
-	
+
 	/**
 	 * This method applies the specific policy of the spectrum allocation algorithm
-	 * 
+	 *
 	 * @param numberOfSlots int
 	 * @param freeSpectrumBands List<int[]>
 	 * @param Circuit circuit

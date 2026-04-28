@@ -5,6 +5,9 @@ import java.awt.*;
 import java.io.File;
 import java.util.prefs.Preferences;
 
+/**
+ * Represents the ConfigDirectorySelectorGUI component.
+ */
 public class ConfigDirectorySelectorGUI extends JDialog {
 
 	private JTextField directoryField;
@@ -24,6 +27,10 @@ public class ConfigDirectorySelectorGUI extends JDialog {
     // --------------------------------------------------
     // Construtor
     // --------------------------------------------------
+    /**
+     * Creates a new instance of ConfigDirectorySelectorGUI.
+     * @param parent the parent.
+     */
     public ConfigDirectorySelectorGUI(Frame parent) {
         super(parent, "Select Simulation Configuration Directory", true);
         initComponents();
@@ -34,6 +41,9 @@ public class ConfigDirectorySelectorGUI extends JDialog {
     // --------------------------------------------------
     // Component initialization
     // --------------------------------------------------
+    /**
+     * Executes the init components operation.
+     */
     private void initComponents() {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setSize(650, 180);
@@ -64,6 +74,9 @@ public class ConfigDirectorySelectorGUI extends JDialog {
     // --------------------------------------------------
     // Layout
     // --------------------------------------------------
+    /**
+     * Executes the setup layout operation.
+     */
     private void setupLayout() {
         setLayout(new BorderLayout(10, 10));
 
@@ -89,6 +102,9 @@ public class ConfigDirectorySelectorGUI extends JDialog {
     // --------------------------------------------------
     // Listeners
     // --------------------------------------------------
+    /**
+     * Executes the setup listeners operation.
+     */
     private void setupListeners() {
 
         browseButton.addActionListener(e -> browseForDirectory());
@@ -106,6 +122,9 @@ public class ConfigDirectorySelectorGUI extends JDialog {
     // --------------------------------------------------
     // JFileChooser (directory mode)
     // --------------------------------------------------
+    /**
+     * Executes the browse for directory operation.
+     */
     private void browseForDirectory() {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Select the configuration directory.");

@@ -5,9 +5,9 @@ import java.util.List;
 
 
 /**
- * This class represents the Network configuration file, its representation in entity form is 
+ * This class represents the Network configuration file, its representation in entity form is
  * important for the storage and transmission of this type of configuration in JSON format.
- * 
+ *
  * Created by Iallen on 04/05/2017.
  */
 public class NetworkConfig {
@@ -21,7 +21,7 @@ public class NetworkConfig {
 
     /**
      * Returns the list of modulations
-     * 
+     *
      * @return List<ModulationConfig>
      */
     public List<ModulationConfig> getModulations() {
@@ -30,7 +30,7 @@ public class NetworkConfig {
 
     /**
      * Sets the list of modulations
-     * 
+     *
      * @param modulations List<ModulationConfig>
      */
     public void setModulations(List<ModulationConfig> modulations) {
@@ -39,7 +39,7 @@ public class NetworkConfig {
 
     /**
      * Returns the list of nodes
-     * 
+     *
      * @return List<NodeConfig>
      */
     public List<NodeConfig> getNodes() {
@@ -48,7 +48,7 @@ public class NetworkConfig {
 
     /**
      * Sets the list of nodes
-     * 
+     *
      * @param nodes List<NodeConfig>
      */
     public void setNodes(List<NodeConfig> nodes) {
@@ -57,7 +57,7 @@ public class NetworkConfig {
 
     /**
      * Returns the list of links
-     * 
+     *
      * @return List<LinkConfig>
      */
     public List<LinkConfig> getLinks() {
@@ -66,34 +66,34 @@ public class NetworkConfig {
 
     /**
      * Sets the list of links
-     * 
+     *
      * @param links List<LinkConfig>
      */
     public void setLinks(List<LinkConfig> links) {
         this.links = links;
     }
-    
+
     /**
      * Returns the list of cores
-     * 
+     *
      * @return List<CoreConfig>
      */
     public List<CoreConfig> getCores() {
 		return cores;
 	}
-    
+
     /**
      * Sets the list of cores
-     * 
+     *
      * @param cores List<CoreConfig>
      */
 	public void setCores(List<CoreConfig> cores) {
 		this.cores = cores;
 	}
-	
+
     /**
      * Returns the guard band
-     * 
+     *
      * @return int
      */
     public int getGuardBand() {
@@ -102,7 +102,7 @@ public class NetworkConfig {
 
     /**
      * Sets the guard band
-     * 
+     *
      * @param guardBand int
      */
     public void setGuardBand(int guardBand) {
@@ -111,7 +111,7 @@ public class NetworkConfig {
 
     /**
      * Returns the BVT Spectral Amplitude
-     * 
+     *
      * @return int
      */
     public int getBvtSpectralAmplitude() {
@@ -120,16 +120,16 @@ public class NetworkConfig {
 
     /**
      * Sets the BVT Spectral Amplitude
-     * 
+     *
      * @param bvtSpectralAmplitude int
      */
     public void setBvtSpectralAmplitude(int bvtSpectralAmplitude) {
         this.bvtSpectralAmplitude = bvtSpectralAmplitude;
     }
-    
+
     /**
      * This class represents a noda of the network
-     * 
+     *
      * @author Iallen
      */
     public static class NodeConfig {
@@ -141,7 +141,7 @@ public class NetworkConfig {
 
         /**
          * Creates a new instance of NodeConfig
-         * 
+         *
          * @param name String
          * @param transmiters int
          * @param receivers int
@@ -156,7 +156,7 @@ public class NetworkConfig {
 
         /**
          * Returns the node name
-         * 
+         *
          * @return String
          */
         public String getName() {
@@ -165,7 +165,7 @@ public class NetworkConfig {
 
         /**
          * Sets the node name
-         * 
+         *
          * @param name String
          */
         public void setName(String name) {
@@ -174,7 +174,7 @@ public class NetworkConfig {
 
         /**
          * Returns the number of transmitters
-         * 
+         *
          * @return int
          */
         public int getTransmitters() {
@@ -183,7 +183,7 @@ public class NetworkConfig {
 
         /**
          * Sets the number of transmitters
-         * 
+         *
          * @param transmitters int
          */
         public void setTransmitters(int transmitters) {
@@ -192,7 +192,7 @@ public class NetworkConfig {
 
         /**
          * Returns the number of receivers
-         * 
+         *
          * @return int
          */
         public int getReceivers() {
@@ -201,16 +201,16 @@ public class NetworkConfig {
 
         /**
          * Sets the number of receivers
-         * 
+         *
          * @param receivers int
          */
         public void setReceivers(int receivers) {
             this.receivers = receivers;
         }
-        
+
         /**
          * Returns the number of regenerators
-         * 
+         *
          * @return int
          */
         public int getRegenerators() {
@@ -219,7 +219,7 @@ public class NetworkConfig {
 
         /**
          * Sets the number of regenerators
-         * 
+         *
          * @param regenerators int
          */
         public void setRegenerators(int regenerators) {
@@ -229,11 +229,11 @@ public class NetworkConfig {
 
     /**
      * This class represents a link of the network
-     * 
+     *
      * @author Iallen
      */
     public static class LinkConfig{
-    	
+
         private String source;
         private String destination;
         private int slots;
@@ -242,7 +242,7 @@ public class NetworkConfig {
 
         /**
          * Creates a new instance of LinkConfig
-         * 
+         *
          * @param source String
          * @param destination String
          * @param slots int
@@ -259,7 +259,7 @@ public class NetworkConfig {
 
         /**
          * Returns the source name
-         * 
+         *
          * @return String
          */
         public String getSource() {
@@ -268,7 +268,7 @@ public class NetworkConfig {
 
         /**
          * Sets the source name
-         * 
+         *
          * @param source String
          */
         public void setSource(String source) {
@@ -277,7 +277,7 @@ public class NetworkConfig {
 
         /**
          * Returns the destination name
-         * 
+         *
          * @return String
          */
         public String getDestination() {
@@ -286,7 +286,7 @@ public class NetworkConfig {
 
         /**
          * Sets the destination name
-         * 
+         *
          * @param destination String
          */
         public void setDestination(String destination) {
@@ -295,7 +295,7 @@ public class NetworkConfig {
 
         /**
          * Returns the number of slots
-         * 
+         *
          * @return int
          */
         public int getSlots() {
@@ -304,7 +304,7 @@ public class NetworkConfig {
 
         /**
          * Sets the number of sltos
-         * 
+         *
          * @param slots int
          */
         public void setSlots(int slots) {
@@ -313,7 +313,7 @@ public class NetworkConfig {
 
         /**
          * Returns the spectrum bandwidth
-         * 
+         *
          * @return double
          */
         public double getSpectrum() {
@@ -322,7 +322,7 @@ public class NetworkConfig {
 
         /**
          * Sets the spectrum bandwidth
-         * 
+         *
          * @param spectrum double
          */
         public void setSpectrum(double spectrum) {
@@ -331,7 +331,7 @@ public class NetworkConfig {
 
         /**
          * Returns the size of the link
-         * 
+         *
          * @return double
          */
         public double getSize() {
@@ -340,7 +340,7 @@ public class NetworkConfig {
 
         /**
          * Sets the size of the link
-         * 
+         *
          * @param size double
          */
         public void setSize(double size) {
@@ -350,20 +350,20 @@ public class NetworkConfig {
 
     /**
      * This class represents a modulation of the network
-     * 
+     *
      * @author Iallen
      */
     public static class ModulationConfig {
-    	
+
         private String name;
         private double maxRange; // km
         private double M;        // Number of modulation format symbols
         private double SNR;      // SNR threshold (dB)
         private double XT;       // XT threshold (dB)
-        
+
         /**
          * Creates a new instance of ModulationConfig
-         * 
+         *
          * @param name String
          * @param M double
          * @param maxRange double
@@ -380,7 +380,7 @@ public class NetworkConfig {
 
         /**
          * Returns the modulation name
-         * 
+         *
          * @return String
          */
         public String getName() {
@@ -389,7 +389,7 @@ public class NetworkConfig {
 
         /**
          * Sets the modulation name
-         * 
+         *
          * @param name String
          */
         public void setName(String name) {
@@ -398,7 +398,7 @@ public class NetworkConfig {
 
         /**
          * Returns the M
-         * 
+         *
          * @return double
          */
         public double getM() {
@@ -407,16 +407,16 @@ public class NetworkConfig {
 
         /**
          * Sets the M
-         * 
+         *
          * @param M double
          */
         public void setM(double M) {
             this.M = M;
         }
-        
+
         /**
          * Returns the maximum range of the modulation
-         * 
+         *
          * @return double
          */
         public double getMaxRange() {
@@ -425,63 +425,63 @@ public class NetworkConfig {
 
         /**
          * Sets the maximum range of the modulation
-         * 
+         *
          * @param maxRange double
          */
         public void setMaxRange(double maxRange) {
             this.maxRange = maxRange;
         }
-        
+
         /**
          * Returns the SNR threshold
-         * 
+         *
          * @return double
          */
 		public double getSNR() {
 			return SNR;
 		}
-		
+
 		/**
 		 * Sets the SNR threshold
-		 * 
+		 *
 		 * @param SNR double
 		 */
 		public void setSNR(double SNR) {
 			this.SNR = SNR;
 		}
-		
+
 		/**
          * Returns the XT threshold
-         * 
+         *
          * @return double
          */
 		public double getXT() {
 			return XT;
 		}
-		
+
 		/**
 		 * Sets the XT threshold
-		 * 
+		 *
 		 * @param XT double
 		 */
 		public void setXT(double XT) {
 			this.XT = XT;
 		}
 	}
-    
+
     /**
      * This class represents a core of the network
-     * 
+     *
      * @author Alexandre
      */
     public static class CoreConfig {
-    	
+
         private int id;
         private List<Integer> adjacentCores = new ArrayList<>(); // List of adjacent cores
-        
+
         /**
          * Creates a new instance of CoreConfig
-         * 
+         *
          * @param name int
          * @param adjacentCores List<Integer>
          */
@@ -492,7 +492,7 @@ public class NetworkConfig {
 
         /**
          * Returns the modulation name
-         * 
+         *
          * @return int
          */
         public int getId() {
@@ -501,16 +501,16 @@ public class NetworkConfig {
 
         /**
          * Sets the modulation name
-         * 
+         *
          * @param name int
          */
         public void setId(int id) {
             this.id = id;
         }
-        
+
         /**
          * Returns the modulation name
-         * 
+         *
          * @return List<Integer>
          */
         public List<Integer> getAdjacentCores() {
@@ -519,7 +519,7 @@ public class NetworkConfig {
 
         /**
          * Sets the modulation name
-         * 
+         *
          * @param adjacentsCores List<Integer>
          */
         public void setAdjacentCores(List<Integer> adjacentCores) {

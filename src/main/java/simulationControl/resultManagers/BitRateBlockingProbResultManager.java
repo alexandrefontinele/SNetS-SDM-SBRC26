@@ -10,34 +10,34 @@ import network.Pair;
 
 /**
  * This class is responsible for formatting the file with results of bitRate blocking probability
- * 
+ *
  * @author Iallen
  */
 public class BitRateBlockingProbResultManager implements ResultManagerInterface {
-	
+
 	private HashMap<Integer, HashMap<Integer, BitRateBlockingProbability>> bbps; // Contains the bitRate blocking probability metric for all load points and replications
 	private List<Integer> loadPoints;
 	private List<Integer> replications;
 	private List<Pair> pairs;
 	private final static String sep = ",";
 	private int maxCoresByLinks;
-	
+
 	/**
 	 * This method organizes the data by load point and replication.
-	 * 
+	 *
 	 * @param llms List<List<Measurement>>
 	 */
 	public void config(List<List<Measurement>> llms){
 		bbps = new HashMap<>();
-		
+
 		for (List<Measurement> loadPoint : llms) {
 			int load = loadPoint.get(0).getLoadPoint();
 			HashMap<Integer, BitRateBlockingProbability>  reps = new HashMap<>();
 			bbps.put(load, reps);
-			
+
 			for (Measurement bbp : loadPoint) {
 				reps.put(bbp.getReplication(), (BitRateBlockingProbability)bbp);
-			}			
+			}
 		}
 		BitRateBlockingProbability bbp = (BitRateBlockingProbability) llms.get(0).get(0);
 		loadPoints = new ArrayList<>(bbps.keySet());
@@ -45,29 +45,29 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		this.pairs = new ArrayList<>(bbp.getUtil().pairs);
 		maxCoresByLinks = bbp.getMaxCoresByLinks();
 	}
-	
+
 	/**
 	 * Returns a string corresponding to the result file for bitRate blocking probabilities
-	 * 
+	 *
 	 * @return String
 	 */
 	@Override
 	public String result(List<List<Measurement>> llms){
 		config(llms);
-		
+
 		StringBuilder res = new StringBuilder();
 		res.append("Metrics" + sep + "LoadPoint" + sep + "BitRate" + sep + "src" + sep + "dest" + sep + " ");
-		
+
 		for (Integer rep : replications) { // Checks how many replications have been made and creates the header of each column
 			res.append(sep + "rep" + rep);
 		}
 		res.append("\n");
-		
+
 		res.append(resultGeneral());
 		res.append("\n\n");
 		res.append(resultGeneralRequestedBitRate());
 		res.append("\n\n");
-		
+
 		res.append(resultGeneralLackTx());
 		res.append("\n\n");
 		res.append(resultGeneralLackRx());
@@ -84,23 +84,23 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		res.append("\n\n");
 		res.append(resultGeneralXtOther());
 		res.append("\n\n");
-		
+
 		res.append(resultBlockPerCore());
 		res.append("\n\n");
-		
+
 		res.append(resultPair());
 		res.append("\n\n");
 		res.append(resultBitRate());
 		res.append("\n\n");
 		res.append(resultPairBandwidth());
 		res.append("\n\n");
-		
+
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the bitRate blocking probability general
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultGeneral(){
@@ -114,10 +114,10 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the general requested bit rate
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultGeneralRequestedBitRate(){
@@ -131,10 +131,10 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the bitRate blocking probability by lack of transmitters
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultGeneralLackTx(){
@@ -148,10 +148,10 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the bitRate blocking probability by lack of receivers
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultGeneralLackRx(){
@@ -165,10 +165,10 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the bitRate blocking probability by fragmentation
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultGeneralFrag(){
@@ -182,10 +182,10 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the bitRate blocking probability by QoTN
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultGeneralQoTN(){
@@ -199,10 +199,10 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the bitRate blocking probability by QoTO
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultGeneralQoTO(){
@@ -216,10 +216,10 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the bitRate blocking probability by other
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultGeneralOther(){
@@ -236,7 +236,7 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 
 	/**
 	 * Returns the bitRate probability by Crosstalk
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultGeneralXt(){
@@ -250,10 +250,10 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the bitRate probability by Crosstalk int Others
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultGeneralXtOther(){
@@ -267,38 +267,38 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the bitRate blocking probability per pair
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultPair(){
 		StringBuilder res = new StringBuilder();
 		for (Integer loadPoint : loadPoints) {
 			String aux = "BitRate blocking probability per pair" + sep + loadPoint + sep + "all";
-			
+
 			for (Pair pair : this.pairs) {
 				String aux2 = aux + sep + pair.getSource().getName() + sep + pair.getDestination().getName() + sep + " ";
 				for (Integer replic : replications) {
 					aux2 = aux2 + sep + bbps.get(loadPoint).get(replic).getProbBlockPair(pair);
 				}
-				res.append(aux2 + "\n");	
+				res.append(aux2 + "\n");
 			}
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the bitRate blocking probability per bitRate
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultBitRate(){
 		StringBuilder res = new StringBuilder();
 		for (Integer loadPoint : loadPoints) {
 			String aux = "BitRate blocking probability per bitRate" + sep + loadPoint;
-			
+
 			for (Double bitRate : bbps.get(0).get(0).getUtil().bitRateList) {
 				String aux2 = aux + sep + (bitRate/1000000000.0) + "Gbps" + sep + "all" + sep + "all" + sep + " ";
 				for (Integer rep : replications) {
@@ -312,14 +312,14 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 
 	/**
 	 * Returns the bitRate blocking probability per pair and bitRate
-	 * 
+	 *
 	 * @return
 	 */
 	private String resultPairBandwidth(){
 		StringBuilder res = new StringBuilder();
 		for (Integer loadPoint : loadPoints) {
 			String aux = "BitRate blocking probability per pair and bitRate" + sep + loadPoint;
-			
+
 			for (Double bitRate : bbps.get(0).get(0).getUtil().bitRateList) {
 				String aux2 = aux + sep + (bitRate/1000000000.0) + "Gbps";
 				for (Pair pair :  bbps.get(0).get(0).getUtil().pairs) {
@@ -328,15 +328,15 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 						aux3 = aux3 + sep + bbps.get(loadPoint).get(rep).getProbBlockPairBitRate(pair, bitRate);
 					}
 					res.append(aux3 + "\n");
-				}				
+				}
 			}
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the bitRate blocking probability per core
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultBlockPerCore(){
@@ -352,5 +352,5 @@ public class BitRateBlockingProbResultManager implements ResultManagerInterface 
 		}
 		return res.toString();
 	}
-	
+
 }

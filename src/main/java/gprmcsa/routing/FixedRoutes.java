@@ -17,7 +17,7 @@ import com.google.gson.reflect.TypeToken;
 
 /**
  * This class allow to configure a set of pre-established routes for each pair of origin and destination.
- * 
+ *
  * @author Iallen
  */
 public class FixedRoutes implements RoutingAlgorithmInterface {
@@ -29,6 +29,12 @@ public class FixedRoutes implements RoutingAlgorithmInterface {
     private HashMap<String, Route> routesForAllPairs;
 
 
+    /**
+     * Finds the route.
+     * @param request the request.
+     * @param mesh the mesh.
+     * @return true if the condition is met; false otherwise.
+     */
     @Override
     public boolean findRoute(Circuit request, Mesh mesh) {
         if (routesForAllPairs == null) {
@@ -79,15 +85,15 @@ public class FixedRoutes implements RoutingAlgorithmInterface {
         }
 
         routesForAllPairs = new HashMap<String, Route>();
-        
+
         for (int i = 0; i < routeList.size(); i++) {
         	String nodes[] = routeList.get(i).split("-");
             Vector<Node> route = new Vector<Node>();
-            
+
             for(int n = 0; n < nodes.length; n++){
             	route.add(mesh.searchNode(nodes[n]));
             }
-            
+
             String pair = nodes[0] + DIV + nodes[nodes.length - 1];
             routesForAllPairs.put(pair, new Route(route));
         }
@@ -95,7 +101,7 @@ public class FixedRoutes implements RoutingAlgorithmInterface {
 
     /**
 	 * Returns the route list for all pairs
-	 * 
+	 *
 	 * @return Vector<Route>
 	 */
     public HashMap<String, Route> getRoutesForAllPairs() {

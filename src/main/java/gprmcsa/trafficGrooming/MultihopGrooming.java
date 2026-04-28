@@ -8,6 +8,9 @@ import util.IntersectionFreeSpectrum;
 
 import java.util.*;
 
+/**
+ * Represents the MultihopGrooming component.
+ */
 public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterface {
 	private static int microRegionsDeep = 2;
 	private int maxVirtualHops = 3;
@@ -15,6 +18,10 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 	private HashMap<String, HashSet<Node>> microRegions;
 	private HashMap<Circuit, Double> oSNRImpactPerCircuit = new HashMap<>(); // store the snrImpact per circuit.
 
+	/**
+	 * Executes the init virtual routing operation.
+	 * @param cp the cp.
+	 */
 	private void initVirtualRouting(ControlPlane cp) {
 		this.virtualRouting = new HashMap<>();
 
@@ -37,6 +44,10 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 
 	}
 
+	/**
+	 * Executes the init micro regions operation.
+	 * @param cp the cp.
+	 */
 	private void initMicroRegions(ControlPlane cp) {
 		this.microRegions = new HashMap<>();
 
@@ -45,12 +56,26 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		}
 	}
 
+	/**
+	 * Computes the micro region.
+	 * @param cp the cp.
+	 * @param n the n.
+	 * @param deep the deep.
+	 * @return the result of the operation.
+	 */
 	private HashSet<Node> computeMicroRegion(ControlPlane cp, Node n, int deep) {
 		HashSet<Node> mr = computeMicroRegionAux(cp, n, deep);
 		mr.remove(n);
 		return mr;
 	}
 
+	/**
+	 * Computes the micro region aux.
+	 * @param cp the cp.
+	 * @param n the n.
+	 * @param deep the deep.
+	 * @return the result of the operation.
+	 */
 	private HashSet<Node> computeMicroRegionAux(ControlPlane cp, Node n, int deep) {
 		HashSet<Node> res = new HashSet<>();
 		res.add(n);
@@ -62,6 +87,12 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		return res;
 	}
 
+	/**
+	 * Returns the make loop.
+	 * @param sol the sol.
+	 * @param newCirc the newCirc.
+	 * @return true if the condition is met; false otherwise.
+	 */
 	private static boolean makeLoop(ArrayList<Circuit> sol, Circuit newCirc) {
 
 		for (Circuit c : sol) {
@@ -73,6 +104,11 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		return false;
 	}
 
+	/**
+	 * Checks whether virtual loop.
+	 * @param sol the sol.
+	 * @return true if the condition is met; false otherwise.
+	 */
 	private static boolean hasVirtualLoop(MultihopSolution sol) {
 		if (sol.virtualRoute.size() == 0)
 			return false;
@@ -92,6 +128,10 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		return false;
 	}
 
+	/**
+	 * Adds the new circuit virtual routing.
+	 * @param circuit the circuit.
+	 */
 	private void addNewCircuitVirtualRouting(Circuit circuit) {
 		updateSNRImpact(circuit);
 		String dst = circuit.getPair().getDestination().getName();
@@ -152,7 +192,7 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 
 	/**
 	 * this method must be called when a circuit is added or removed.
-	 * 
+	 *
 	 * @param c
 	 */
 	/*
@@ -160,10 +200,10 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 	 * r.getLinkList()){ for(Circuit ci: l.getCircuitList()){
 	 * oSNRImpactPerCircuit.remove(ci); } } } /** this method must be called when a
 	 * circuit is added or removed.
-	 * 
-	 * @param c 
-	 * Criado por Selles
-	 * Adicionado um for para percorrer Cores devido a lista de circuito existir apenas dentro do core
+	 *
+	 * @param c
+	 * Created by Selles
+	 * Added a for-loop to iterate over cores because the circuit list exists only inside the core
 	 */
 	private void updateSNRImpact(Circuit c) {
 		Route r = c.getRoute();
@@ -176,6 +216,10 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		}
 	}
 
+	/**
+	 * Removes the circuit virtual routing.
+	 * @param circuit the circuit.
+	 */
 	protected void removeCircuitVirtualRouting(Circuit circuit) {
 		updateSNRImpact(circuit);
 		Set<String> srcs = this.virtualRouting.keySet();
@@ -199,6 +243,11 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 
 	}
 
+	/**
+	 * Returns the all virtual routing.
+	 * @param rfc the rfc.
+	 * @return the result of the operation.
+	 */
 	private ArrayList<MultihopSolution> allVirtualRouting(RequestForConnection rfc) {
 		ArrayList<MultihopSolution> allSolutions = new ArrayList<>();
 
@@ -208,6 +257,13 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		return allSolutions;
 	}
 
+	/**
+	 * Returns the decide to expand.
+	 * @param numMoreSlots the numMoreSlots.
+	 * @param numLowerFreeSlots the numLowerFreeSlots.
+	 * @param numUpperFreeSlots the numUpperFreeSlots.
+	 * @return the result of the operation.
+	 */
 	private static int[] decideToExpand(int numMoreSlots, int numLowerFreeSlots, int numUpperFreeSlots) {
 		int[] res = new int[2];
 		if (numLowerFreeSlots >= numMoreSlots) {
@@ -221,6 +277,13 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		return res;
 	}
 
+	/**
+	 * Returns the complement solution.
+	 * @param ms the ms.
+	 * @param rfc the rfc.
+	 * @param cp the cp.
+	 * @return the result of the operation.
+	 */
 	protected Circuit complementSolution(MultihopSolution ms, RequestForConnection rfc, ControlPlane cp)
 			throws Exception {
 		Node s = ms.pairComplement.getSource();
@@ -235,6 +298,12 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		}
 	}
 
+	/**
+	 * Checks whether suficient residual capacity.
+	 * @param ms the ms.
+	 * @param rfc the rfc.
+	 * @return true if the condition is met; false otherwise.
+	 */
 	private boolean hasSuficientResidualCapacity(MultihopSolution ms, RequestForConnection rfc) {
 		boolean hasSuficientResitualCapacity = true;
 
@@ -248,6 +317,12 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		return hasSuficientResitualCapacity;
 	}
 
+	/**
+	 * Checks whether be expanded.
+	 * @param c the c.
+	 * @param rfc the rfc.
+	 * @return true if the condition is met; false otherwise.
+	 */
 	private boolean canBeExpanded(Circuit c, RequestForConnection rfc) {
 		int[] exp = Grooming.circuitExpansiveness(c);
 		int circExCap = exp[0] + exp[1];
@@ -256,6 +331,13 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		return circExCap >= slotsNeeded;
 	}
 
+	/**
+	 * Returns the aply solution.
+	 * @param ms the ms.
+	 * @param rfc the rfc.
+	 * @param cp the cp.
+	 * @return true if the condition is met; false otherwise.
+	 */
 	private boolean aplySolution(MultihopSolution ms, RequestForConnection rfc, ControlPlane cp) throws Exception {
 		ms = ms.clone();
 		Circuit newCircuit = null;
@@ -347,6 +429,12 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		}
 	}
 
+	/**
+	 * Returns the search circuits for grooming.
+	 * @param rfc the rfc.
+	 * @param cp the cp.
+	 * @return true if the condition is met; false otherwise.
+	 */
 	public boolean searchCircuitsForGrooming(RequestForConnection rfc, final ControlPlane cp) throws Exception {
 
 		if (this.virtualRouting == null) {
@@ -362,6 +450,12 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		ArrayList<MultihopSolution> multihopSolutions = this.allVirtualRouting(rfc);
 		this.avMS(multihopSolutions, rfc, cp);
 		multihopSolutions.sort(new Comparator<MultihopSolution>() {
+			/**
+			 * Returns the compare.
+			 * @param o1 the o1.
+			 * @param o2 the o2.
+			 * @return the result of the operation.
+			 */
 			public int compare(MultihopSolution o1, MultihopSolution o2) {
 				Double c1 = costFunction(o1, rfc, cp);
 				Double c2 = costFunction(o2, rfc, cp);
@@ -382,6 +476,11 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		return true;
 	}
 
+	/**
+	 * Executes the finish connection operation.
+	 * @param rfc the rfc.
+	 * @param cp the cp.
+	 */
 	public void finishConnection(RequestForConnection rfc, ControlPlane cp) throws Exception {
 
 		for (Circuit circuit : rfc.getCircuits()) {
@@ -406,11 +505,18 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 
 	}
 
+	/**
+	 * Returns the cost function.
+	 * @param var1 the var1.
+	 * @param var2 the var2.
+	 * @param var3 the var3.
+	 * @return the result of the operation.
+	 */
 	protected abstract double costFunction(MultihopSolution var1, RequestForConnection var2, ControlPlane var3);
 
 	/**
 	 * Compute the statistics for each traffic grooming solution.
-	 * 
+	 *
 	 * @param ams traffic grooming solutions
 	 * @param rfc request to be served
 	 * @param cp  control plane
@@ -486,6 +592,9 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 
 	}
 
+	/**
+	 * Prints the virtual route.
+	 */
 	private void printVirtualRoute() {
 		System.out.println("Virtual routes:");
 		for (String o : virtualRouting.keySet()) {
@@ -617,6 +726,10 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 		Pair pairComplement = null;
 		MultihopSolutionStatistics statistics = null;
 
+		/**
+		 * Creates and returns a copy of this object.
+		 * @return the result.
+		 */
 		@Override
 		public MultihopSolution clone() {
 			MultihopSolution n = new MultihopSolution();
@@ -628,6 +741,10 @@ public abstract class MultihopGrooming implements TrafficGroomingAlgorithmInterf
 			return n;
 		}
 
+		/**
+		 * Returns the string representation of this object.
+		 * @return the result.
+		 */
 		@Override
 		public String toString() {
 			String res = "[";

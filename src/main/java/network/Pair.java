@@ -8,7 +8,7 @@ import simulationControl.Util;
 
 /**
  * This class represents a pair of source (s) and destination (d) nodes
- * 
+ *
  * @author Iallen
  */
 public class Pair implements Serializable {
@@ -18,7 +18,7 @@ public class Pair implements Serializable {
     private List<RequestGenerator> requestGenerators;
 
     /**
-     * Cria instancia de Pair
+     * Creates a Pair instance
      *
      * @param s Node
      * @param d Node
@@ -28,7 +28,7 @@ public class Pair implements Serializable {
         this.destination = d;
         requestGenerators = new ArrayList<RequestGenerator>();
     }
-    
+
     /**
      * Returns the source node
      *
@@ -58,13 +58,13 @@ public class Pair implements Serializable {
 
     /**
      * Returns the pair name
-     * 
+     *
      * @return String
      */
     public String getName() {
         return ("(" + this.source.getName() + "," + this.destination.getName() + ")");
     }
-    
+
     /**
      * Add a request generator to the pair
      *
@@ -76,7 +76,7 @@ public class Pair implements Serializable {
 
     /**
      * Returns the request generators
-     * 
+     *
      * @return List<RequestGenerator> the requestGenerators
      */
     public List<RequestGenerator> getRequestGenerators() {
@@ -85,7 +85,7 @@ public class Pair implements Serializable {
 
     /**
      * Checks whether a given pair is equal to this pair
-     * 
+     *
      * @param o Object
      */
     @Override
@@ -99,6 +99,10 @@ public class Pair implements Serializable {
         }
     }
 
+    /**
+     * Returns the string representation of this object.
+     * @return the result.
+     */
     public String toString(){
         return source.getName() + "-" + destination.getName();
     }

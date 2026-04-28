@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * This class is responsible for formatting the file with results of consumed energy
- * 
+ *
  * @author Iallen, Alexandre
  *
  */
@@ -39,46 +39,51 @@ public class ConsumedEnergyResultManager implements ResultManagerInterface {
         loadPoints = new ArrayList<>(ces.keySet());
         replications = new ArrayList<>(ces.values().iterator().next().keySet());
     }
-    
+
+    /**
+     * Returns the result.
+     * @param llms the llms.
+     * @return the result of the operation.
+     */
     @Override
     public String result(List<List<Measurement>> llms) {
         config(llms);
-        
+
         StringBuilder res = new StringBuilder();
         res.append("Metrics" + sep + "LoadPoint" + sep + " ");
-        
+
         for (Integer rep : replications) { // Checks how many replications have been made and creates the header of each column
             res.append(sep + "rep" + rep);
         }
         res.append("\n");
-        
+
         res.append(resultTotalConsumedEnergy());
 		res.append("\n\n");
-		
+
 		res.append(ressultTotalPowerConsumption());
 		res.append("\n\n");
-		
+
 		res.append(ressultEnergyEfficiency());
 		res.append("\n\n");
-		
+
 		res.append(resultTotalDataTransmitted());
 		res.append("\n\n");
-		
+
 		res.append(resultTotalConsumedEnergyTransponders());
 		res.append("\n\n");
-		
+
 		res.append(resultTotalConsumedEnergyOXCs());
 		res.append("\n\n");
-		
+
 		res.append(resultTotalConsumedEnergyAmplifiers());
 		res.append("\n\n");
-		
+
         return res.toString();
     }
 
     /**
 	 * Returns the total energy consumption of the network
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultTotalConsumedEnergy(){
@@ -92,10 +97,10 @@ public class ConsumedEnergyResultManager implements ResultManagerInterface {
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the average power consumption
-	 * 
+	 *
 	 * @return String
 	 */
 	private String ressultTotalPowerConsumption(){
@@ -110,10 +115,10 @@ public class ConsumedEnergyResultManager implements ResultManagerInterface {
 		return res.toString();
 	}
 
-	
+
 	/**
-	 * Returns the energy consumption of the transponders 
-	 * 
+	 * Returns the energy consumption of the transponders
+	 *
 	 * @return String
 	 */
 	private String resultTotalConsumedEnergyTransponders(){
@@ -127,10 +132,10 @@ public class ConsumedEnergyResultManager implements ResultManagerInterface {
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the energy consumption of the OXCs
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultTotalConsumedEnergyOXCs(){
@@ -144,10 +149,10 @@ public class ConsumedEnergyResultManager implements ResultManagerInterface {
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the energy consumption of the amplifiers
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultTotalConsumedEnergyAmplifiers(){
@@ -161,10 +166,10 @@ public class ConsumedEnergyResultManager implements ResultManagerInterface {
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the energy efficiency
-	 * 
+	 *
 	 * @return String
 	 */
 	private String ressultEnergyEfficiency(){
@@ -178,10 +183,10 @@ public class ConsumedEnergyResultManager implements ResultManagerInterface {
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Returns the total data transmitted
-	 * 
+	 *
 	 * @return String
 	 */
 	private String resultTotalDataTransmitted(){
@@ -195,5 +200,5 @@ public class ConsumedEnergyResultManager implements ResultManagerInterface {
 		}
 		return res.toString();
 	}
-	
+
 }

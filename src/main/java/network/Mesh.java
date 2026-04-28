@@ -17,7 +17,7 @@ import util.RandGenerator;
 
 /**
  * This class represents the topology of the network
- * 
+ *
  * @author Iallen
  */
 public class Mesh implements Serializable {
@@ -25,9 +25,9 @@ public class Mesh implements Serializable {
     private Vector<Node> nodeList;
     private Vector<Link> linkList;
     private Vector<Pair> pairList;
-    
+
     private int guarBand;
-    
+
     private PhysicalLayer physicalLayer;
     private OthersConfig othersConfig;
 
@@ -36,7 +36,7 @@ public class Mesh implements Serializable {
     private double totalPowerConsumptionOXCs;
     private double totalPowerConsumptionAmplifiers;
     private double totalDataTransmitted;
-    
+
     private List<Modulation> avaliableModulations;
     private HashMap<String, HashMap<Double, Double>> modTrDistance;
 
@@ -44,7 +44,7 @@ public class Mesh implements Serializable {
 
     /**
      * Creates a new instance of Mesh.
-     * 
+     *
      * @param nc NetworkConfig
      * @param tc TrafficConfig
      */
@@ -52,10 +52,10 @@ public class Mesh implements Serializable {
         this.util = util;
         this.guarBand = nc.getGuardBand();
         this.othersConfig = oc;
-        
+
         RandGenerator randGenerator = new RandGenerator();
         HashMap<String, Node> nodesAux = new HashMap<>();
-        
+
         // Create nodes
         this.nodeList = new Vector<>();
         for (NetworkConfig.NodeConfig nodeConf : nc.getNodes()) {
@@ -85,28 +85,28 @@ public class Mesh implements Serializable {
                 }
             }
         }
-        
+
         // Add request generators in pairs
         for (TrafficConfig.RequestGeneratorConfig rgc : tc.getRequestGenerators()) {
             Pair p = pairsAux.get(rgc.getSource()).get(rgc.getDestination());
             p.addRequestGenerator(new RequestGenerator(p, rgc.getBitRate(), rgc.getHoldRate(), rgc.getArrivalRate(), rgc.getArrivalRateIncrease(), randGenerator));
             util.bitRateList.add(rgc.getBitRate()); //Used to write to the archive the results of the simulation
         }
-        
+
         // Information related to the physical layer of the network
         this.physicalLayer = new PhysicalLayer(plc, this, util);
-        
+
         // Instance the modulation formats
         this.avaliableModulations = new ArrayList<>();
         for (NetworkConfig.ModulationConfig modConf : nc.getModulations()) {
         	Modulation mod = new Modulation(modConf.getName(), modConf.getMaxRange(), modConf.getM(), modConf.getSNR(), plc.getRateOfFEC(), linkList.get(0).getCore(0).getSlotSpectrumBand(), physicalLayer.getPolarizationModes(), modConf.getXT());
         	avaliableModulations.add(mod);
         }
-        
+
         if (avaliableModulations.isEmpty()) {
         	this.avaliableModulations = ModulationSelector.configureModulations(this);
         }
-        
+
         // Computing of the distances of the modulation formats
         if (physicalLayer.isActiveQoT()) {
         	if (modTrDistance == null) {
@@ -116,35 +116,35 @@ public class Mesh implements Serializable {
         	}
         }
     }
-    
+
     /**
      * Returns the modulation transmission range by transmission rate
-     * 
+     *
      * @param modulation Modulation
      * @param bitRate double
      * @return double - max transmission range
      */
     public double getModulationDistanceByBitRate(Modulation modulation, double bitRate) {
     	Double distance = null;
-    	
+
     	if (physicalLayer.isActiveQoT()) {
     		distance = modTrDistance.get(modulation.getName()).get(bitRate);
-    		
+
     		if(distance == null) {
     			distance = physicalLayer.computeModulationDistanceByBitRate(modulation, bitRate, this);
     			modTrDistance.get(modulation.getName()).put(bitRate, distance);
     		}
-			
+
     	} else {
     		distance = modulation.getMaxRange();
     	}
-    	
+
     	return distance;
     }
 
     /**
      * Returns a link to a given pair of source and destination nodes
-     * 
+     *
      * @param source String
      * @param destination String
      * @return Link
@@ -166,7 +166,7 @@ public class Mesh implements Serializable {
     public Vector<Link> getLinkList() {
         return linkList;
     }
-    
+
     /**
      * Getter for property nodeList.
      *
@@ -205,10 +205,10 @@ public class Mesh implements Serializable {
         }
         return res;
     }
-    
+
     /**
      * Return the list of source and destination node pairs
-     * 
+     *
      * @return Vector<Pair> the pairList
      */
     public Vector<Pair> getPairList() {
@@ -217,8 +217,8 @@ public class Mesh implements Serializable {
 
     /**
      * Returns the guard band
-     * 
-     * @return int 
+     *
+     * @return int
      */
     public int getGuardBand() {
         return this.guarBand;
@@ -226,7 +226,7 @@ public class Mesh implements Serializable {
 
     /**
      * This method returns the maximum amount of slots in a link between all links in the network
-     * 
+     *
      * @return int
      */
     public int maximumSlotsByLinks(){
@@ -241,10 +241,10 @@ public class Mesh implements Serializable {
     	}
     	return max;
     }
-    
+
     /**
      * This method returns the maximum amount of cores in a link between all links in the network
-     * 
+     *
      * @return int
      */
     public int maximumCoresByLinks(){
@@ -257,97 +257,97 @@ public class Mesh implements Serializable {
     	}
     	return max;
     }
-    
+
     /**
      * Returns the physical layer configuration of the network
-     * 
+     *
      * @return PhysicalLayer
      */
     public PhysicalLayer getPhysicalLayer(){
     	return physicalLayer;
     }
-    
+
     /**
      * Returns the others configuration
-     * 
+     *
      * @return OthersConfig
      */
     public OthersConfig getOthersConfig() {
         return othersConfig;
     }
-    
+
     /**
      * Returns the total power consumption
-     * 
+     *
      * @return double
      */
     public double getTotalPowerConsumption() {
         return totalPowerConsumption;
     }
-    
+
     /**
      * Returns the total power consumption by transponders
-     * 
+     *
      * @return double
      */
     public double getTotalPowerConsumptionTransponders() {
         return totalPowerConsumptionTransponders;
     }
-    
+
     /**
      * Returns the total power consumption by OXCs
-     * 
+     *
      * @return double
      */
     public double getTotalPowerConsumptionOXCs() {
         return totalPowerConsumptionOXCs;
     }
-    
+
     /**
      * Returns the total power consumption by amplifiers
-     * 
+     *
      * @return double
      */
     public double getTotalPowerConsumptionAmplifiers() {
         return totalPowerConsumptionAmplifiers;
     }
-    
+
     /**
      * Computes the total power consumption
-     * 
+     *
      * @param cp ControlPlane
      */
     public void computesPowerConsmption(ControlPlane cp) {
     	totalPowerConsumptionTransponders = EnergyConsumption.computeTranspondersPowerConsumption(cp);
     	totalPowerConsumptionOXCs = EnergyConsumption.computeOxcsPowerConsumption(nodeList);
     	totalPowerConsumptionAmplifiers = EnergyConsumption.computeLinksPowerConsumption(linkList, cp);
-    	
+
     	totalPowerConsumption = totalPowerConsumptionTransponders + totalPowerConsumptionOXCs + totalPowerConsumptionAmplifiers;
-    	
+
     	totalDataTransmitted = cp.getDataTransmitted();
     }
-    
+
     /**
      * Returns the total data transmitted
-     * 
+     *
      * @return double
      */
     public double getTotalDataTransmitted() {
     	return totalDataTransmitted;
     }
-    
+
     /**
      * Returns the avaliableModulations
-     * 
+     *
      * @return List<Modulation> avaliableModulations
      */
 	public List<Modulation> getAvaliableModulations() {
 		return avaliableModulations;
 	}
-	
+
 	/**
 	 * Sets the avaliableModulations
-	 * 
+	 *
 	 * @param avaliableModulations List<Modulation>
 	 */
 	public void setAvaliableModulations(List<Modulation> avaliableModulations) {
@@ -356,20 +356,20 @@ public class Mesh implements Serializable {
 
 	/**
 	 * Return the modTrDistance
-	 * 
+	 *
 	 * @return HashMap<Modulation, HashMap<Double, Double>>
 	 */
 	public HashMap<String, HashMap<Double, Double>> getModTrDistance() {
 		return modTrDistance;
 	}
-	
+
 	/**
 	 * Return the util
-	 * 
+	 *
 	 * @return util
 	 */
     public Util getUtil() {
         return util;
     }
-    
+
 }

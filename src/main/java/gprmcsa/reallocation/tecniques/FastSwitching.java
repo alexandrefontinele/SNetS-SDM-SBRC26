@@ -7,35 +7,38 @@ import network.ControlPlane;
 import util.IntersectionFreeSpectrum;
 
 /**
- * Tecnica de migracao de trafego entre nucleos para a mesma faixa de espectro.
- * 
+ * Traffic migration technique between cores for the same spectrum band.
+ *
  * @author gustavo
  *
  *
- *         FALTANDO TESTAR
+ *         PENDING TESTING
  */
 public class FastSwitching {
 
+	/**
+	 * Creates a new instance of FastSwitching.
+	 */
 	public FastSwitching() {
 		//
 	}
 
 	/**
-	 * Troca de nucleo
-	 * 
+	 * Troca de core
+	 *
 	 * @param circuit
 	 * @param cp
 	 * @return
 	 * @throws Exception
 	 */
 	public boolean execute(Circuit circuit, int newIndexCore, ControlPlane cp) throws Exception {
-		
-		// nucleo deve ser diferente do nucleo do circuito a ser realocado
+
+		// the core must be different from the core of the circuit to be reallocated
 		if (circuit.getIndexCore() == newIndexCore) {
 			return false;
 		}
 
-		// verifica se a faixa espectral do novo nucleo esta livre
+		// check whether the spectral range of the new core is free
 		boolean isPossible = canBeSwitchingCore(circuit, newIndexCore);
 
 		if (isPossible == false) {
@@ -45,9 +48,9 @@ public class FastSwitching {
 		// Saves the allocated spectrum band without the reallocation
 		int oldIndexCore = circuit.getIndexCore();
 
-//		System.out.println("Espectro ");
-		
-		// Releasing the spectrum and guard bands already allocated do nucleo original
+//		System.out.println("Spectrum ");
+
+		// Releasing the spectrum and guard bands already allocated from the original core
 		cp.releaseSpectrum(circuit, circuit.getSpectrumAssigned(), circuit.getRoute().getLinkList(), circuit.getGuardBand());
 
 		// Try to realloc circuit
@@ -60,9 +63,9 @@ public class FastSwitching {
 		// already active circuits
 		boolean QoT = cp.isAdmissibleQualityOfTransmission(circuit);
 
-//		System.out.println("Entrou aqui");
-		// QoT ou QoTO não aceitável ou XT inaceitavel
-		// colocar o circuito original de volta
+//		System.out.println("Entered here");
+		// QoT ou QoTO no aceitvel ou XT inaceitavel
+		// restore the original circuit
 		if (!QoT) {
 
 			// QoT was not acceptable after expansion, releasing the spectrum
@@ -77,10 +80,10 @@ public class FastSwitching {
 			// Recalculates the QoT and XT of the circuit
 			cp.computeQualityOfTransmission(circuit, null, false);
 
-			// nao deu certo a realocacao devico a QoT inaceitavel
+			// reallocation failed because QoT was unacceptable
 
 		} else {// QoT Aceitavel
-			// verificar se Xt é aceitavel
+			// check se Xt  aceitavel
 			boolean xt = cp.isAdmissibleCrosstalk(circuit);// verifica crosstalk
 
 			if (!xt) {
@@ -92,17 +95,17 @@ public class FastSwitching {
 					throw new Exception("Bad RMLSA. Spectrum cant be allocated.");
 				}
 
-				// recalcula crosstalk
+				// recalculate crosstalk
 				cp.computeCrosstalk(circuit);
 
-			} else { // realocacao efetivada
-				// atualiza o consumo da rede
-//				System.out.println("realocacao com sucesso");
-				
-				// atualizar a lista de circuitos dos cores
+			} else { // reallocation completed
+				// update network power consumption
+//				System.out.println("successful reallocation");
+
+				// update the circuit lists of the cores
 				removeCircuitOldCore(circuit, oldIndexCore);
 				addCircuitNewCore(circuit, newIndexCore);
-				
+
 				cp.updateNetworkPowerConsumption();
 				return true;
 			}
@@ -113,7 +116,7 @@ public class FastSwitching {
 	}
 
 	/**
-	 * Remover circuito da lista de circuitos do Nucleo Antigo
+	 * Remove the circuit from the old-core circuit list
 	 * @param circuit
 	 * @param oldIndexCore
 	 */
@@ -122,9 +125,9 @@ public class FastSwitching {
 			circuit.getRoute().getLinkList().get(i).getCore(oldIndexCore).removeCircuit(circuit);
 		}
 	}
-	
+
 	/**
-	 * Adicionar circuito na lista de circuitos do Nucleo Novo
+	 * Add the circuit to the new-core circuit list
 	 */
 	private void addCircuitNewCore(Circuit circuit, int newIndexCore) {
 		for (int i = 0; i < circuit.getRoute().getLinkList().size(); i++) {
@@ -133,19 +136,19 @@ public class FastSwitching {
 	}
 
 	/**
-	 * verifica se a faixa de espetro do novo nucleo está livre ou nao
+	 * checks se a band de espetro do novo core est free ou not
 	 */
 	public boolean canBeSwitchingCore(Circuit circuit, int newIndexCore) {
 
 		int guardBand = circuit.getGuardBand();
 		int band[] = circuit.getSpectrumAssigned();
 
-		// composition da rota do nucleo a ser realocado
+		// composition of the route for the core to be reallocated
 		List<int[]> composition = IntersectionFreeSpectrum.merge(circuit.getRoute(), guardBand, newIndexCore);
 
 		for (int[] fl : composition) {
-			// verifica se o intervalo espectral está contido em um bloco livre nno novo
-			// nucleo
+			// checks whether the spectral interval is contained in a free block in the new core
+			// core
 			if (band[0] >= fl[0] && band[1] <= fl[1]) {
 				return true;
 			}

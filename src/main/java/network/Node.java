@@ -5,7 +5,7 @@ import java.util.Vector;
 
 /**
  * This class represents a network topology node
- * 
+ *
  * @author Iallen
  */
 public class Node implements Serializable {
@@ -15,9 +15,9 @@ public class Node implements Serializable {
     private Vector<Pair> pairs;
     private Transmitters txs;
     private Receivers rxs;
-    
+
     private Regenerators regenerators;
-    
+
     /**
      * Creates a new instance of Node.
      *
@@ -33,7 +33,7 @@ public class Node implements Serializable {
 
     /**
      * Creates a new instance of Node
-     * 
+     *
      * @param name String
      * @param numTx int
      * @param numRx int
@@ -48,7 +48,7 @@ public class Node implements Serializable {
 
     /**
      * Checks whether a given node is equal to this node
-     * 
+     *
      * @param o Object
      */
     public boolean equals(Object o) {
@@ -114,16 +114,20 @@ public class Node implements Serializable {
         this.pairs = pairs;
     }
 
-    
+
     /**
      * Returns the bank of regenerators
-     * 
+     *
      * @return regenerators Regenerators
      */
     public Regenerators getRegenerators(){
     	return regenerators;
     }
 
+    /**
+     * Returns the string representation of this object.
+     * @return the result.
+     */
     public String toString(){
         return "node: " + name;
     }

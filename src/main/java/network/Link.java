@@ -9,19 +9,19 @@ import simulationControl.parsers.NetworkConfig.CoreConfig;
 
 /**
  * This class represents a link in SDM network
- * 
+ *
  * @author Jurandir
  */
 public class Link implements Serializable {
-	
+
 	private ArrayList<Core> cores;
-	
+
     private Oxc source;
     private Oxc destination;
     private double cost;
     private double distance;  //km
 //  private Spectrum spectrum;
-    
+
 //  private HashSet<Circuit> circuitList;
 
     /**
@@ -38,9 +38,9 @@ public class Link implements Serializable {
     	this.source = s;
         this.destination = d;
         this.distance = distance;
-        
+
         startCores(coreList, numberOfSlots, spectrumBand);
-        
+
         //this.spectrum = new Spectrum(numberOfSlots, spectrumBand);
         //this.circuitList = new HashSet<Circuit>();
         //this.cores = new Core[NUMBEROFCORES];
@@ -64,7 +64,7 @@ public class Link implements Serializable {
     /**
      * This method occupies a certain range of spectrum defined in the parameter
      *
-     * @param interval - int[] - Vector of two positions, the first refers to the first slot 
+     * @param interval - int[] - Vector of two positions, the first refers to the first slot
      *                           and the second to the last slot to be used
      * @return boolean
      */
@@ -161,10 +161,10 @@ public class Link implements Serializable {
  //   public List<int[]> getFreeSpectrumBands(int guardBand) {
  //       return spectrum.getFreeSpectrumBands(guardBand);
  //   }
-    
+
     /**
      * Returns the bandwidth of a slot
-     * 
+     *
      * @return the slotSpectrumBand
      */
  //   public double getSlotSpectrumBand() {
@@ -173,16 +173,16 @@ public class Link implements Serializable {
 
     /**
      * Returns the number of slots in the link
-     * 
+     *
      * @return int the numOfSlots
      */
   //  public int getNumOfSlots() {
   //      return spectrum.getNumOfSlots();
   //  }
-    
+
     /**
      * Returns the number of used slots
-     * 
+     *
 	 * @return int
 	 */
 //	public int getUsedSlots(){
@@ -197,10 +197,10 @@ public class Link implements Serializable {
  //   public Double getUtilization() {
  //       return this.spectrum.utilization();
  //   }
-	
+
 	/**
 	 * Returns the list of circuits that use this link
-	 * 
+	 *
 	 * @return the listRequests
 	 */
 //	public HashSet<Circuit> getCircuitList() {
@@ -209,16 +209,16 @@ public class Link implements Serializable {
 
 	/**
 	 * Sets the list of circuits that use this link
-	 * 
+	 *
 	 * @param listRequests the listRequests to set
 	 */
 //	public void setCircuitList(HashSet<Circuit> circuitList) {
 //		this.circuitList = circuitList;
 //	}
-	
+
 	/**
 	 * Adds a circuit to the list of circuits that use this link
-	 * 
+	 *
 	 * @param circuit Circuit
 	 */
 //	public void addCircuit(Circuit circuit){
@@ -226,26 +226,26 @@ public class Link implements Serializable {
 //			circuitList.add(circuit);
 //		}
 //	}
-	
+
 	/**
 	 * Removes a circuit from the list of circuits using this link
-	 * 
+	 *
 	 * @param circuit Circuit
 	 */
 //	public void removeCircuit(Circuit circuit){
 //		circuitList.remove(circuit);
 //	}
-	
-	
+
+
 //	private void startCores(Oxc s, Oxc d, int numberOfSlots, double spectrumBand, double distance) {
 //		for(int i=0; i<NUMBEROFCORES; i++) {
 //			this.cores[i] = new Core(s, d, numberOfSlots, spectrumBand, distance, i);
 //		}
 //	}
-	
+
     /**
      * Initializes the cores of the link
-     * 
+     *
      * @param s Oxc
      * @param d Oxc
      * @param numberOfSlots int
@@ -254,28 +254,28 @@ public class Link implements Serializable {
      */
 	private void startCores(List<CoreConfig> coreList, int numberOfSlots, double spectrumBand) {
 		this.cores = new ArrayList<Core>();
-		
+
 		//Create the cores
 		for(CoreConfig coreConf : coreList) {
 			this.cores.add(coreConf.getId(), new Core(coreConf.getId(), numberOfSlots, spectrumBand));
 		}
-		
+
 		//Configures the list of adjacent cores
 		for(CoreConfig coreConf : coreList) {
 			ArrayList<Core> adjacentCoresList = new ArrayList<>();
-			
+
 			List<Integer> adjacentIdList = coreConf.getAdjacentCores();
 			for(Integer adjId : adjacentIdList) {
 				adjacentCoresList.add(getCore(adjId));
 			}
-			
+
 			getCore(coreConf.getId()).setAdjacentCores(adjacentCoresList);
 		}
 	}
-	
+
 	/**
 	 * Returns the Core by id
-	 * 
+	 *
 	 * @param idCore int
 	 * @return Core
 	 */
@@ -287,10 +287,10 @@ public class Link implements Serializable {
 		}
 		return null;
 	}
-	
+
 //	public ArrayList<Integer> indexOfAdjacentCores(int id){
 //		ArrayList<Integer> listof = new ArrayList<Integer>();
-//		
+//
 //		if(id == 0) {
 //			listof.add(1); // all
 //			listof.add(2); // all
@@ -300,95 +300,100 @@ public class Link implements Serializable {
 //			listof.add(6); // all
 //			return listof;
 //		}
-//		
+//
 //		if(id == 6) {
 //			listof.add(0); //central
 //			listof.add(5); //anterior
 //			listof.add(1); //proximo
 //			return listof;
 //		}
-//		
+//
 //		if(id == 1) {
 //			listof.add(0); //central
 //			listof.add(6); //anterior
 //			listof.add(2); //proximo
 //			return listof;
 //		}
-//		
+//
 //		if((id>1) && (id<6)) {
 //			listof.add(0); //central
 //			listof.add(id-1); //anterior
 //			listof.add(id+1); //proximo
 //			return listof;
 //		}
-//		
+//
 //		return null;
 //	}
-	
+
 //	private boolean isAdjacent(Core core1, Core core2) {
 //		ArrayList<Integer> indexOfAdjacents = indexOfAdjacentCores(core1.getId());
-//		
+//
 //		if(indexOfAdjacents.contains(core2.getId())) {
 //			return true;
 //		}
-//		
+//
 //		return false;
 //	}
-	
-	
+
+
 //	public ArrayList<Core> getAdjacentCores(int id){
 //		ArrayList<Core> adjCores = new ArrayList<Core>();
-//		
+//
 //		for(Core core : this.cores) {
 //			if(isAdjacent(getCore(id), core)) {
 //				adjCores.add(core);
 //			}
 //		}
-//		
+//
 //		return adjCores;
 //	}
-	
+
+	/**
+	 * Returns the adjacent cores.
+	 * @param idCore the idCore.
+	 * @return the adjacent cores.
+	 */
 	public ArrayList<Core> getAdjacentCores(int idCore){
 		return getCore(idCore).getAdjacentCores();
 	}
-	
+
 	/**
 	 * Returns the total number of slots in link
-	 * 
+	 *
 	 * @return int
 	 */
 	public int totalNumberOfSlots() {
 		int cont = 0;
-		
+
 		for(Core core : cores) {
 			cont = cont + core.getNumOfSlots();
 		}
-		
+
 		return cont;
 	}
-	
+
 	/**
 	 * Returns list of cores
-	 * 
+	 *
 	 * @return ArrayList<Core>
 	 */
 	public ArrayList<Core> getCores() {
 		return cores;
 	}
-	
+
 	/**
 	 * Update the pesos of the adjacent cores
-	 * 
+	 *
 	 * @param core int
 	 */
 	public void updatePesosOfCores(int core) {
 		ArrayList<Core> adjacentCores = getAdjacentCores(core);
-		
+
 		for (Core coreAdj: adjacentCores) {
 			coreAdj.incrementPeso();
 		}
 	}
-	
+
 	/**
 	 * Renew all pesos of the cores
 	 */
@@ -397,14 +402,14 @@ public class Link implements Serializable {
 			core.renewPeso();
 		}
 	}
-	
+
 	/**
 	 * Returns the number of cores
-	 * 
+	 *
 	 * @return in
 	 */
 	public int getNumberOfCores() {
 		return cores.size();
 	}
-	
+
 }

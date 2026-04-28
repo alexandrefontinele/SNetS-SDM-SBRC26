@@ -3,9 +3,9 @@ package simulationControl.parsers;
 import java.io.Serializable;
 
 /**
- * This class represents the Simulation configuration file, its representation in entity form is 
+ * This class represents the Simulation configuration file, its representation in entity form is
  * important for the storage and transmission of this type of configuration in the JSON format.
- * 
+ *
  * Created by Iallen on 04/05/2017.
  */
 public class SimulationConfig {
@@ -45,7 +45,7 @@ public class SimulationConfig {
 
     /**
      * Returns the minimum number of requests
-     * 
+     *
      * @return int
      */
     public int getRequests() {
@@ -54,7 +54,7 @@ public class SimulationConfig {
 
     /**
      * Sets the minimum number of requests
-     * 
+     *
      * @param requests int
      */
     public void setRequests(int requests) {
@@ -63,7 +63,7 @@ public class SimulationConfig {
 
     /**
      * Returns the RMLSA type
-     * 
+     *
      * @return int
      */
     public int getRmlsaType() {
@@ -72,7 +72,7 @@ public class SimulationConfig {
 
     /**
      * Sets the RMLSA type
-     * 
+     *
      * @param rmlsaType int
      */
     public void setRmlsaType(int rmlsaType) {
@@ -81,7 +81,7 @@ public class SimulationConfig {
 
     /**
      * Returns the routing algorithm
-     * 
+     *
      * @return String
      */
     public String getRouting() {
@@ -90,25 +90,25 @@ public class SimulationConfig {
 
     /**
      * Sets the routing algorithm
-     * 
+     *
      * @param routing String
      */
     public void setRouting(String routing) {
         this.routing = routing;
     }
-    
+
     /**
      * Returns the k routing algorithm
-     * 
+     *
      * @return String
      */
     public String getkRouting() {
 		return kRouting;
 	}
-    
+
     /**
      * Sets the routing algorithm
-     * 
+     *
      * @param kRouting String
      */
 	public void setkRouting(String kRouting) {
@@ -117,34 +117,34 @@ public class SimulationConfig {
 
 	/**
      * Returns the spectrum assignment algorithm
-     * 
+     *
      * @return String
      */
     public String getSpectrumAssignment() {
         return spectrumAssignment;
     }
-    
+
     /**
      * Returns the core and spectrum assignment algorithm
-     * 
+     *
      * @return String
      */
     public String getCoreAndSpectrumAssignment() {
         return coreAndSpectrumAssignment;
     }
-	
+
     /**
      * Sets the spectrum assignment algorithm
-     * 
+     *
      * @param spectrumAssignment String
      */
     public void setSpectrumAssignment(String spectrumAssignment) {
         this.spectrumAssignment = spectrumAssignment;
     }
-    
+
     /**
      * Sets the Core and spectrum assignment algorithm
-     * 
+     *
      * @param coreAndSpectrumAssignment String
      */
     public void setCoreAndSpectrumAssignment(String coreAndSpectrumAssignment) {
@@ -153,7 +153,7 @@ public class SimulationConfig {
 
     /**
      * Returns the integrated RMLSA algorithm
-     * 
+     *
      * @return String
      */
     public String getIntegratedRmlsa() {
@@ -162,7 +162,7 @@ public class SimulationConfig {
 
     /**
      * Sets the integrated RMLSA algorithm
-     * 
+     *
      * @param integratedRmlsa String
      */
     public void setIntegratedRmlsa(String integratedRmlsa) {
@@ -171,7 +171,7 @@ public class SimulationConfig {
 
     /**
      * Returns the modulation
-     * 
+     *
      * @return String
      */
     public String getModulationSelection() {
@@ -180,7 +180,7 @@ public class SimulationConfig {
 
     /**
      * Sets the modulation
-     * 
+     *
      * @param modulationSelection String
      */
     public void setModulationSelection(String modulationSelection) {
@@ -189,7 +189,7 @@ public class SimulationConfig {
 
     /**
      * Returns the grooming algorithm
-     * 
+     *
      * @return String
      */
     public String getGrooming() {
@@ -198,7 +198,7 @@ public class SimulationConfig {
 
     /**
      * Sets the grooming algorithm
-     * 
+     *
      * @param grooming String
      */
     public void setGrooming(String grooming) {
@@ -207,7 +207,7 @@ public class SimulationConfig {
 
     /**
      * Return the number of load points
-     * 
+     *
      * @return int
      */
     public int getLoadPoints() {
@@ -216,7 +216,7 @@ public class SimulationConfig {
 
     /**
      * Sets the number of load points
-     * 
+     *
      * @param loadPoints int
      */
     public void setLoadPoints(int loadPoints) {
@@ -225,7 +225,7 @@ public class SimulationConfig {
 
     /**
      * Returns the number of replications
-     * 
+     *
      * @return int
      */
     public int getReplications() {
@@ -234,7 +234,7 @@ public class SimulationConfig {
 
     /**
      * Sets the number of replications
-     * 
+     *
      * @param replications int
      */
     public void setReplications(int replications) {
@@ -243,7 +243,7 @@ public class SimulationConfig {
 
     /**
      * get the active metrics in this simulation
-     * 
+     *
      * @return
      */
     public Metrics getActiveMetrics() {
@@ -252,7 +252,7 @@ public class SimulationConfig {
 
     /**
      * set the active metrics in this simulation
-     * 
+     *
      * @return
      */
     public void setActiveMetrics(Metrics activeMetrics) {
@@ -261,7 +261,7 @@ public class SimulationConfig {
 
 	/**
 	 * Returns the regenerators assignment algorithm
-	 * 
+	 *
 	 * @return the regeneratorAssignment
 	 */
 	public String getRegeneratorAssignment() {
@@ -270,7 +270,7 @@ public class SimulationConfig {
 
 	/**
 	 * Sets the regenerators assignment algorithm
-	 * 
+	 *
 	 * @param regeneratorAssignment the regeneratorAssignment to set
 	 */
 	public void setRegeneratorAssignment(String regeneratorAssignment) {
@@ -279,7 +279,7 @@ public class SimulationConfig {
 
 	/**
 	 * Returns the network type
-	 * 
+	 *
 	 * @return the networkType
 	 */
 	public int getNetworkType() {
@@ -288,65 +288,65 @@ public class SimulationConfig {
 
 	/**
 	 * Sets the network type
-	 * 
+	 *
 	 * @param networkType the networkType to set
 	 */
 	public void setNetworkType(int networkType) {
 		this.networkType = networkType;
 	}
-	
+
 	/**
 	 * Returns the number of threads
-	 * 
+	 *
 	 * @return int
-	 */	   
+	 */
     public int getThreads() {
         return threads;
     }
-    
+
     /**
      * Sets the number of threads
-     * 
+     *
      * @param threads int
      */
     public void setThreads(int threads) {
         this.threads = threads;
     }
-    
+
     /**
      * Returns the reallocation algorithm
-     * 
+     *
      * @return String
      */
 	public String getReallocation() {
 		return reallocation;
 	}
-	
+
 	/**
 	 * Sets the reallocation algorithm
-	 * 
+	 *
 	 * @param reallocation
 	 */
 	public void setReallocation(String reallocation) {
 		this.reallocation = reallocation;
 	}
-	
+
 	/**
      * Returns power assignment algorithm
-     * 
+     *
      * @return String
      */
 	public String getPowerAssignment() {
 		return powerAssignment;
 	}
-	
+
 	/**
 	 * Sets the power assignment algorithm
-	 * 
+	 *
 	 * @param powerAssignment
 	 */
 	public void setPowerAssignment(String powerAssignment) {
 		this.powerAssignment = powerAssignment;
 	}
-	
+
 }

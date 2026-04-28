@@ -10,44 +10,57 @@ import network.Link;
 import util.IntersectionFreeSpectrum;
 
 /**
- * Algoritmo de desfragmentacao de redes opticas multinucleo Retirado do artigo
+ * Defragmentation algorithm for multicore optical networks extracted from the paper
  * "Empowering Hitless Spectral Defragmentation in Elastic Optical Networks with
  * Spatial Multiplexing"
- * 
+ *
  * @author gustavo
  *
  */
 public class CASDPushPull implements ReallocationAlgorithmInterface {
 
+	/**
+	 * Executes the choose new resources for selected circuits operation.
+	 * @param cp the cp.
+	 */
 	@Override
 	public void chooseNewResourcesForSelectedCircuits(ControlPlane cp) {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Executes the traffic migration operation.
+	 */
 	@Override
 	public void trafficMigration() {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Returns the strategy.
+	 * @param requisicaoCircuito the requisicaoCircuito.
+	 * @param controlPlane the controlPlane.
+	 * @return true if the condition is met; false otherwise.
+	 */
 	@Override
 	public boolean strategy(Circuit requisicaoCircuito, ControlPlane controlPlane) {
 		ArrayList<Core> coresSCabaixoLimiar = new ArrayList<>();
 		boolean realocacaoSucesso = false;
 
-		// calcular SC de todos os nucleos de todos os enlaces da rede
+		// calculate SC for all cores of all network links
 		for (Link link : controlPlane.getMesh().getLinkList()) {
 			for (Core core : link.getCores()) {
 				double scCurrent = controlPlane.sc.compute(core);
 
 //				if (core.getCircuitList().isEmpty()) {
-//					System.out.println(" entrou aqui");
+//					System.out.println(" entered here");
 //				}
 				if (core.getCircuitList().size() != 0) {
 
 					if (scCurrent > 0 && scCurrent < 50 && core.getCircuitList().size() != 0) {
 						System.out.println(scCurrent);
 						System.out.println(core.getCircuitList());
-						//lista de circuitos do nucleo
+						//list of circuits on the core
 						for (Circuit circuitAtivo : core.getCircuitList()) {
 							// System.out.println(circuitAtivo);
 							for (int i = 0; i <= 6; i++) {
@@ -59,7 +72,7 @@ public class CASDPushPull implements ReallocationAlgorithmInterface {
 									for (int[] freeBand : composition) {
 										if (circuitAtivo.getSpectrumAssigned()[0] >= freeBand[0] && circuitAtivo.getSpectrumAssigned()[1] <= freeBand[1]) {
 											// ssdc
-											// criando um circuito copia
+											// creating a copy of the circuit
 											Circuit circuitoTeste = new Circuit();
 											try {
 												circuitoTeste = circuitAtivo.clone();
@@ -121,10 +134,18 @@ public class CASDPushPull implements ReallocationAlgorithmInterface {
 		return false;
 	}
 
+	/**
+	 * Executes the ssdc operation.
+	 */
 	private void ssdc() {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Selects the actives circuits.
+	 * @param cp the cp.
+	 * @param requisicao the request.
+	 */
 	@Override
 	public void selectActivesCircuits(ControlPlane cp, Circuit requisicao) {
 		// TODO Auto-generated method stub

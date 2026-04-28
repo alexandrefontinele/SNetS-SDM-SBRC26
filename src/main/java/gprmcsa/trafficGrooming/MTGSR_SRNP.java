@@ -14,6 +14,13 @@ public class MTGSR_SRNP extends MultihopGroomingSRNP {
     private Double gama;
     private Double delta;
     private Double epsilon;
+    /**
+     * Returns the cost function.
+     * @param sol the sol.
+     * @param rfc the rfc.
+     * @param cp the cp.
+     * @return the result of the operation.
+     */
     @Override
     protected double costFunction(MultihopSolution sol, RequestForConnection rfc, ControlPlane cp) {
         if (this.alfa == null) {

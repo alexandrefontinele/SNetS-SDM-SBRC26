@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * This class represents the receivers on the network
- * 
+ *
  * @author Iallen
  */
 public class Receivers implements Serializable {
@@ -22,7 +22,7 @@ public class Receivers implements Serializable {
 
 	/**
 	 * Creates a new instance of Receivers with a limited number of receivers
-	 * 
+	 *
 	 * @param numberOfRx int
 	 */
 	public Receivers(int numberOfRx) {
@@ -58,16 +58,16 @@ public class Receivers implements Serializable {
 
 	/**
 	 * Returns the use of receivers
-	 * 
+	 *
 	 * @return int
 	 */
 	public int getRxUtilization() {
 		return rxUtilization;
 	}
-	
+
 	/**
 	 * Returns the maximum number of receivers
-	 * 
+	 *
 	 * @return int
 	 */
 	public int getNumberOfRx() {
@@ -76,26 +76,26 @@ public class Receivers implements Serializable {
 
 	/**
 	 * Sets the maximum number of receivers
-	 * 
+	 *
 	 * @param numberOfRx int
 	 */
 	public void setNumberOfRx(int numberOfRx) {
 		this.numberOfRx = numberOfRx;
 	}
-	
+
 	/**
 	 * To verify if the use of receivers has reached the maximum number of available receivers
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public boolean isFullUtilized(){
 		return numberOfRx == rxUtilization;
 	}
-	
+
 	/**
 	 * Check if there are free receivers.
 	 * Returns true if there are free receivers, otherwise returns false.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public boolean hasFreeRecivers(){

@@ -7,9 +7,9 @@ import network.ControlPlane;
 import util.IntersectionFreeSpectrum;
 
 /**
- * Técnica PUSH and PULL com desenvolvimento finalizado dia 31.05.23.
- * Técnica de migração de tráfego de dados.
- * A técnica permite REATRIBUIÇÃO ESPECTRAL no espectro.
+ * PUSH and PULL technique finalized on 31.05.23.
+ * Data-traffic migration technique.
+ * The technique allows SPECTRUM REALLOCATION in the spectrum.
  * @author gustavo
  *
  *
@@ -17,17 +17,20 @@ import util.IntersectionFreeSpectrum;
  */
 public class PushPull {
 
+	/**
+	 * Creates a new instance of PushPull.
+	 */
 	public PushPull() {
 
 	}
 
 	/**
-	 * executa push pull para direita (para cima) no espectro
-	 * 
+	 * executes push-pull to the right (upward) in the spectrum
+	 *
 	 * @param circuit
 	 * @param cp
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean executeUpper(Circuit circuit, ControlPlane cp) throws Exception {
 		int[] band = canBeShiftUpper(circuit);
@@ -43,7 +46,7 @@ public class PushPull {
 
 		int newBand[] = new int[2];
 		newBand[1] = band[1];
-		newBand[0] = band[1] - numberSlots + 1;// verficar se está correto?
+		newBand[0] = band[1] - numberSlots + 1;// verficar se est correto?
 
 		// Releasing the spectrum and guard bands already allocated
 		cp.releaseSpectrum(circuit, oldBand, circuit.getRoute().getLinkList(), circuit.getGuardBand());
@@ -58,9 +61,9 @@ public class PushPull {
 		// already active circuits
 		boolean QoT = cp.isAdmissibleQualityOfTransmission(circuit);
 
-//				System.out.println("Entrou aqui");
-		// QoT ou QoTO não aceitável ou XT inaceitavel
-		// colocar o circuito original de volta
+//				System.out.println("Entered here");
+		// QoT ou QoTO no aceitvel ou XT inaceitavel
+		// restore the original circuit
 		if (!QoT) {
 
 			// QoT was not acceptable after expansion, releasing the spectrum
@@ -75,10 +78,10 @@ public class PushPull {
 			// Recalculates the QoT and XT of the circuit
 			cp.computeQualityOfTransmission(circuit, null, false);
 
-			// nao deu certo a realocacao devico a QoT inaceitavel
+			// reallocation failed because QoT was unacceptable
 
 		} else {// QoT Aceitavel
-			// verificar se Xt é aceitavel
+			// check se Xt  aceitavel
 			boolean xt = cp.isAdmissibleCrosstalk(circuit);// verifica crosstalk
 
 			if (!xt) {
@@ -90,12 +93,12 @@ public class PushPull {
 					throw new Exception("Bad RMLSA. Spectrum cant be allocated.");
 				}
 
-				// recalcula crosstalk
+				// recalculate crosstalk
 				cp.computeCrosstalk(circuit);
 
-			} else { // realocacao efetivada
-				// atualiza o consumo da rede
-//						System.out.println(" realocacao com sucesso");
+			} else { // reallocation completed
+				// update network power consumption
+//						System.out.println(" successful reallocation");
 				cp.updateNetworkPowerConsumption();
 				return true;
 			}
@@ -107,8 +110,8 @@ public class PushPull {
 	}
 
 	/**
-	 * executa push pull para esquerda (para baixo) no espectro
-	 * 
+	 * executes push-pull to the left (downward) in the spectrum
+	 *
 	 * @param circuit
 	 * @param cp
 	 * @return
@@ -117,7 +120,7 @@ public class PushPull {
 
 		int[] band = canBeShiftDown(circuit);
 
-		// nao e possivel fazer deslizar no espectro
+		// it is not possible to slide in the spectrum
 		if (band == null) {
 			return false;
 		}
@@ -146,9 +149,9 @@ public class PushPull {
 		// already active circuits
 		boolean QoT = cp.isAdmissibleQualityOfTransmission(circuit);
 
-//		System.out.println("Entrou aqui");
-		// QoT ou QoTO não aceitável ou XT inaceitavel
-		// colocar o circuito original de volta
+//		System.out.println("Entered here");
+		// QoT ou QoTO no aceitvel ou XT inaceitavel
+		// restore the original circuit
 		if (!QoT) {
 
 			// QoT was not acceptable after expansion, releasing the spectrum
@@ -163,10 +166,10 @@ public class PushPull {
 			// Recalculates the QoT and XT of the circuit
 			cp.computeQualityOfTransmission(circuit, null, false);
 
-			// nao deu certo a realocacao devico a QoT inaceitavel
+			// reallocation failed because QoT was unacceptable
 
 		} else {// QoT Aceitavel
-			// verificar se Xt é aceitavel
+			// check se Xt  aceitavel
 			boolean xt = cp.isAdmissibleCrosstalk(circuit);// verifica crosstalk
 
 			if (!xt) {
@@ -178,12 +181,12 @@ public class PushPull {
 					throw new Exception("Bad RMLSA. Spectrum cant be allocated.");
 				}
 
-				// recalcula crosstalk
+				// recalculate crosstalk
 				cp.computeCrosstalk(circuit);
 
-			} else { // realocacao efetivada
-				// atualiza o consumo da rede
-//				System.out.println(" realocacao com sucesso");
+			} else { // reallocation completed
+				// update network power consumption
+//				System.out.println(" successful reallocation");
 				cp.updateNetworkPowerConsumption();
 				return true;
 			}
@@ -195,14 +198,14 @@ public class PushPull {
 	}
 
 	/**
-	 * verifica a possibilidade de deslizar para a direita (cima) do espectro
+	 * checks the possibility of sliding to the right (up) in the spectrum
 	 */
 	public int[] canBeShiftUpper(Circuit circuit) {
 		List<int[]> composition = IntersectionFreeSpectrum.merge(circuit.getRoute(), circuit.getGuardBand(),
 				circuit.getIndexCore());
 
-		// numero de slots livres para baixo do espectro - verifica o deslizamento para
-		// baixo
+		// number of free slots below the spectrum - checks the sliding toward
+		// down
 		int numSlotsUpper = IntersectionFreeSpectrum.freeSlotsUpper(circuit.getSpectrumAssigned(), composition,
 				circuit.getGuardBand());
 		if (numSlotsUpper <= 0) {
@@ -212,7 +215,7 @@ public class PushPull {
 		int[] bandToShift = bandAdjacentUpper(circuit.getSpectrumAssigned(), composition, circuit.getGuardBand());
 
 		if (bandToShift != null) {
-//			System.out.println("Entrou aqui");
+//			System.out.println("Entered here");
 			return bandToShift;
 		}
 
@@ -221,15 +224,15 @@ public class PushPull {
 	}
 
 	/**
-	 * verifica a possibilidade de deslizar para a esquerda (baixo) do espectro
+	 * checks the possibility of sliding to the left (down) in the spectrum
 	 */
 	public int[] canBeShiftDown(Circuit circuit) {
 
 		List<int[]> composition = IntersectionFreeSpectrum.merge(circuit.getRoute(), circuit.getGuardBand(),
 				circuit.getIndexCore());
 
-		// numero de slots livres para baixo do espectro - verifica o deslizamento para
-		// baixo
+		// number of free slots below the spectrum - checks the sliding toward
+		// down
 		int numSlotsDown = IntersectionFreeSpectrum.freeSlotsDown(circuit.getSpectrumAssigned(), composition,
 				circuit.getGuardBand());
 		if (numSlotsDown <= 0) {
@@ -239,7 +242,7 @@ public class PushPull {
 		int[] bandToShift = bandAdjacentDown(circuit.getSpectrumAssigned(), composition, circuit.getGuardBand());
 
 		if (bandToShift != null) {
-//			System.out.println("Entrou aqui2");
+//			System.out.println("Entered here2");
 			return bandToShift;
 		}
 
@@ -249,18 +252,18 @@ public class PushPull {
 
 	/**
 	 * Returns the adjacent range less than the range passed by parameter. Used in
-	 * optical aggregation algorithms. Metodo retirados da classe
+	 * optical aggregation algorithms. Methods extracted from the class
 	 * IntersectionFreeSpectrum
-	 * 
+	 *
 	 * @param band      int[]
 	 * @param bandsFree List<int[]>
 	 * @return int[]
 	 */
 	public static int[] bandAdjacentDown(int band[], List<int[]> bandsFree, int guardBand) {
 
-//    	System.out.println("Espectro circuito: "+band[0]+"-"+band[1]);
+//    	System.out.println("Circuit spectrum: "+band[0]+"-"+band[1]);
 //    	System.out.println("Banda de guarda: "+guardBand);
-//    	System.out.println("Faixa espectro livre: ");
+//    	System.out.println("Free spectrum band: ");
 //    	for (int[] is : bandsFree) {
 //			System.out.println(is[0]+"-"+is[1]);
 //		}
@@ -268,7 +271,7 @@ public class PushPull {
 		for (int[] fl : bandsFree) {
 
 			if (fl[1] == (band[0] - 1 - guardBand)) {
-//            	System.out.println("Aqui papai");
+//            	System.out.println("Here - parent");
 				return fl;
 			}
 		}
@@ -277,9 +280,9 @@ public class PushPull {
 
 	/**
 	 * Returns the adjacent range higher than the range passed by parameter. Used in
-	 * optical aggregation algorithms. Metodo retirados da classe
+	 * optical aggregation algorithms. Methods extracted from the class
 	 * IntersectionFreeSpectrum
-	 * 
+	 *
 	 * @param band      int[]
 	 * @param bandsFree List<int[]>
 	 * @return int[]
@@ -287,7 +290,7 @@ public class PushPull {
 	public static int[] bandAdjacentUpper(int band[], List<int[]> bandsFree, int guardBand) {
 		for (int[] fl : bandsFree) {
 			if (fl[0] == (band[1] + 1 + guardBand)) {
-				// System.out.println("Teste ok");
+				// System.out.println("Test ok");
 				return fl;
 			}
 		}

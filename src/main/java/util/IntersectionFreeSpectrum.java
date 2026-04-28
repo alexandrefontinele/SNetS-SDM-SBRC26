@@ -8,7 +8,7 @@ import network.Link;
 
 /**
  * This class is responsible for performing the merge between lists of spectrum.
- * 
+ *
  * @author Iallen
  */
 public class IntersectionFreeSpectrum {
@@ -22,38 +22,38 @@ public class IntersectionFreeSpectrum {
      */
     public static List<int[]> merge(List<int[]> l1, List<int[]> l2) {
         List<int[]> res = new ArrayList<>();
-        
+
         int indL1 = 0;
         int indL2 = 0;
-        
+
         int aux1[] = null;
         int aux2[] = null;
         int aux3[];
-        
+
         while (indL1 < l1.size() && indL2 < l2.size()) {
-        	
+
             if (aux1 == null) aux1 = l1.get(indL1).clone();
             if (aux2 == null) aux2 = l2.get(indL2).clone();
             aux3 = new int[2];
-            
+
             if (aux1[0] >= aux2[0]) {
                 aux3[0] = aux1[0];
             } else {
                 aux3[0] = aux2[0];
             }
-            
+
             if (aux1[1] < aux2[0]) { // Intervals does not overlap, pick up the next free intervals in list 1
                 indL1++;
                 aux1 = null;
                 continue;
             }
-            
+
             if (aux2[1] < aux1[0]) { // Intervals does not overlap, pick up the next free intervals in list 2
                 indL2++;
                 aux2 = null;
                 continue;
             }
-            
+
             if (aux1[1] < aux2[1]) {
                 aux3[1] = aux1[1];
                 aux2[0] = aux1[1] + 1;
@@ -62,7 +62,7 @@ public class IntersectionFreeSpectrum {
                 res.add(aux3);
                 continue;
             }
-            
+
             if (aux2[1] < aux1[1]) {
                 aux3[1] = aux2[1];
                 aux1[0] = aux2[1] + 1;
@@ -71,7 +71,7 @@ public class IntersectionFreeSpectrum {
                 res.add(aux3);
                 continue;
             }
-            
+
             if (aux1[1] == aux2[1]) {
                 aux3[1] = aux2[1];
                 indL1++;
@@ -81,7 +81,7 @@ public class IntersectionFreeSpectrum {
                 res.add(aux3);
             }
         }
-        
+
         return res;
     }
 
@@ -94,31 +94,36 @@ public class IntersectionFreeSpectrum {
     public static List<int[]> merge(Route route, int guardBand, int indexCore) {
         List<Link> links = new ArrayList<>(route.getLinkList());
         List<int[]> composition = links.get(0).getCore(indexCore).getFreeSpectrumBands(guardBand);
-        
+
         for (int i = 1; i < links.size(); i++) {
             composition = IntersectionFreeSpectrum.merge(composition, links.get(i).getCore(indexCore).getFreeSpectrumBands(guardBand));
         }
-        
+
         return composition;
     }
-    
+
 	/*
-    public static List<int[]> merge(Route route, int guardBand) {
-        List<Link> links = new ArrayList<>(route.getLinkList());
-        List<int[]> composition = links.get(0).getFreeSpectrumBands(guardBand);
-        
-        for (int i = 1; i < links.size(); i++) {
-            composition = IntersectionFreeSpectrum.merge(composition, links.get(i).getFreeSpectrumBands(guardBand));
-        }
-        
-        return composition;
-    }
-	*/
+    /**
+     * Returns the merge.
+     * @param route the route.
+     * @param guardBand the guardBand.
+     * @return the result of the operation.
+     */
+//    public static List<int[]> merge(Route route, int guardBand) {
+//        List<Link> links = new ArrayList<>(route.getLinkList());
+//        List<int[]> composition = links.get(0).getFreeSpectrumBands(guardBand);
+//
+//        for (int i = 1; i < links.size(); i++) {
+//            composition = IntersectionFreeSpectrum.merge(composition, links.get(i).getFreeSpectrumBands(guardBand));
+//        }
+//
+//        return composition;
+//    }
 
     /**
      * Returns the adjacent range less than the range passed by parameter.
 	 * Used in optical aggregation algorithms.
-     * 
+     *
      * @param band int[]
      * @param bandsFree List<int[]>
      * @return int[]
@@ -135,7 +140,7 @@ public class IntersectionFreeSpectrum {
     /**
      * Returns the adjacent range higher than the range passed by parameter.
      * Used in optical aggregation algorithms.
-     * 
+     *
      * @param band int[]
      * @param bandsFree List<int[]>
      * @return int[]
@@ -151,7 +156,7 @@ public class IntersectionFreeSpectrum {
 
     /**
      * Returns the number of free slots from the upper slot band
-     * 
+     *
      * @param band int[]
      * @param freeBands List<int[]>
      * @return int
@@ -164,7 +169,7 @@ public class IntersectionFreeSpectrum {
 
     /**
      * Returns the number of free slots from the down slot band
-     * 
+     *
      * @param band int[]
      * @param freeBands List<int[]>
      * @return int
@@ -174,5 +179,5 @@ public class IntersectionFreeSpectrum {
         if(aux==null) return 0;
         else return aux[1] - aux[0] + 1;
     }
-    
+
 }

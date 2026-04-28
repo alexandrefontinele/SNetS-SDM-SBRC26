@@ -12,6 +12,9 @@ import util.IntersectionFreeSpectrum;
 
 import java.util.*;
 
+/**
+ * Represents the AuxiliaryGraphGrooming component.
+ */
 public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface {
     private Double alfa;
     private Double beta;
@@ -24,27 +27,44 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
     private boolean flagInit = true;
 
 
+    /**
+     * Returns the search circuits for grooming.
+     * @param rfc the rfc.
+     * @param cp the cp.
+     * @return true if the condition is met; false otherwise.
+     */
     @Override
     public boolean searchCircuitsForGrooming(RequestForConnection rfc, ControlPlane cp) throws Exception {
-        // carregar os valores das variáveis de pesos
+        // load the weight variable values
     	if(flagInit){
             init(cp);
             flagInit = false;
         }
 
-    	// Construir o grafo auxiliar para a requisicao rfc
+    	// Build the auxiliary graph for the request RFC
         AuxiliaryGraph AG = makeAuxiliaryGraph(cp,rfc);
-        // Uma lista de arestas é uma solucao, Lista de listas de arestas são várias solucoes
+        // A list of edges is one solution, and a list of edge lists is multiple solutions
         List<List<AuxiliaryGraph.Edge>> solutions = AG.djk(rfc.getPair().getSource().toString(), rfc.getPair().getDestination().toString());
 
 
-        // Ordenar solucoes de acordo com o custo da solucao, ou seja, o somatorio dos custos das arestas
+        // Sort solutions according to the solution cost, that is, the sum of the edge costs
         Collections.sort(solutions, new Comparator<List<AuxiliaryGraph.Edge>>() {
+            /**
+             * Returns the compare.
+             * @param o1 the o1.
+             * @param o2 the o2.
+             * @return the result of the operation.
+             */
             @Override
             public int compare(List<AuxiliaryGraph.Edge> o1, List<AuxiliaryGraph.Edge> o2) {
                 return auxCost(o1).compareTo(auxCost(o2));
             }
 
+            /**
+             * Returns the aux cost.
+             * @param le the le.
+             * @return the result of the operation.
+             */
             private Double auxCost(List<AuxiliaryGraph.Edge> le){
                 double c = 0;
                 for (AuxiliaryGraph.Edge e:le) {
@@ -64,10 +84,17 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
             }
         }
 
-        //System.out.println(" Não agregou ");
+        //System.out.println(" No agregou ");
         return false;
     }
 
+    /**
+     * Returns the apply solution.
+     * @param solution the solution.
+     * @param rfc the rfc.
+     * @param cp the cp.
+     * @return true if the condition is met; false otherwise.
+     */
     private boolean applySolution(List<AuxiliaryGraph.Edge> solution, RequestForConnection rfc, ControlPlane cp){
         List<MyEdge> newCircuitEdges = createNewCircuits(solution,rfc,cp);
         if(newCircuitEdges==null) return false;
@@ -89,6 +116,13 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
         return true;
     }
 
+    /**
+     * Returns the expand circuits.
+     * @param solution the solution.
+     * @param rfc the rfc.
+     * @param cp the cp.
+     * @return true if the condition is met; false otherwise.
+     */
     private boolean expandCircuits(List<AuxiliaryGraph.Edge> solution, RequestForConnection rfc, ControlPlane cp){
         //for rollback
         List<MyEdge> expandedCircuits = new ArrayList<>();
@@ -127,6 +161,13 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
         return true;
     }
 
+    /**
+     * Executes the retract circuits operation.
+     * @param circuitsToRetract the circuitsToRetract.
+     * @param upExps the upExps.
+     * @param downExps the downExps.
+     * @param cp the cp.
+     */
     private void retractCircuits(List<MyEdge> circuitsToRetract, List<Integer> upExps, List<Integer> downExps, ControlPlane cp){
         int i;
         for(i=0;i<circuitsToRetract.size();i++){
@@ -139,6 +180,13 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
         }
     }
 
+    /**
+     * Returns the decide to expand.
+     * @param numMoreSlots the numMoreSlots.
+     * @param numLowerFreeSlots the numLowerFreeSlots.
+     * @param numUpperFreeSlots the numUpperFreeSlots.
+     * @return the result of the operation.
+     */
     protected int[] decideToExpand(int numMoreSlots, int numLowerFreeSlots, int numUpperFreeSlots) {
         int[] res = new int[2];
         if (numLowerFreeSlots >= numMoreSlots) {
@@ -152,6 +200,13 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
         return res;
     }
 
+    /**
+     * Creates the new circuits.
+     * @param solution the solution.
+     * @param rfc the rfc.
+     * @param cp the cp.
+     * @return the result of the operation.
+     */
     private List<MyEdge> createNewCircuits(List<AuxiliaryGraph.Edge> solution, RequestForConnection rfc, ControlPlane cp){
         List<MyEdge> newCircuitEdges = new ArrayList<>();
         //create new circuits
@@ -179,6 +234,12 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
         return newCircuitEdges;
     }
 
+    /**
+     * Returns the establish circuit.
+     * @param c the c.
+     * @param cp the cp.
+     * @return true if the condition is met; false otherwise.
+     */
     protected boolean establishCircuit(Circuit c, ControlPlane cp){
         try {
             return cp.establishCircuit(c);
@@ -188,6 +249,11 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
         }
     }
 
+    /**
+     * Releases the circuits.
+     * @param newCircuitEdges the newCircuitEdges.
+     * @param cp the cp.
+     */
     private void releaseCircuits(List<MyEdge> newCircuitEdges, ControlPlane cp){
         for(MyEdge c: newCircuitEdges){
             try {
@@ -200,6 +266,11 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
         }
     }
 
+    /**
+     * Executes the finish connection operation.
+     * @param rfc the rfc.
+     * @param cp the cp.
+     */
     @Override
     public void finishConnection(RequestForConnection rfc, ControlPlane cp) throws Exception {
         for (Circuit circuit : rfc.getCircuits()) {
@@ -222,7 +293,7 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
 
     /**
      * Info adicionada por Selles
-     * Construcao do grafo auxiliar para uma requisicao
+     * Construction of the auxiliary graph for a request
      * @param cp
      * @param rfc
      * @return
@@ -254,6 +325,10 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
         return AG;
     }
 
+    /**
+     * Executes the init operation.
+     * @param cp the cp.
+     */
     protected void init(ControlPlane cp){
         Map<String, String> uv = cp.getMesh().getOthersConfig().getVariables();
         if(uv.get("alfa")!=null) this.alfa = Double.parseDouble(uv.get("alfa"));
@@ -294,7 +369,7 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
         /**
          * Construtor 1
          * @param circuit
-         * @param rfc Requisicao
+         * @param rfc request
          */
         private MyEdge(Circuit circuit, RequestForConnection rfc) {
             this.circuit = circuit;
@@ -306,9 +381,9 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
 
         /**
          * Construtor 2
-         * @param s No Origem
-         * @param d No Destino
-         * @param rfc Requisicao
+         * @param s Source node
+         * @param d Destination node
+         * @param rfc request
          * @param cp Plano de Controle
          */
         private MyEdge(Node s, Node d,RequestForConnection rfc, ControlPlane cp){
@@ -321,7 +396,7 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
         }
 
         /**
-         * Retorna o custo da aresta
+         * Returns the edge cost
          */
         @Override
         public double getCost() {
@@ -371,11 +446,14 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
             System.out.println(epsilon);
             System.out.println(fi);
             */
-            
-            
+
+
             return cost;
         }
 
+        /**
+         * Executes the analysis operation.
+         */
         private void analise(){
             this.virtualHop = 1;
             this.physicallHop = circuit.getRoute().getHops();
@@ -384,37 +462,69 @@ public class AuxiliaryGraphGrooming implements TrafficGroomingAlgorithmInterface
             this.sNRImpact = cp.computesImpactOnSNROther(circuit);
         }
 
+        /**
+         * Returns the source.
+         * @return the source.
+         */
         @Override
         public String getSource() {
             return source.toString();
         }
 
+        /**
+         * Returns the source node.
+         * @return the source node.
+         */
         private Node getSourceNode() {
             return source;
         }
 
+        /**
+         * Returns the destination.
+         * @return the destination.
+         */
         @Override
         public String getDestination() {
             return destination.toString();
         }
 
 
+        /**
+         * Returns the destination node.
+         * @return the destination node.
+         */
         private Node getDestinationNode() {
             return destination;
         }
 
+        /**
+         * Checks whether active.
+         * @return true if the condition is met; false otherwise.
+         */
         private boolean isActive() {
             return active;
         }
 
+        /**
+         * Returns the circuit.
+         * @return the circuit.
+         */
         public Circuit getCircuit() {
             return circuit;
         }
 
+        /**
+         * Sets the circuit.
+         * @param circuit the circuit.
+         */
         public void setCircuit(Circuit circuit) {
             this.circuit = circuit;
         }
 
+        /**
+         * Sets the active.
+         * @param active the active.
+         */
         private void setActive(boolean active) {
             this.active = active;
         }

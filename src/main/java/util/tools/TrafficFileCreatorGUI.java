@@ -7,8 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+/**
+ * Represents the TrafficFileCreatorGUI component.
+ */
 public class TrafficFileCreatorGUI extends JFrame {
-	
+
     private JTextField caminhoArqField;
     private JTextField quantNodesField;
     private JTextField taxasField;
@@ -19,6 +22,9 @@ public class TrafficFileCreatorGUI extends JFrame {
     private JButton criarButton;
     private JButton selecionarArquivoButton;
 
+    /**
+     * Creates a new instance of TrafficFileCreatorGUI.
+     */
     public TrafficFileCreatorGUI() {
         initComponents();
         setupLayout();
@@ -26,8 +32,11 @@ public class TrafficFileCreatorGUI extends JFrame {
         setDefaultValues();
     }
 
+    /**
+     * Executes the init components operation.
+     */
     private void initComponents() {
-        setTitle("Criador de Arquivo de Tráfego");
+        setTitle("Traffic File Creator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setLocationRelativeTo(null);
@@ -39,69 +48,75 @@ public class TrafficFileCreatorGUI extends JFrame {
         roField = new JTextField();
         incrementoField = new JTextField();
         muField = new JTextField();
-        
-        criarButton = new JButton("Criar Arquivo de Tráfego");
-        selecionarArquivoButton = new JButton("Selecionar...");
+
+        criarButton = new JButton("Create Traffic File");
+        selecionarArquivoButton = new JButton("Select...");
     }
 
+    /**
+     * Sets the default values.
+     */
     private void setDefaultValues() {
-        // Valores padrão/exemplo para cada campo
+        // Default/example values for each field
         quantNodesField.setText("14");
         taxasField.setText("100E+9, 200E+9, 300E+9, 400E+9, 500E+9");
         proporcoesField.setText("5, 4, 3, 2, 1");
         roField.setText("500");
         incrementoField.setText("200");
         muField.setText("1");
-        
-        // Sugerir um caminho padrão para o arquivo
+
+        // Suggest a default path for the file
         String userHome = System.getProperty("user.home");
         caminhoArqField.setText(userHome + File.separator + "traffic");
     }
 
+    /**
+     * Executes the setup layout operation.
+     */
     private void setupLayout() {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Painel de configurações
+        // Configuration panel
         JPanel configPanel = new JPanel(new GridBagLayout());
         configPanel.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createEtchedBorder(), "Configurações do Tráfego", 
+            BorderFactory.createEtchedBorder(), "Traffic Configuration",
             TitledBorder.LEFT, TitledBorder.TOP));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Linha 0 - Caminho do arquivo
+        // Row 0 - File path
         gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0;
-        configPanel.add(new JLabel("Caminho do arquivo que será criado:"), gbc);
-        
+        configPanel.add(new JLabel("Path of the file to be created:"), gbc);
+
         gbc.gridx = 1; gbc.weightx = 1;
         configPanel.add(caminhoArqField, gbc);
-        
+
         gbc.gridx = 2; gbc.weightx = 0;
         configPanel.add(selecionarArquivoButton, gbc);
 
-        // Linha 1 - Quantidade de Nodes
+        // Row 1 - Number of nodes
         gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0;
-        configPanel.add(new JLabel("Quantidade de nós da rede:"), gbc);
-        
+        configPanel.add(new JLabel("Number of network nodes:"), gbc);
+
         gbc.gridx = 1; gbc.gridwidth = 2; gbc.weightx = 1;
         configPanel.add(quantNodesField, gbc);
         gbc.gridwidth = 1;
 
-        // Linha 2 - Taxas (String[])
+        // Row 2 - Rates (String[])
         gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0;
-        configPanel.add(new JLabel("Taxas de bits (separadas por vírgula):"), gbc);
-        
+        configPanel.add(new JLabel("Bit rates (comma-separated):"), gbc);
+
         gbc.gridx = 1; gbc.gridwidth = 2; gbc.weightx = 1;
         configPanel.add(taxasField, gbc);
         gbc.gridwidth = 1;
 
-        // Linha 3 - Proporções (double[])
+        // Row 3 - Proportions (double[])
         gbc.gridx = 0; gbc.gridy = 3; gbc.weightx = 0;
-        configPanel.add(new JLabel("Proporções (separadas por vírgula):"), gbc);
-        
+        configPanel.add(new JLabel("Proportions (comma-separated):"), gbc);
+
         gbc.gridx = 1; gbc.gridwidth = 2; gbc.weightx = 1;
         configPanel.add(proporcoesField, gbc);
         gbc.gridwidth = 1;
@@ -109,27 +124,27 @@ public class TrafficFileCreatorGUI extends JFrame {
         // Linha 4 - Ro
         gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 0;
         configPanel.add(new JLabel("Ro (Carga inicial - Erlangs):"), gbc);
-        
+
         gbc.gridx = 1; gbc.gridwidth = 2; gbc.weightx = 1;
         configPanel.add(roField, gbc);
         gbc.gridwidth = 1;
 
-        // Linha 5 - Incremento
+        // Row 5 - Load increment
         gbc.gridx = 0; gbc.gridy = 5; gbc.weightx = 0;
-        configPanel.add(new JLabel("Incremento da carga (Erlangs):"), gbc);
-        
+        configPanel.add(new JLabel("Load increment (Erlangs):"), gbc);
+
         gbc.gridx = 1; gbc.gridwidth = 2; gbc.weightx = 1;
         configPanel.add(incrementoField, gbc);
         gbc.gridwidth = 1;
 
         // Linha 6 - Mu
         gbc.gridx = 0; gbc.gridy = 6; gbc.weightx = 0;
-        configPanel.add(new JLabel("Mu (Taxa de retenção):"), gbc);
-        
+        configPanel.add(new JLabel("Mu (Holding rate):"), gbc);
+
         gbc.gridx = 1; gbc.gridwidth = 2; gbc.weightx = 1;
         configPanel.add(muField, gbc);
 
-        // Painel de botão
+        // Button panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(criarButton);
 
@@ -139,21 +154,28 @@ public class TrafficFileCreatorGUI extends JFrame {
         add(mainPanel);
     }
 
+    /**
+     * Executes the setup listeners operation.
+     */
     private void setupListeners() {
         selecionarArquivoButton.addActionListener(new ActionListener() {
+            /**
+             * Handles the action event.
+             * @param e the e.
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Salvar arquivo de tráfego");
-                
-                // Sugerir o nome do arquivo baseado no campo atual
+                fileChooser.setDialogTitle("Save traffic file");
+
+                // Suggest the file name based on the current field
                 String currentPath = caminhoArqField.getText();
                 if (!currentPath.isEmpty()) {
                     fileChooser.setSelectedFile(new File(currentPath));
                 }
-                
+
                 int userSelection = fileChooser.showSaveDialog(TrafficFileCreatorGUI.this);
-                
+
                 if (userSelection == JFileChooser.APPROVE_OPTION) {
                     File fileToSave = fileChooser.getSelectedFile();
                     caminhoArqField.setText(fileToSave.getAbsolutePath());
@@ -162,6 +184,10 @@ public class TrafficFileCreatorGUI extends JFrame {
         });
 
         criarButton.addActionListener(new ActionListener() {
+            /**
+             * Handles the action event.
+             * @param e the e.
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 criarArquivoTrafico();
@@ -169,44 +195,47 @@ public class TrafficFileCreatorGUI extends JFrame {
         });
 
         // Adicionar tooltips para explicar cada campo
-        quantNodesField.setToolTipText("Número total de nodes na topologia (ex: 10)");
-        taxasField.setToolTipText("Taxas de bits (ex: 100E+9, 200E+9, 300E+9)");
-        proporcoesField.setToolTipText("Proporções para cada taxa de bit (ex: 5, 4, 1)");
-        roField.setToolTipText("Carga inicial da rede em Erlangs (ex: 500)");
-        incrementoField.setToolTipText("Valor de incremento para a carga da rede em Erlangs (ex: 200)");
-        muField.setToolTipText("Taxa de retenção de circuito (ex: 1.0)");
+        quantNodesField.setToolTipText("Total number of nodes in the topology (e.g., 10)");
+        taxasField.setToolTipText("Bit rates (e.g., 100E+9, 200E+9, 300E+9)");
+        proporcoesField.setToolTipText("Proportions for each bit rate (e.g., 5, 4, 1)");
+        roField.setToolTipText("Carga inicial da network em Erlangs (ex: 500)");
+        incrementoField.setToolTipText("Increment value for the network load in Erlangs (e.g., 200)");
+        muField.setToolTipText("Circuit holding rate (e.g., 1.0)");
     }
 
+    /**
+     * Executes the create traffic file operation.
+     */
     private void criarArquivoTrafico() {
         try {
-            // Validar e obter os valores dos campos
+            // Validate and obtain the field values
             String caminhoArq = caminhoArqField.getText().trim();
             if (caminhoArq.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Por favor, selecione um caminho para o arquivo.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please select a path for the file.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             int quantNodes = Integer.parseInt(quantNodesField.getText().trim());
-            
-            // Processar taxas (String[])
+
+            // Process rates (String[])
             String[] taxasArray = taxasField.getText().split(",");
             String[] taxas = new String[taxasArray.length];
             for (int i = 0; i < taxasArray.length; i++) {
                 taxas[i] = taxasArray[i].trim();
             }
 
-            // Processar proporções (double[])
+            // Process proportions (double[])
             String[] proporcoesArray = proporcoesField.getText().split(",");
             double[] proporcoes = new double[proporcoesArray.length];
             for (int i = 0; i < proporcoesArray.length; i++) {
                 proporcoes[i] = Double.parseDouble(proporcoesArray[i].trim());
             }
 
-            // Validar se o número de taxas e proporções é o mesmo
+            // Validate whether the number of rates and proportions is the same
             if (taxas.length != proporcoes.length) {
-                JOptionPane.showMessageDialog(this, 
-                    "O número de taxas deve ser igual ao número de proporções.", 
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                    "The number of rates must match the number of proportions.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -214,61 +243,61 @@ public class TrafficFileCreatorGUI extends JFrame {
             double incremento = Double.parseDouble(incrementoField.getText().trim());
             double mu = Double.parseDouble(muField.getText().trim());
 
-            // Chamar o método original
+            // Call the original method
             createProportionalTrafficFile(caminhoArq, quantNodes, taxas, proporcoes, ro, incremento, mu);
-            
-            JOptionPane.showMessageDialog(this, 
-                "Arquivo de tráfego criado com sucesso!\nLocal: " + caminhoArq, 
-                "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+            JOptionPane.showMessageDialog(this,
+                "Traffic file created successfully!\nLocation: " + caminhoArq,
+                "Success", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, 
-                "Por favor, verifique se todos os valores numéricos estão corretos.", 
-                "Erro de Formato", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                "Please check whether all numeric values are correct.",
+                "Format Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, 
-                "Erro ao criar arquivo: " + ex.getMessage(), 
-                "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                "Error creating file: " + ex.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
     }
 
     /**
-     * Método para criar arquivo de tráfego
+     * Method to create a traffic file
      */
     public static void createProportionalTrafficFile(String caminhoArq, int quantNodes, String[] taxas, double proporcoes[], double ro, double incremento, double mu) {
-        
-        double quantPares = quantNodes * (quantNodes - 1); //Quantidade de pares de nodes
-        double quantTaxas = taxas.length; //Quantidade de taxas de bits
-        
+
+        double quantPares = quantNodes * (quantNodes - 1); //Number of node pairs
+        double quantTaxas = taxas.length; //Number of bit-rate values
+
         double sumPropor = 0.0;
         for(int i = 0; i < quantTaxas; i++) {
             sumPropor += proporcoes[i];
         }
-        
+
         double lambdaPorPar = (ro / quantPares) * mu;
         double lambdaPorTaxaTotal = lambdaPorPar / sumPropor;
-        
+
         double lambdaPorTaxaPropor[] = new double[(int)quantTaxas];
         for(int i = 0; i < quantTaxas; i++) {
             lambdaPorTaxaPropor[i] = lambdaPorTaxaTotal * proporcoes[i];
         }
-        
+
         double incPorPar = (incremento / quantPares) * mu;
         double incPorTaxaTotal = incPorPar / sumPropor;
-        
+
         double incPorTaxaPropor[] = new double[(int)quantTaxas];
         for(int i = 0; i < quantTaxas; i++) {
             incPorTaxaPropor[i] = incPorTaxaTotal * proporcoes[i];
         }
-        
+
         try {
             java.io.FileWriter fw = new java.io.FileWriter(caminhoArq);
             java.io.BufferedWriter out = new java.io.BufferedWriter(fw);
-            
+
             StringBuilder sbaux = new StringBuilder();
             sbaux.append("{\"requestGenerators\":[\n");
-            
+
             int cont = 0;
             for(int i = 1; i <= quantNodes; i++){
                 StringBuilder sb = new StringBuilder();
@@ -287,24 +316,31 @@ public class TrafficFileCreatorGUI extends JFrame {
                 }
                 sbaux.append(sb.toString());
             }
-            
+
             sbaux.append("]}");
             out.append(sbaux.toString());
             //System.out.println(sbaux.toString());
-            
+
             out.close();
             fw.close();
-            
-            System.out.println("Arquivo de trafego criado.");
-            
+
+            System.out.println("Traffic file created.");
+
         } catch (java.io.IOException e) {
             e.printStackTrace();
-            System.out.println("Erro ao criar o arquivo de trafego.");
+            System.out.println("Error creating the traffic file.");
         }
     }
 
+    /**
+     * Runs the application entry point.
+     * @param args the args.
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
+            /**
+             * Runs the operation.
+             */
             @Override
             public void run() {
                 new TrafficFileCreatorGUI().setVisible(true);

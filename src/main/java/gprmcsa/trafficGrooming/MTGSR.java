@@ -16,6 +16,13 @@ public class MTGSR extends MultihopGrooming {
     private Double delta;
     private Double epsilon;
     private Double fi;
+    /**
+     * Returns the cost function.
+     * @param sol the sol.
+     * @param rfc the rfc.
+     * @param cp the cp.
+     * @return the result of the operation.
+     */
     @Override
     protected double costFunction(MultihopSolution sol, RequestForConnection rfc, ControlPlane cp) {
         if (this.alfa == null) {

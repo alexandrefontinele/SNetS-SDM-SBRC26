@@ -5,21 +5,29 @@ import java.util.*;
 import simulationControl.parsers.NetworkConfig;
 
 /**
- * Validador estrutural de NetworkConfig.
+ * Structural validator for NetworkConfig.
  */
 public class NetworkConfigValidator {
-	
+
 	private static final double EPS = 1e-9;
 
+    /**
+     * Creates a new instance of NetworkConfigValidator.
+     */
     private NetworkConfigValidator() {
     	//
     }
 
+    /**
+     * Validates the value.
+     * @param config the config.
+     * @return the result of the operation.
+     */
     public static ValidationResult validate(NetworkConfig config) {
         ValidationResult result = new ValidationResult();
 
         if (config == null) {
-            result.addError("NetworkConfig é null.");
+            result.addError("NetworkConfig  null.");
             return result;
         }
 
@@ -31,13 +39,17 @@ public class NetworkConfigValidator {
 
         NodeValidationContext nodeCtx = validateNodes(nodes, result);
         LinkValidationContext linkCtx = validateLinks(nodeCtx, links, result);
-        
+
         validateGraphConnectivity(nodeCtx, linkCtx, result);
         validateCores(cores, result);
 
         return result;
     }
 
+    /**
+     * Validates the or throw.
+     * @param config the config.
+     */
     public static void validateOrThrow(NetworkConfig config) {
         ValidationResult result = validate(config);
         if (!result.isValid()) {
@@ -45,11 +57,17 @@ public class NetworkConfigValidator {
         }
     }
 
+    /**
+     * Validates the nodes.
+     * @param nodes the nodes.
+     * @param result the result.
+     * @return the result of the operation.
+     */
     private static NodeValidationContext validateNodes(List<NetworkConfig.NodeConfig> nodes, ValidationResult result) {
         NodeValidationContext ctx = new NodeValidationContext();
 
         if (nodes.isEmpty()) {
-            result.addError("A rede não possui nós cadastrados.");
+            result.addError("The network has no registered nodes.");
             return ctx;
         }
 
@@ -57,30 +75,37 @@ public class NetworkConfigValidator {
             NetworkConfig.NodeConfig node = nodes.get(i);
 
             if (node == null) {
-                result.addError("Existe um NodeConfig null na posição " + i + ".");
+                result.addError("There is a null NodeConfig at position " + i + ".");
                 continue;
             }
 
             String name = safeTrim(node.getName());
 
             if (name.isEmpty()) {
-                result.addError("Existe nó com nome vazio na posição " + i + ".");
+                result.addError("There is a node with an empty name at position " + i + ".");
                 continue;
             }
 
             if (!ctx.validNodes.add(name)) {
-                result.addError("Nome de nó duplicado: '" + name + "'.");
+                result.addError("Duplicate node name: '" + name + "'.");
             }
         }
 
         return ctx;
     }
 
+    /**
+     * Validates the links.
+     * @param nodeCtx the nodeCtx.
+     * @param links the links.
+     * @param result the result.
+     * @return the result of the operation.
+     */
     private static LinkValidationContext validateLinks(NodeValidationContext nodeCtx, List<NetworkConfig.LinkConfig> links, ValidationResult result) {
         LinkValidationContext ctx = new LinkValidationContext();
 
         if (links.isEmpty()) {
-            result.addError("A rede não possui links cadastrados.");
+            result.addError("The network has no registered links.");
             return ctx;
         }
 
@@ -94,7 +119,7 @@ public class NetworkConfigValidator {
             NetworkConfig.LinkConfig link = links.get(i);
 
             if (link == null) {
-                result.addError("Existe um LinkConfig null na posição " + i + ".");
+                result.addError("There is a null LinkConfig at position " + i + ".");
                 continue;
             }
 
@@ -102,37 +127,37 @@ public class NetworkConfigValidator {
             String destination = safeTrim(link.getDestination());
 
             if (source.isEmpty()) {
-                result.addError("Link na posição " + i + " possui source vazio.");
+                result.addError("Link at position " + i + " has an empty source.");
                 continue;
             }
 
             if (destination.isEmpty()) {
-                result.addError("Link na posição " + i + " possui destination vazio.");
+                result.addError("Link at position " + i + " has an empty destination.");
                 continue;
             }
 
             if (!nodeCtx.validNodes.contains(source)) {
-                result.addError("Link " + source + " -> " + destination + " referencia source inexistente.");
+                result.addError("Link " + source + " -> " + destination + " references a non-existing source.");
             }
 
             if (!nodeCtx.validNodes.contains(destination)) {
-                result.addError("Link " + source + " -> " + destination + " referencia destination inexistente.");
+                result.addError("Link " + source + " -> " + destination + " references a non-existing destination.");
             }
 
             if (source.equals(destination)) {
-                result.addError("Link inválido do tipo auto-loop: '" + source + " -> " + destination + "'.");
+                result.addError("Link invlido do tipo auto-loop: '" + source + " -> " + destination + "'.");
             }
 
             if (link.getSlots() <= 0) {
-                result.addError("Link " + source + " -> " + destination + " possui slots <= 0.");
+                result.addError("Link " + source + " -> " + destination + " has slots <= 0.");
             }
 
             if (link.getSpectrum() <= 0.0) {
-                result.addError("Link " + source + " -> " + destination + " possui spectrum <= 0.");
+                result.addError("Link " + source + " -> " + destination + " has spectrum <= 0.");
             }
 
             if (link.getSize() < 0.0) {
-                result.addError("Link " + source + " -> " + destination + " possui size negativo.");
+                result.addError("Link " + source + " -> " + destination + " has a negative size.");
             }
 
             boolean sourceExists = nodeCtx.validNodes.contains(source);
@@ -161,11 +186,11 @@ public class NetworkConfigValidator {
 
         for (String nodeName : nodeCtx.validNodes) {
             if (ctx.incomingCount.getOrDefault(nodeName, 0) == 0) {
-                result.addError("O nó '" + nodeName + "' não possui nenhum link chegando.");
+                result.addError("The node '" + nodeName + "' has no incoming link.");
             }
 
             if (ctx.outgoingCount.getOrDefault(nodeName, 0) == 0) {
-                result.addError("O nó '" + nodeName + "' não possui nenhum link saindo.");
+                result.addError("The node '" + nodeName + "' has no outgoing link.");
             }
         }
 
@@ -175,6 +200,11 @@ public class NetworkConfigValidator {
         return ctx;
     }
 
+    /**
+     * Executes the detect duplicate links operation.
+     * @param pairToSignatures the pairToSignatures.
+     * @param result the result.
+     */
     private static void detectDuplicateLinks(
             Map<DirectedPair, Map<LinkSignature, Integer>> pairToSignatures,
             ValidationResult result
@@ -187,17 +217,22 @@ public class NetworkConfigValidator {
                 if (count > 1) {
                     LinkSignature sig = sigEntry.getKey();
                     result.addError(
-                            "Link duplicado detectado para '" + pair.source + " -> " + pair.destination +
-                            "' com size=" + sig.size +
+                            "Duplicate link detected for '" + pair.source + " -> " + pair.destination +
+                            "' with size=" + sig.size +
                             ", slots=" + sig.slots +
                             ", spectrum=" + sig.spectrum +
-                            ". Ocorrências: " + count + "."
+                            ". Occurrences: " + count + "."
                     );
                 }
             }
         }
     }
 
+    /**
+     * Executes the detect missing or invalid reverse links operation.
+     * @param pairToSignatures the pairToSignatures.
+     * @param result the result.
+     */
     private static void detectMissingOrInvalidReverseLinks(
             Map<DirectedPair, Map<LinkSignature, Integer>> pairToSignatures,
             ValidationResult result
@@ -220,11 +255,11 @@ public class NetworkConfigValidator {
                     int missing = directCount - reverseCount;
                     for (int i = 0; i < missing; i++) {
                         result.addError(
-                                "Falta link oposto para '" + direct.source + " -> " + direct.destination +
-                                "' com size=" + sig.size +
+                                "Missing reverse link for '" + direct.source + " -> " + direct.destination +
+                                "' with size=" + sig.size +
                                 ", slots=" + sig.slots +
                                 ", spectrum=" + sig.spectrum +
-                                ". Esperado: '" + direct.destination + " -> " + direct.source + "'."
+                                ". Expected: '" + direct.destination + " -> " + direct.source + "'."
                         );
                     }
                 }
@@ -243,8 +278,8 @@ public class NetworkConfigValidator {
                     UndirectedPair up = new UndirectedPair(direct.source, direct.destination);
                     if (mismatchedReported.add(up)) {
                         result.addError(
-                                "Existe link nos dois sentidos entre '" + direct.source + "' e '" + direct.destination +
-                                "', mas sem correspondência exata de size/slots/spectrum entre os sentidos."
+                                "There is a bidirectional link between '" + direct.source + "' and '" + direct.destination +
+                                "', but there is no exact size/slots/spectrum match between directions."
                         );
                     }
                 }
@@ -252,6 +287,12 @@ public class NetworkConfigValidator {
         }
     }
 
+    /**
+     * Validates the graph connectivity.
+     * @param nodeCtx the nodeCtx.
+     * @param linkCtx the linkCtx.
+     * @param result the result.
+     */
     private static void validateGraphConnectivity(
             NodeValidationContext nodeCtx,
             LinkValidationContext linkCtx,
@@ -283,15 +324,20 @@ public class NetworkConfigValidator {
             missing.removeAll(visited);
 
             result.addError(
-                    "A rede não é totalmente conectada. Nós não alcançáveis a partir de '" +
+                    "The network is not fully connected. Unreachable nodes starting from '" +
                     start + "': " + missing
             );
         }
     }
 
+    /**
+     * Validates the cores.
+     * @param cores the cores.
+     * @param result the result.
+     */
     private static void validateCores(List<NetworkConfig.CoreConfig> cores, ValidationResult result) {
         if (cores.isEmpty()) {
-            result.addWarning("A configuração não possui cores cadastrados.");
+            result.addWarning("The configuration has no registered cores.");
             return;
         }
 
@@ -301,14 +347,14 @@ public class NetworkConfigValidator {
             NetworkConfig.CoreConfig core = cores.get(i);
 
             if (core == null) {
-                result.addError("Existe um CoreConfig null na posição " + i + ".");
+                result.addError("There is a null CoreConfig at position " + i + ".");
                 continue;
             }
 
             int id = core.getId();
 
             if (coreById.containsKey(id)) {
-                result.addError("Core duplicado com id=" + id + ".");
+                result.addError("Duplicate core with id=" + id + ".");
             } else {
                 coreById.put(id, core);
             }
@@ -327,24 +373,24 @@ public class NetworkConfigValidator {
 
             for (Integer adjId : adjacents) {
                 if (adjId == null) {
-                    result.addError("Core " + coreId + " possui adjacência null.");
+                    result.addError("Core " + coreId + " has null adjacency.");
                     continue;
                 }
 
                 if (adjId == coreId) {
-                    result.addError("Core " + coreId + " possui auto-adjacência com ele mesmo.");
+                    result.addError("Core " + coreId + " has self-adjacency.");
                 }
 
                 if (!seenAdj.add(adjId)) {
                     result.addError(
-                            "Core " + coreId + " possui adjacência repetida para core " + adjId + "."
+                            "Core " + coreId + " has repeated adjacency to core " + adjId + "."
                     );
                     continue;
                 }
 
                 NetworkConfig.CoreConfig adjCore = coreById.get(adjId);
                 if (adjCore == null) {
-                    result.addError("Core " + coreId + " aponta para core adjacente inexistente: " + adjId + ".");
+                    result.addError("Core " + coreId + " points to a non-existing adjacent core: " + adjId + ".");
                     continue;
                 }
 
@@ -353,16 +399,21 @@ public class NetworkConfigValidator {
 
                 if (!reverseAdj.contains(coreId)) {
                     result.addError(
-                            "Adjacência de core não é recíproca: core " + coreId +
-                            " aponta para " + adjId +
-                            ", mas core " + adjId +
-                            " não aponta de volta para " + coreId + "."
+                            "Non-reciprocal core adjacency: core " + coreId +
+                            " points to " + adjId +
+                            ", but core " + adjId +
+                            " does not point back to " + coreId + "."
                     );
                 }
             }
         }
     }
 
+    /**
+     * Returns the safe trim.
+     * @param s the s.
+     * @return the result of the operation.
+     */
     private static String safeTrim(String s) {
         return s == null ? "" : s.trim();
     }
@@ -387,6 +438,11 @@ public class NetworkConfigValidator {
             this.destination = destination;
         }
 
+        /**
+         * Checks whether this object is equal to another object.
+         * @param obj the obj.
+         * @return the result.
+         */
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -395,6 +451,10 @@ public class NetworkConfigValidator {
             return Objects.equals(source, other.source) && Objects.equals(destination, other.destination);
         }
 
+        /**
+         * Returns the hash code for this object.
+         * @return the result.
+         */
         @Override
         public int hashCode() {
             return Objects.hash(source, destination);
@@ -415,6 +475,11 @@ public class NetworkConfigValidator {
             }
         }
 
+        /**
+         * Checks whether this object is equal to another object.
+         * @param obj the obj.
+         * @return the result.
+         */
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -423,6 +488,10 @@ public class NetworkConfigValidator {
             return Objects.equals(a, other.a) && Objects.equals(b, other.b);
         }
 
+        /**
+         * Returns the hash code for this object.
+         * @return the result.
+         */
         @Override
         public int hashCode() {
             return Objects.hash(a, b);
@@ -440,6 +509,11 @@ public class NetworkConfigValidator {
             this.spectrum = normalize(spectrum);
         }
 
+        /**
+         * Returns the normalize.
+         * @param value the value.
+         * @return the result of the operation.
+         */
         private static double normalize(double value) {
             if (Math.abs(value) < EPS) {
                 return 0.0;
@@ -447,6 +521,11 @@ public class NetworkConfigValidator {
             return value;
         }
 
+        /**
+         * Checks whether this object is equal to another object.
+         * @param obj the obj.
+         * @return the result.
+         */
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -457,6 +536,10 @@ public class NetworkConfigValidator {
                     && Math.abs(spectrum - other.spectrum) < EPS;
         }
 
+        /**
+         * Returns the hash code for this object.
+         * @return the result.
+         */
         @Override
         public int hashCode() {
             long roundedSize = Math.round(size / EPS);
@@ -469,32 +552,59 @@ public class NetworkConfigValidator {
         private final List<String> errors = new ArrayList<>();
         private final List<String> warnings = new ArrayList<>();
 
+        /**
+         * Checks whether valid.
+         * @return true if the condition is met; false otherwise.
+         */
         public boolean isValid() {
             return errors.isEmpty();
         }
 
+        /**
+         * Returns the errors.
+         * @return the errors.
+         */
         public List<String> getErrors() {
             return Collections.unmodifiableList(errors);
         }
 
+        /**
+         * Returns the warnings.
+         * @return the warnings.
+         */
         public List<String> getWarnings() {
             return Collections.unmodifiableList(warnings);
         }
 
+        /**
+         * Adds the error.
+         * @param message the message.
+         */
         public void addError(String message) {
             errors.add(message);
         }
 
+        /**
+         * Adds the warning.
+         * @param message the message.
+         */
         public void addWarning(String message) {
             warnings.add(message);
         }
 
+        /**
+         * Executes the throw if invalid operation.
+         */
         public void throwIfInvalid() {
             if (!isValid()) {
                 throw new IllegalStateException(toPrettyString());
             }
         }
 
+        /**
+         * Returns the to pretty string.
+         * @return the result of the operation.
+         */
         public String toPrettyString() {
             StringBuilder sb = new StringBuilder();
 
@@ -521,6 +631,10 @@ public class NetworkConfigValidator {
             return sb.toString();
         }
 
+        /**
+         * Returns the string representation of this object.
+         * @return the result.
+         */
         @Override
         public String toString() {
             return toPrettyString();

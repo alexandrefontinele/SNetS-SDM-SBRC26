@@ -18,7 +18,7 @@ import simulationControl.Util;
 
 /**
  * This class represents the Dijkstra (Shortest Path) Routing Algorithm.
- * 
+ *
  * @author Iallen
  */
 public class DJK implements RoutingAlgorithmInterface {
@@ -29,6 +29,12 @@ public class DJK implements RoutingAlgorithmInterface {
 
     private Util util;
 
+    /**
+     * Finds the route.
+     * @param circuit the circuit.
+     * @param mesh the mesh.
+     * @return true if the condition is met; false otherwise.
+     */
     @Override
     public boolean findRoute(Circuit circuit, Mesh mesh) {
         if (routesForAllPairs == null) {
@@ -95,7 +101,7 @@ public class DJK implements RoutingAlgorithmInterface {
 
                 rAux = (Vector<Node>) routes.get(nAux1).clone();
                 rAux.add(n);
-                
+
                 //Check if it is necessary to update the route
                 if (undefined.get(n) == null || undefined.get(n) > undefined.get(nAux1) + mesh.getLink(nAux1.getName(), n.getName()).getDistance()) {
                     undefined.put(n, undefined.get(nAux1) + mesh.getLink(nAux1.getName(), n.getName()).getDistance());
@@ -130,31 +136,31 @@ public class DJK implements RoutingAlgorithmInterface {
 
         return res;
     }
-    
+
     /**
 	 * Returns the route list for all pairs
-	 * 
+	 *
 	 * @return Vector<Route>
 	 */
 	public HashMap<String, Route> getRoutesForAllPairs() {
 		return routesForAllPairs;
 	}
-    
+
     /**
      * This method saves in files the routes for all the pairs.
-     * 
+     *
      * @param nodeList Vector<Node>
      */
     private void salveRoutesByPar(Vector<Node> nodeList) {
     	List<String> routesList = new ArrayList<String>();
-    	
+
     	int numNodes = nodeList.size();
         for(int i = 1; i <= numNodes; i++){
     	    for(int j = 1; j <= numNodes; j++){
-    		    
+
     		    if(i != j){
 	      		    String pair = i + DIV + j;
-	      		    
+
 		        	Route rota = routesForAllPairs.get(pair);
 		        	StringBuilder sb = new StringBuilder();
 		        	for(int n = 0; n < rota.getNodeList().size(); n++){
@@ -163,26 +169,26 @@ public class DJK implements RoutingAlgorithmInterface {
 		        			sb.append("-");
 		        		}
 		        	}
-		        	
+
 		        	routesList.add(sb.toString());
     		    }
     	    }
         }
-        
+
         Gson gson = new GsonBuilder().create();
         String json = gson.toJson(routesList);
-        
+
         try {
         	String separator = System.getProperty("file.separator");
-        	
+
         	FileWriter fw = new FileWriter(util.projectPath + separator + "routesByPar.txt");
 			BufferedWriter out = new BufferedWriter(fw);
-            
+
 			out.append(json);
-			
+
 			out.close();
 			fw.close();
-            
+
         } catch (Exception ex) {
         	ex.printStackTrace();
         }

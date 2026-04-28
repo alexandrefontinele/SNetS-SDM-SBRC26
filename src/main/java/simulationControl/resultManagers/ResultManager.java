@@ -13,10 +13,18 @@ import java.util.List;
 public class ResultManager {
     private List<List<Measurements>> mainMeasuremens;
 
+    /**
+     * Creates a new instance of ResultManager.
+     * @param mainMeasuremens the mainMeasuremens.
+     */
     public ResultManager(List<List<Measurements>> mainMeasuremens) {
         this.mainMeasuremens = mainMeasuremens;
     }
 
+    /**
+     * Returns the results.
+     * @return the results.
+     */
     public SimulationRequest.Result getResults(){
         SimulationRequest.Result r = new SimulationRequest.Result();
         int numMetrics = mainMeasuremens.get(0).get(0).getMetrics().size();

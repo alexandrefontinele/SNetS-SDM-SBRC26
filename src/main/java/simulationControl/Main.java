@@ -122,6 +122,10 @@ public class Main {
 
         FirebaseDatabase.getInstance().getReference("simulationServers/" + simSerRef.getKey() + "/online")
                 .addValueEventListener(new ValueEventListener() {
+                    /**
+                     * Executes the on data change operation.
+                     * @param dataSnapshot the dataSnapshot.
+                     */
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Object value = dataSnapshot.getValue();
@@ -130,6 +134,10 @@ public class Main {
                         }
                     }
 
+                    /**
+                     * Executes the on cancelled operation.
+                     * @param databaseError the databaseError.
+                     */
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         // do nothing
@@ -138,6 +146,11 @@ public class Main {
 
         FirebaseDatabase.getInstance().getReference("simulationServers/" + simSerRef.getKey() + "/simulationQueue")
                 .addChildEventListener(new ChildEventListener() {
+                    /**
+                     * Executes the on child added operation.
+                     * @param dataSnapshot the dataSnapshot.
+                     * @param s the s.
+                     */
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Gson gson = new GsonBuilder().create();
@@ -154,11 +167,18 @@ public class Main {
 
                                 SimulationManagement sm = new SimulationManagement(sr);
                                 sm.startSimulations(new SimulationManagement.SimulationProgressListener() {
+                                    /**
+                                     * Executes the on simulation progress update operation.
+                                     * @param progress the progress.
+                                     */
                                     @Override
                                     public void onSimulationProgressUpdate(double progress) {
                                         newRef.child("progress").setValueAsync(progress);
                                     }
 
+                                    /**
+                                     * Executes the on simulation finished operation.
+                                     */
                                     @Override
                                     public void onSimulationFinished() {
                                         // do nothing
@@ -176,21 +196,39 @@ public class Main {
                         }
                     }
 
+                    /**
+                     * Executes the on child changed operation.
+                     * @param dataSnapshot the dataSnapshot.
+                     * @param s the s.
+                     */
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                         // do nothing
                     }
 
+                    /**
+                     * Executes the on child removed operation.
+                     * @param dataSnapshot the dataSnapshot.
+                     */
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
                         // do nothing
                     }
 
+                    /**
+                     * Executes the on child moved operation.
+                     * @param dataSnapshot the dataSnapshot.
+                     * @param s the s.
+                     */
                     @Override
                     public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                         // do nothing
                     }
 
+                    /**
+                     * Executes the on cancelled operation.
+                     * @param databaseError the databaseError.
+                     */
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         // do nothing yet
@@ -243,8 +281,7 @@ public class Main {
         SimulationRequest simulationRequest = sfm.readSimulation(path, name);
         SimulationConfig sc = simulationRequest.getSimulationConfig();
 
-        NetworkConfigValidator.ValidationResult result = NetworkConfigValidator
-                .validate(simulationRequest.getNetworkConfig());
+        NetworkConfigValidator.ValidationResult result = NetworkConfigValidator.validate(simulationRequest.getNetworkConfig());
         System.out.println(result.toPrettyString());
         if (!result.isValid()) {
             throw new IllegalStateException(result.toPrettyString());
@@ -260,16 +297,32 @@ public class Main {
         long start = System.nanoTime();
 
         sm.startSimulations(new SimulationManagement.SimulationProgressListener() {
+            /**
+             * Executes the on simulation progress update operation.
+             * @param progress the progress.
+             */
             @Override
             public void onSimulationProgressUpdate(double progress) {
                 System.out.println("progress: " + (progress * 100) + "%");
             }
 
+            /**
+             * Executes the on simulation finished operation.
+             */
             @Override
             public void onSimulationFinished() {
 
             }
         });
+        
+        long end = System.nanoTime();
+        
+        System.out.println("Saving results");
+        sfm.writeSimulation(path, simulationRequest);
+        System.out.println("Finish!");
+        
+        long time = end - start;
+		System.out.println("Total simulation time (s): " + (time / 1000000000.0));
 
         return sm;
     }

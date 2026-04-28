@@ -3,6 +3,9 @@ package gprmcsa.trafficGrooming.util;
 import java.util.*;
 
 
+/**
+ * Represents the AuxiliaryGraph component.
+ */
 public class AuxiliaryGraph {
 
     //Graph
@@ -11,12 +14,19 @@ public class AuxiliaryGraph {
     /*
     Standard constructor. No nodes or edges are build.
      */
+    /**
+     * Creates a new instance of AuxiliaryGraph.
+     */
     public AuxiliaryGraph(){
         graph = new HashMap<>();
     }
 
     /*
     Create nodes between 1 (inclusive) and $numberOfNodes (inclusive)
+     */
+    /**
+     * Creates a new instance of AuxiliaryGraph.
+     * @param numberOfNodes the numberOfNodes.
      */
     public AuxiliaryGraph(int numberOfNodes){
         graph = new HashMap<>();
@@ -35,6 +45,10 @@ public class AuxiliaryGraph {
 
     /*
     Setup nodes by the given list $nodes;
+     */
+    /**
+     * Creates a new instance of AuxiliaryGraph.
+     * @param nodes the nodes.
      */
     public AuxiliaryGraph(List<Object> nodes){
         graph = new HashMap<>();
@@ -59,6 +73,11 @@ public class AuxiliaryGraph {
     /*
     Temporary method, only for debug.
      */
+    /**
+     * Returns the solutions to string.
+     * @param sol the sol.
+     * @return the result of the operation.
+     */
     public String solutionsToString(List<List<Edge>> sol){
         String res = "";
 
@@ -72,6 +91,12 @@ public class AuxiliaryGraph {
         return res;
     }
 
+    /**
+     * Returns the djk.
+     * @param S the S.
+     * @param D the D.
+     * @return the result of the operation.
+     */
     public List<List<Edge>> djk(String S, String D){
         List<List<Edge>> solutions = new ArrayList<>();
         HashMap<String,List<Edge>> distanceVectors = new HashMap<>();
@@ -111,7 +136,7 @@ public class AuxiliaryGraph {
                             toVisit.add(v);
                         }
                     }
-                    if(v.equals(D)){//possível solução
+                    if(v.equals(D)){//possvel soluo
                         ArrayList<Edge> dvUntilV = new ArrayList<>();
                         dvUntilV.addAll(dvUntilN);
                         dvUntilV.add(e);
@@ -124,6 +149,12 @@ public class AuxiliaryGraph {
         return solutions;
     }
 
+    /**
+     * Returns the min cost set.
+     * @param set the set.
+     * @param distanceVectorsCost the distanceVectorsCost.
+     * @return the result of the operation.
+     */
     private String minCostSet(Set<String> set, HashMap<String,Double> distanceVectorsCost){
         Iterator<String>it = set.iterator();
         String min = it.next();
@@ -140,20 +171,36 @@ public class AuxiliaryGraph {
         return min;
     }
 
+    /**
+     * Adds the edge.
+     * @param e the e.
+     */
     public void addEdge(Edge e){
         graph.get(e.getSource()).get(e.getDestination()).add(e);
     }
 
     public interface Edge{
 
+        /**
+         * Returns the cost.
+         * @return the cost.
+         */
         public double getCost();
 
+        /**
+         * Returns the source.
+         * @return the source.
+         */
         String getSource();
 
+        /**
+         * Returns the destination.
+         * @return the destination.
+         */
         String getDestination();
     }
 
-    
+
 
 }
 

@@ -28,7 +28,7 @@ public class GPRMCSA implements Serializable {
 	// Constants that indicate which type are the RSA algorithms (sequential or integrated)
 	public static final int RMCSA_SEQUENCIAL = 0;
 	public static final int RMCSA_INTEGRATED = 1;
-	
+
 	// Constants for indication of RMLSA algorithms Optical traffic aggregation
 	private static final String GROOMING_OPT_NOTRAFFICGROOMING = "notrafficgrooming";
 	private static final String GROOMING_OPT_SIMPLETRAFFICGROOMING = "simpletrafficgrooming";
@@ -36,17 +36,17 @@ public class GPRMCSA implements Serializable {
 	private static final String GROOMING_OPT_MTGSR = "mtgsr";
 	private static final String GROOMING_OPT_MGFCCFSRNP = "mgfccfsrnp";// equivalent to mtgsr_srnp
 	private static final String GROOMING_OPT_MTGSRSRNP = "mtgsr_srnp";
-	private static final String GROOMING_OPT_AUXILIARYGRAPHGROOMING = "agg";// Adicionado por Selles
-	private static final String GROOMING_OPT_AUXILIARYGRAPHGROOMINGSRNP = "agg_srnp";// Adicionado por Selles
-	private static final String GROOMING_OPT_AUXILIARYGRAPHGROOMINGSSTG1 = "agg_sstg1";// Adicionado por Selles
-	private static final String GROOMING_OPT_AUXILIARYGRAPHGROOMINGSSTG2 = "agg_sstg2";// Adicionado por Selles
+	private static final String GROOMING_OPT_AUXILIARYGRAPHGROOMING = "agg";// Added by Selles
+	private static final String GROOMING_OPT_AUXILIARYGRAPHGROOMINGSRNP = "agg_srnp";// Added by Selles
+	private static final String GROOMING_OPT_AUXILIARYGRAPHGROOMINGSSTG1 = "agg_sstg1";// Added by Selles
+	private static final String GROOMING_OPT_AUXILIARYGRAPHGROOMINGSSTG2 = "agg_sstg2";// Added by Selles
 
 	// Routing
 	private static final String ROUTING_DJK = "djk";
 	private static final String ROUTING_FIXEDROUTES = "fixedroutes";
 	private static final String ROUTING_SCSP = "scsp";
 	private static final String ROUTING_MMRDS = "mmrds";
-	
+
 	// K routing
 	private static final String ROUTING_K_FIXEDROUTES = "kfixedroutes";
 	private static final String ROUTING_K_SP = "ksp";
@@ -105,14 +105,14 @@ public class GPRMCSA implements Serializable {
 	private static final String CORE_SPECTRUM_ASSIGNMENT_RCCAS = "rccas";
 	private static final String CORE_SPECTRUM_ASSIGNMENT_CPCAS = "cpcas";
 	private static final String CORE_SPECTRUM_ASSIGNMENT_ICXTAA = "icxtaa";
-	
+
 	// Reallocation
 	private static final String REALLOCATION_FASTSWITCHING_ALFAV1 = "fsalfav1";
 	private static final String REALLOCATION_FASTSWITCHING_ALFAV2 = "fsalfav2";
 	private static final String REALLOCATION_FASTSWITCHING_ALFAV3 = "fsalfav3";
 	private static final String REALLOCATION_CASD_PUSHPULL = "casdpushpull";
 	private static final String REALLOCATION_PUSHPULL_CSBASDM = "pushpullcsbasdm";
-	
+
 	// Power assignment
 	private static final String POWER_ASSIGNMENT_CPSD = "cpsd";
 	private static final String POWER_ASSIGNMENT_CPA = "cpa";
@@ -125,7 +125,7 @@ public class GPRMCSA implements Serializable {
 	private static final String POWER_ASSIGNMENT_PABS = "pabs";
 	private static final String POWER_ASSIGNMENT_PABS_V2 = "pabsv2";
 	private static final String POWER_ASSIGNMENT_IMPA = "impa";
-	
+
 	// Guard Band Selection
 	private static final String GBS_KSPGBSA = "kspgbsa";
 	private static final String GBS_KSPFGBA = "kspfgba";
@@ -147,7 +147,7 @@ public class GPRMCSA implements Serializable {
 
 	/**
 	 * Creates a new instance of GRMLSA
-	 * 
+	 *
 	 * @param grooming                    String
 	 * @param integrated                  String
 	 * @param routing                     String
@@ -162,7 +162,7 @@ public class GPRMCSA implements Serializable {
 	public GPRMCSA(String grooming, String integrated, String routing, String kRouting, String modulationSelection,
 			String spectrumAssignment, String regeneratorAssignment, String coreAndSpectrumAssignment,
 			String reallocation, String powerAssignment) {
-		
+
 		this.grooming = grooming;
 		this.integrated = integrated;
 		this.routing = routing;
@@ -198,7 +198,7 @@ public class GPRMCSA implements Serializable {
 
 	/**
 	 * Instance the optical traffic aggregation algorithm
-	 * 
+	 *
 	 * @throws Exception
 	 * @return TrafficGroomingAlgorithm
 	 */
@@ -247,7 +247,7 @@ public class GPRMCSA implements Serializable {
 				return null;
 		}
 	}
-	
+
 	/**
 	 * Instance the routing algorithm
 	 *
@@ -351,7 +351,7 @@ public class GPRMCSA implements Serializable {
 
 	/**
 	 * Instance the regenerators assignment algorithm
-	 * 
+	 *
 	 * @throws Exception
 	 * @return RegeneratorAssignmentAlgorithmInterface
 	 */
@@ -366,7 +366,7 @@ public class GPRMCSA implements Serializable {
 
 	/**
 	 * Instance the modulation selection algorithm
-	 * 
+	 *
 	 * @return ModulationSelectionAlgorithmInterface
 	 * @throws Exception
 	 */
@@ -388,10 +388,10 @@ public class GPRMCSA implements Serializable {
 				return null;
 		}
 	}
-	
+
 	/**
 	 * Instance the core and spectrum assignment algorithm
-	 * 
+	 *
 	 * @return CoreAndSpectrumAssignmentAlgorithmInterface
 	 * @throws Exception
 	 */
@@ -427,10 +427,10 @@ public class GPRMCSA implements Serializable {
                 return null;
         }
 	}
-	
+
 	/**
 	 * Instance the reallocation algorithm
-	 * 
+	 *
 	 * @return ReallocationAlgorithmInterface
 	 * @throws Exception
 	 */
@@ -450,10 +450,10 @@ public class GPRMCSA implements Serializable {
 				return null;
 		}
 	}
-	
+
 	/**
 	 * Instance the power assignment algorithm
-	 * 
+	 *
 	 * @return PowerAssignmentAlgorithmInterface
 	 * @throws Exception
 	 */
@@ -485,5 +485,5 @@ public class GPRMCSA implements Serializable {
 				return null;
 		}
 	}
-	
+
 }

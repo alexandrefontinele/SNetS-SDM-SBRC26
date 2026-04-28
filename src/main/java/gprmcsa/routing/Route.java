@@ -8,18 +8,21 @@ import java.util.Vector;
 
 /**
  * This class represents a route between two network nodes
- * 
+ *
  * @author Iallen
  */
 @SuppressWarnings("serial")
+/**
+ * Represents the Route component.
+ */
 public class Route implements Serializable, Comparable<Route> {
 
 	// List of nodes that are present on the route
     private Vector<Node> nodeList;
-    
+
     // List of links that are present on the route
     private Vector<Link> linkList;
-    
+
     // Route distance
     private double distanceAllLinks;
 
@@ -119,7 +122,7 @@ public class Route implements Serializable, Comparable<Route> {
             }
         }
         System.err.println("ERROR: next node was not found for node : " + n.getName());
-        System.out.println("ERRO: class Route");
+        System.out.println("ERROR: class Route");
         return null;
     }
 
@@ -246,16 +249,16 @@ public class Route implements Serializable, Comparable<Route> {
 
     /**
      * Configures the links list of route
-     * 
+     *
      * @param linkList the linkList to set
      */
     public void setLinkList(Vector<Link> linkList) {
         this.linkList = linkList;
     }
-    
+
     /**
      * Configures the nodes of route
-     * 
+     *
      * @param nodeList the nodeList to set
      */
     public void setNodeList(Vector<Node> nodeList) {
@@ -264,7 +267,7 @@ public class Route implements Serializable, Comparable<Route> {
 
     /**
      * Checks if a given route is equal to the current route
-     * 
+     *
      * @param o Route
      */
     @Override
@@ -277,7 +280,7 @@ public class Route implements Serializable, Comparable<Route> {
 
     /**
      * Checks if a given route is equal to the current route
-     * 
+     *
      * @param o Route
      */
     @Override
@@ -290,7 +293,7 @@ public class Route implements Serializable, Comparable<Route> {
 
     /**
      * Adds a node to the route
-     * 
+     *
      * @param n Node
      */
     public void addNode(Node n) {
@@ -300,7 +303,7 @@ public class Route implements Serializable, Comparable<Route> {
 
     /**
      * Returns a clone of the route
-     * 
+     *
      * @return Route
      */
     @SuppressWarnings("unchecked")

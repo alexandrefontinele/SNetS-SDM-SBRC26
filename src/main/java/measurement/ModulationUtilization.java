@@ -14,31 +14,37 @@ import simulationControl.resultManagers.ModulationUtilizationResultManager;
 
 /**
  * This class stored the metrics related to the use of modulation.
- * 
+ *
  * @author Alexandre
  */
 public class ModulationUtilization extends Measurement {
 
 	private int numObservations;
-	
+
 	private HashMap<String, Integer> numCircuitsPerMod;
 	private HashMap<String, HashMap<Double, Integer>> numCircuitsPerModPerBw;
-	
+
 	private List<String> modulationList;
 	private Util util;
-	
+
+	/**
+	 * Creates a new instance of ModulationUtilization.
+	 * @param loadPoint the loadPoint.
+	 * @param replication the replication.
+	 * @param util the util.
+	 */
 	public ModulationUtilization(int loadPoint, int replication, Util util) {
 		super(loadPoint, replication);
-		
+
 		this.util = util;
 		this.numObservations = 0;
-		
+
 		this.numCircuitsPerMod = new HashMap<>();
 		this.numCircuitsPerModPerBw = new HashMap<>();
 
 		resultManager = new ModulationUtilizationResultManager();
 	}
-	
+
 	/**
     * Adds a new usage observation of modulation utilization
     *
@@ -50,27 +56,27 @@ public class ModulationUtilization extends Measurement {
 	   if(modulationList == null){
 		   modulationList = new ArrayList<String>();
 		   List<Modulation> avaliableModulations = cp.getMesh().getAvaliableModulations();
-		   
+
 		   for(int i = 0; i < avaliableModulations.size(); i++){
 			   modulationList.add(avaliableModulations.get(i).getName());
 		   }
 	   }
-	   
+
 	   if(success){
 		   for(Circuit circuit : request.getCircuits()) {
 				numObservations++;
-	
+
 				double bandwidth = circuit.getRequiredBitRate();
 				List<Modulation> modList = cp.getModulationsUsedByCircuit(circuit);
-	
+
 				for (int i = 0; i < modList.size(); i++) {
 					String modName = modList.get(i).getName();
-	
+
 					// Number of circuits per modulation
 					Integer numCirc = numCircuitsPerMod.get(modName);
 					if (numCirc == null) numCirc = 0;
 					numCircuitsPerMod.put(modName, numCirc + 1);
-	
+
 					// Number of circuits per modulation and bandwidth
 					HashMap<Double, Integer> numCircBw = numCircuitsPerModPerBw.get(modName);
 					if (numCircBw == null) {
@@ -85,6 +91,10 @@ public class ModulationUtilization extends Measurement {
 		}
 	}
 
+	/**
+	 * Returns the file name.
+	 * @return the file name.
+	 */
 	@Override
 	public String getFileName() {
 		return SimulationRequest.Result.FILE_MODULATION_UTILIZATION;
@@ -100,10 +110,10 @@ public class ModulationUtilization extends Measurement {
 		if(numCirc == null) numCirc = 0;
 		return (double)numCirc / (double)numObservations;
 	}
-	
+
 	/**
 	 * Returns the percentage of circuits per modulation e per bandwidth
-	 * 
+	 *
 	 * @param modName String
 	 * @param bandwidth double
 	 * @return double
@@ -116,16 +126,20 @@ public class ModulationUtilization extends Measurement {
 		}
 		return (double)numCirc / (double)numObservations;
 	}
-	
+
 	/**
 	 * Returns the modulation list
-	 * 
+	 *
 	 * @return List<String>
 	 */
 	public List<String> getModulationList(){
 		return modulationList;
 	}
 
+	/**
+	 * Returns the util.
+	 * @return the util.
+	 */
 	public Util getUtil() {
 		return util;
 	}

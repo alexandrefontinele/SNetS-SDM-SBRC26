@@ -4,6 +4,9 @@ package util;
  * A class for random drawing.<p>
  */
 @SuppressWarnings("serial")
+/**
+ * Represents the RandGenerator component.
+ */
 public class RandGenerator extends java.util.Random {
     /**
      * This constructor creates a <tt>Random</tt> object with the current
@@ -91,6 +94,11 @@ public class RandGenerator extends java.util.Random {
     }
 
     //-------------------------------------------------------------------------
+    /**
+     * Returns the negexp1.
+     * @param a the a.
+     * @return the result of the operation.
+     */
     public final double negexp1(double a) {
         if (a <= 0)
             error("negexp: First parameter is lower than zero");
@@ -98,6 +106,12 @@ public class RandGenerator extends java.util.Random {
     }
 
     //-------------------------------------------------------------------------
+    /**
+     * Returns the negexp2.
+     * @param a the a.
+     * @param x the x.
+     * @return the result of the operation.
+     */
     public final double negexp2(double a, int x) {
         if (a <= 0)
             error("negexp: First parameter is lower than zero");
@@ -105,6 +119,11 @@ public class RandGenerator extends java.util.Random {
     }
     //-------------------------------------------------------------------------
 
+    /**
+     * Returns the expntl.
+     * @param a the a.
+     * @return the result of the operation.
+     */
     public final double expntl(double a) {
         if (a <= 0)
             error("negexp: First parameter is lower than zero");
@@ -225,11 +244,21 @@ public class RandGenerator extends java.util.Random {
         return i;
     }
 
+    /**
+     * Executes the error operation.
+     * @param msg the msg.
+     */
     private static void error(String msg) {
         throw new RuntimeException(msg);
     }
 
     //------------------------------------------------------------------------------
+    /**
+     * Returns the expntl finita.
+     * @param n the n.
+     * @param p the p.
+     * @return the result of the operation.
+     */
     public final int expntlFinita(int n, double p) {
         double numerador, denominador, resultado;
         double u = nextDouble();

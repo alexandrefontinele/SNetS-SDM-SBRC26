@@ -14,21 +14,30 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+/**
+ * Represents the SimulationFileManager component.
+ */
 public class SimulationFileManager {
 
+    /**
+     * Reads the simulation.
+     * @param path the path.
+     * @param name the name.
+     * @return the result of the operation.
+     */
     public SimulationRequest readSimulation(String path, String name) throws FileNotFoundException {
         SimulationRequest sr = new SimulationRequest();
         sr.setName(name);
         sr.setPath(path);
-        
+
         String separator = System.getProperty("file.separator");
         String filesPath = path + separator + name;
-        
+
         File folder = new File(filesPath);
         File[] listOfFiles = folder.listFiles();
-        
+
         Gson gson = new GsonBuilder().create();
-        
+
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
                 switch(listOfFiles[i].getName()){
@@ -98,6 +107,11 @@ public class SimulationFileManager {
         return sr;
     }
 
+    /**
+     * Writes the simulation.
+     * @param path the path.
+     * @param sr the sr.
+     */
     public void writeSimulation(String path, SimulationRequest sr) throws IOException {
         // Create a folder with the name and add it to the path
         path = path + System.getProperty("file.separator") + sr.getName();
@@ -110,10 +124,16 @@ public class SimulationFileManager {
         saveResult(path,sr);
     }
 
+    /**
+     * Reads the file.
+     * @param f the f.
+     * @param carriageReturn the carriageReturn.
+     * @return the result of the operation.
+     */
     private String readFile(File f, boolean carriageReturn) throws FileNotFoundException {
         Scanner scanner = new Scanner(f);
         StringBuilder res = new StringBuilder();
-        
+
         while (scanner.hasNextLine()) {
             res.append(scanner.nextLine());
             if (carriageReturn) {
@@ -121,14 +141,24 @@ public class SimulationFileManager {
             }
         }
         scanner.close();
-        
+
         return res.toString();
     }
 
+    /**
+     * Reads the file.
+     * @param f the f.
+     * @return the result of the operation.
+     */
     private String readFile(File f) throws FileNotFoundException {
         return readFile(f, false);
     }
 
+    /**
+     * Saves the config.
+     * @param path the path.
+     * @param sr the sr.
+     */
     private void saveConfig(String path, SimulationRequest sr) throws IOException {
         Gson gson = new GsonBuilder().create();
         saveConfig(path, "network", gson.toJson(sr.getNetworkConfig()));
@@ -138,6 +168,11 @@ public class SimulationFileManager {
         saveConfig(path, "traffic", gson.toJson(sr.getTrafficConfig()));
     }
 
+    /**
+     * Saves the result.
+     * @param path the path.
+     * @param sr the sr.
+     */
     private void saveResult(String path, SimulationRequest sr) throws IOException {
         if(sr.getSimulationConfig().getActiveMetrics().BlockingProbability){
             saveResult(path, SimulationRequest.Result.FILE_BLOCKING_PROBABILITY,sr.getResult().blockingProbability);
@@ -177,6 +212,11 @@ public class SimulationFileManager {
         }
     }
 
+    /**
+     * Saves the file.
+     * @param path the path.
+     * @param value the value.
+     */
     private void saveFile(String path, String value) throws IOException {
         if(value==null) return;
 
@@ -187,6 +227,12 @@ public class SimulationFileManager {
         fw.close();
     }
 
+    /**
+     * Saves the result.
+     * @param path the path.
+     * @param metric the metric.
+     * @param resultCsv the resultCsv.
+     */
     private void saveResult(String path, String metric, String resultCsv) throws IOException {
         String separador = System.getProperty("file.separator");
         String aux[] = path.split(Pattern.quote(separador));
@@ -195,6 +241,12 @@ public class SimulationFileManager {
         saveFile(p, resultCsv);
     }
 
+    /**
+     * Saves the config.
+     * @param path the path.
+     * @param config the config.
+     * @param value the value.
+     */
     private void saveConfig(String path, String config, String value) throws IOException {
         String separator = System.getProperty("file.separator");
         //String aux[] = path.split(Pattern.quote(separador));

@@ -14,10 +14,18 @@ import util.IntersectionFreeSpectrum;
  */
 public class BestFit implements SpectrumAssignmentAlgorithmInterface {
 
+    /**
+     * Returns the assign spectrum.
+     * @param numberOfSlots the numberOfSlots.
+     * @param circuit the circuit.
+     * @param cp the cp.
+     * @param indexCore the indexCore.
+     * @return true if the condition is met; false otherwise.
+     */
     @Override
     public boolean assignSpectrum(int numberOfSlots, Circuit circuit, ControlPlane cp, int indexCore) {
     	List<int[]> composition = IntersectionFreeSpectrum.merge(circuit.getRoute(), circuit.getGuardBand(), indexCore);
-    	
+
         int chosen[] = policy(numberOfSlots, composition, circuit, cp);
         circuit.setSpectrumAssigned(chosen);
 
@@ -27,13 +35,21 @@ public class BestFit implements SpectrumAssignmentAlgorithmInterface {
         return true;
     }
 
+    /**
+     * Returns the policy.
+     * @param numberOfSlots the numberOfSlots.
+     * @param freeSpectrumBands the freeSpectrumBands.
+     * @param circuit the circuit.
+     * @param cp the cp.
+     * @return the result of the operation.
+     */
     @Override
     public int[] policy(int numberOfSlots, List<int[]> freeSpectrumBands, Circuit circuit, ControlPlane cp){
         int maxAmplitude = circuit.getPair().getSource().getTxs().getMaxSpectralAmplitude();
         if(numberOfSlots>maxAmplitude) return null;
     	int chosen[] = null;
         int lessDifference = 999999999;
-        
+
         for (int[] band : freeSpectrumBands) {
             int sizeBand = band[1] - band[0] + 1;
             if (sizeBand >= numberOfSlots) {

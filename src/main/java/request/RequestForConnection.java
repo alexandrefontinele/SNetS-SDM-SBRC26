@@ -9,24 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents the requests made by the clients for the establishment of 
+ * This class represents the requests made by the clients for the establishment of
  * connections between two nodes of the network
- * 
+ *
  * @author Iallen
  */
 public class RequestForConnection implements Serializable {
-	
+
 	protected Pair pair;
 	protected double timeOfRequestHours;
 	protected double timeOfFinalizeHours;
 	protected double requiredBitRate;
 	protected RequestGenerator rg;
-	
+
 	protected List<Circuit> circuit = new ArrayList<>(); // Circuit that attends this request
-	
+
 	/**
 	 * Returns the pair
-	 * 
+	 *
 	 * @return Pair
 	 */
 	public Pair getPair() {
@@ -35,7 +35,7 @@ public class RequestForConnection implements Serializable {
 
 	/**
 	 * Sets the pair
-	 * 
+	 *
 	 * @param pair Pair
 	 */
 	public void setPair(Pair pair) {
@@ -44,7 +44,7 @@ public class RequestForConnection implements Serializable {
 
 	/**
 	 * Returns request start time
-	 * 
+	 *
 	 * @return double
 	 */
 	public double getTimeOfRequestHours() {
@@ -53,7 +53,7 @@ public class RequestForConnection implements Serializable {
 
 	/**
 	 * Sets the request start time
-	 * 
+	 *
 	 * @param timeOfRequestHours double
 	 */
 	public void setTimeOfRequestHours(double timeOfRequestHours) {
@@ -62,7 +62,7 @@ public class RequestForConnection implements Serializable {
 
 	/**
 	 * Returns request end time
-	 * 
+	 *
 	 * @return double
 	 */
 	public double getTimeOfFinalizeHours() {
@@ -71,7 +71,7 @@ public class RequestForConnection implements Serializable {
 
 	/**
 	 * Sets the request end time
-	 * 
+	 *
 	 * @param timeOfFinalizeHours double
 	 */
 	public void setTimeOfFinalizeHours(double timeOfFinalizeHours) {
@@ -80,7 +80,7 @@ public class RequestForConnection implements Serializable {
 
 	/**
 	 * Returns the request bit rate
-	 * 
+	 *
 	 * @return double
 	 */
 	public double getRequiredBitRate() {
@@ -89,7 +89,7 @@ public class RequestForConnection implements Serializable {
 
 	/**
 	 * Sets the request bit rate
-	 * 
+	 *
 	 * @param requiredBitRate double
 	 */
 	public void setRequiredBitRate(double requiredBitRate) {
@@ -98,7 +98,7 @@ public class RequestForConnection implements Serializable {
 
 	/**
 	 * Returns the circuit that attends this request
-	 * 
+	 *
 	 * @return Circuit
 	 */
 	public List<Circuit> getCircuits() {
@@ -107,7 +107,7 @@ public class RequestForConnection implements Serializable {
 
 	/**
 	 * Sets the circuit that attends this request
-	 * 
+	 *
 	 * @param circuits Circuit
 	 */
 	public void setCircuit(List<Circuit> circuits) {
@@ -115,7 +115,7 @@ public class RequestForConnection implements Serializable {
 	}
 	/**
 	 * Returns the request generator
-	 * 
+	 *
 	 * @return RequestGenerator
 	 */
 	public RequestGenerator getRequestGenerator() {
@@ -124,7 +124,7 @@ public class RequestForConnection implements Serializable {
 
 	/**
 	 * Sets the request generator
-	 * 
+	 *
 	 * @param rg RequestGenerator
 	 */
 	public void setRequestGenerator(RequestGenerator rg) {

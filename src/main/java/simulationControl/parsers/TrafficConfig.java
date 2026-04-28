@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents the Traffic configuration file, its representation in entity form is 
+ * This class represents the Traffic configuration file, its representation in entity form is
  * important for the storage and transmission of this type of configuration in JSON format.
- * 
+ *
  * Created by Iallen on 04/05/2017.
  */
 public class TrafficConfig {
@@ -15,7 +15,7 @@ public class TrafficConfig {
 
     /**
      * Returns the list of request generators
-     * 
+     *
      * @return List<RequestGeneratorConfig>
      */
     public List<RequestGeneratorConfig> getRequestGenerators() {
@@ -24,7 +24,7 @@ public class TrafficConfig {
 
     /**
      * Sets the list of request generators
-     * 
+     *
      * @param requestGenerators List<RequestGeneratorConfig>
      */
     public void setRequestGenerators(List<RequestGeneratorConfig> requestGenerators) {
@@ -33,7 +33,7 @@ public class TrafficConfig {
 
     /**
      * This class represents a request generator
-     * 
+     *
      * @author Iallen
      */
     public static class RequestGeneratorConfig{
@@ -47,7 +47,7 @@ public class TrafficConfig {
 
         /**
          * Creates a new instance of RequestGeneratorConfig
-         * 
+         *
          * @param source String
          * @param destination String
          * @param bitRate double
@@ -66,7 +66,7 @@ public class TrafficConfig {
 
         /**
          * Returns the source node
-         * 
+         *
          * @return String
          */
         public String getSource() {
@@ -75,7 +75,7 @@ public class TrafficConfig {
 
         /**
          * Sets the source node
-         * 
+         *
          * @param source String
          */
         public void setSource(String source) {
@@ -84,7 +84,7 @@ public class TrafficConfig {
 
         /**
          * Returns the destination node
-         * 
+         *
          * @return String
          */
         public String getDestination() {
@@ -93,7 +93,7 @@ public class TrafficConfig {
 
         /**
          * Sets the destination node
-         * 
+         *
          * @param destination String
          */
         public void setDestination(String destination) {
@@ -102,7 +102,7 @@ public class TrafficConfig {
 
         /**
          * Returns the requested bit rate
-         * 
+         *
          * @return double
          */
         public double getBitRate() {
@@ -111,7 +111,7 @@ public class TrafficConfig {
 
         /**
          * Sets the requested bit rate
-         * 
+         *
          * @param bitRate double
          */
         public void setBitRate(double bitRate) {
@@ -120,7 +120,7 @@ public class TrafficConfig {
 
         /**
          * Returns the arrival rate
-         * 
+         *
          * @return double
          */
         public double getArrivalRate() {
@@ -129,7 +129,7 @@ public class TrafficConfig {
 
         /**
          * Sets the arrival rate
-         * 
+         *
          * @param arrivalRate
          */
         public void setArrivalRate(double arrivalRate) {
@@ -138,7 +138,7 @@ public class TrafficConfig {
 
         /**
          * Returns the hold rate
-         * 
+         *
          * @return double
          */
         public double getHoldRate() {
@@ -147,7 +147,7 @@ public class TrafficConfig {
 
         /**
          * Sets the hold rate
-         * 
+         *
          * @param holdRate double
          */
         public void setHoldRate(double holdRate) {
@@ -156,7 +156,7 @@ public class TrafficConfig {
 
         /**
          * Returns the arrival rate increase
-         * 
+         *
          * @return double
          */
         public double getArrivalRateIncrease() {
@@ -165,7 +165,7 @@ public class TrafficConfig {
 
         /**
          * Sets the arrival rate increase
-         * 
+         *
          * @param arrivalRateIncrease double
          */
         public void setArrivalRateIncrease(double arrivalRateIncrease) {

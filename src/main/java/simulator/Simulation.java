@@ -13,10 +13,13 @@ import gprmcsa.GPRMCSA;
 
 /**
  * This class represents a single simulation
- * 
+ *
  * @author Iallen
  */
 @SuppressWarnings("serial")
+/**
+ * Represents the Simulation component.
+ */
 public class Simulation implements Serializable {
 
     private Mesh mesh;
@@ -29,7 +32,7 @@ public class Simulation implements Serializable {
 
     /**
      * Creates a new instance of Simulation
-     * 
+     *
      * @param sc SimulationConfig
      * @param mesh Mesh
      * @param loadPoint int
@@ -42,10 +45,10 @@ public class Simulation implements Serializable {
         this.measurements = new Measurements(sc.getRequests(), loadPoint, replication, mesh, sc.getActiveMetrics());
         this.mesh = mesh;
         this.util = util;
-        
-        GPRMCSA grmlsa = new GPRMCSA(sc.getGrooming(), sc.getIntegratedRmlsa(), sc.getRouting(), sc.getkRouting(), sc.getModulationSelection(), sc.getSpectrumAssignment(), 
+
+        GPRMCSA grmlsa = new GPRMCSA(sc.getGrooming(), sc.getIntegratedRmlsa(), sc.getRouting(), sc.getkRouting(), sc.getModulationSelection(), sc.getSpectrumAssignment(),
         							 sc.getRegeneratorAssignment(), sc.getCoreAndSpectrumAssignment(), sc.getReallocation(), sc.getPowerAssignment());
-        
+
         // Check if any algorithm was entered incorrectly.
 		checkNotNull(grmlsa.instantiateGrooming(), "grooming: " + sc.getGrooming());
 		checkNotNull(grmlsa.instantiateIntegratedRSA(), "integrated: " + sc.getIntegratedRmlsa());
@@ -57,19 +60,19 @@ public class Simulation implements Serializable {
 		checkNotNull(grmlsa.instantiatePowerAssignment(), "powerAssignment: " + sc.getPowerAssignment());
 		checkNotNull(grmlsa.instantiateReallocation(), "reallocation: " + sc.getReallocation());
 		checkNotNull(grmlsa.instantiateRegeneratorAssignment(), "regeneratorAssignment: " + sc.getRegeneratorAssignment());
-		
+
         if(sc.getNetworkType() == GPRMCSA.TRANSPARENT){
-        	controlPlane = new ControlPlane(mesh, sc.getRmlsaType(), grmlsa.instantiateGrooming(), grmlsa.instantiateIntegratedRSA(), grmlsa.instantiateRouting(), grmlsa.instantiateKRouting(), 
-        									grmlsa.instantiateSpectrumAssignment(), grmlsa.instantiateModulationSelection(), grmlsa.instantiateCoreAndSpectrumAssignment(), 
+        	controlPlane = new ControlPlane(mesh, sc.getRmlsaType(), grmlsa.instantiateGrooming(), grmlsa.instantiateIntegratedRSA(), grmlsa.instantiateRouting(), grmlsa.instantiateKRouting(),
+        									grmlsa.instantiateSpectrumAssignment(), grmlsa.instantiateModulationSelection(), grmlsa.instantiateCoreAndSpectrumAssignment(),
         									grmlsa.instantiateReallocation(), grmlsa.instantiatePowerAssignment());
-        
+
         }else if(sc.getNetworkType() == GPRMCSA.TRANSLUCENT){
-        	controlPlane = new TranslucentControlPlane(mesh, sc.getRmlsaType(), grmlsa.instantiateGrooming(), grmlsa.instantiateIntegratedRSA(), grmlsa.instantiateRouting(), 
-        												grmlsa.instantiateKRouting(), grmlsa.instantiateSpectrumAssignment(), grmlsa.instantiateRegeneratorAssignment(), grmlsa.instantiateModulationSelection(), 
+        	controlPlane = new TranslucentControlPlane(mesh, sc.getRmlsaType(), grmlsa.instantiateGrooming(), grmlsa.instantiateIntegratedRSA(), grmlsa.instantiateRouting(),
+        												grmlsa.instantiateKRouting(), grmlsa.instantiateSpectrumAssignment(), grmlsa.instantiateRegeneratorAssignment(), grmlsa.instantiateModulationSelection(),
         												grmlsa.instantiateCoreAndSpectrumAssignment(), grmlsa.instantiateReallocation(), grmlsa.instantiatePowerAssignment());
         }
     }
-    
+
     /**
      * Check if any algorithm name was entered incorrectly.
      * @param obj Object
@@ -77,16 +80,16 @@ public class Simulation implements Serializable {
      */
     private static void checkNotNull(Object obj, String name) {
 	    if (obj == null) {
-	        System.err.println("Erro: Classe/algoritmo não encontrado -> " + name);
-	        System.err.println("Encerrando o programa.");
+	        System.err.println("Error: Class/algorithm not found -> " + name);
+	        System.err.println("Terminating the program.");
 	        System.exit(1);
 	    }
 	}
-    
-    
+
+
     /**
      * Returns the load point
-     * 
+     *
      * @return the loadPoint
      */
     public int getLoadPoint() {
@@ -95,7 +98,7 @@ public class Simulation implements Serializable {
 
     /**
      * Sets the replication
-     * 
+     *
      * @return replication
      */
     public int getReplication() {
@@ -104,16 +107,16 @@ public class Simulation implements Serializable {
 
     /**
      * Returns the mesh of the network
-     * 
+     *
      * @return the mesh
      */
     public Mesh getMesh() {
         return mesh;
     }
-    
+
     /**
      * Sets the mesh of the network
-     * 
+     *
      * @param mesh the mesh to set
      */
     public void setMesh(Mesh mesh) {
@@ -122,7 +125,7 @@ public class Simulation implements Serializable {
 
     /**
      * Returns the control plane
-     * 
+     *
      * @return controlPlane
      */
     public ControlPlane getControlPlane() {
@@ -131,15 +134,19 @@ public class Simulation implements Serializable {
 
     /**
      * Returns the measurements
-     * 
+     *
      * @return measurements
      */
     public Measurements getMeasurements() {
         return measurements;
     }
-    
+
+    /**
+     * Returns the util.
+     * @return the util.
+     */
     public Util getUtil() {
     	return this.util;
     }
-    
+
 }

@@ -9,15 +9,15 @@ import network.ControlPlane;
 
 /**
  * This interface should be implemented by classes of power assignment algorithms.
- * 
+ *
  * @author Alexandre
  *
  */
 public interface PowerAssignmentAlgorithmInterface  extends Serializable {
-	
+
 	/**
 	 * This method computes a launch power for a circuit.
-	 * 
+	 *
 	 * @param circuit Circuit
 	 * @param route Route
 	 * @param modulation Modulation

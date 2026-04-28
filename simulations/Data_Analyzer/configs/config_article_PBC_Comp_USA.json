@@ -1,0 +1,177 @@
+{
+  "language": "pt",
+  "init_load": 500,
+  "load_step": 250,
+  "replications": 0,
+  "confidence": "95%",
+  "ci_method": "t-Student",
+  "bootstrap": 2000,
+  "axis_font": 19,
+  "tick_font": 14,
+  "legend_font": 14,
+  "axis_text_bold": false,
+  "tick_text_bold": false,
+  "x_left_margin": 50,
+  "x_right_margin": 50,
+  "x_margin_bar": 1.0,
+  "y_bottom_margin_linear": 0.01,
+  "y_top_margin_linear": 0.01,
+  "y_bottom_margin_log": 0.8,
+  "y_top_margin_log": 1.2,
+  "log_error_mode": "Mark truncated lower error",
+  "y_grid_mode": "Major lines only",
+  "algorithm_aliases": {
+    "APAmem": "APAmen",
+    "APAmen": "APAmen",
+    "APAnoMem": "APAnoMen",
+    "APAnoMen": "APAnoMen",
+    "APAmin": "APAmen",
+    "CPA": "CPA",
+    "CPSD": "CPSD",
+    "EnPA": "EnPA",
+    "EPA": "EPA",
+    "IMPA": "IMPA",
+    "PABS": "PABS"
+  },
+  "line_styles": {
+    "APAmen": {
+      "color": "#1f77b4",
+      "marker": "o",
+      "linestyle": "solid"
+    },
+    "APAmem": {
+      "color": "#1f77b4",
+      "marker": "o",
+      "linestyle": "solid"
+    },
+    "APAnoMen": {
+      "color": "#00ff40",
+      "marker": "s",
+      "linestyle": "dash"
+    },
+    "APAnoMem": {
+      "color": "#00ff40",
+      "marker": "s",
+      "linestyle": "dash"
+    },
+    "CPA": {
+      "color": "#0072ff",
+      "marker": "D",
+      "linestyle": "dot"
+    },
+    "CPSD": {
+      "color": "#8b5a2b",
+      "marker": "v",
+      "linestyle": "long_dash"
+    },
+    "EnPA": {
+      "color": "#8b008b",
+      "marker": "P",
+      "linestyle": "dashdot"
+    },
+    "EPA": {
+      "color": "#ff9966",
+      "marker": "X",
+      "linestyle": "dense_dotted"
+    },
+    "IMPA": {
+      "color": "#008b45",
+      "marker": "*",
+      "linestyle": "solid"
+    },
+    "PABS": {
+      "color": "#ff0000",
+      "marker": "h",
+      "linestyle": "dash_dot_dot"
+    }
+  },
+  "component_labels": {
+    "pt": {
+      "QoTN": "OSNRN",
+      "QoTO": "OSNRO",
+      "crosstalk": "XTN",
+      "crosstalk in other": "XTO",
+      "fragmentation": "Frag",
+      "lack of transmitters": "Tx",
+      "lack of receivers": "Rx",
+      "other": "Outros"
+    },
+    "en": {
+      "QoTN": "OSNRN",
+      "QoTO": "OSNRO",
+      "crosstalk": "XTN",
+      "crosstalk in other": "XTO",
+      "fragmentation": "Frag",
+      "lack of transmitters": "Tx",
+      "lack of receivers": "Rx",
+      "other": "Other"
+    }
+  },
+  "percent_component_labels": {
+    "pt": {
+      "QoTN": "OSNRN",
+      "QoTO": "OSNRO",
+      "crosstalk": "XTN",
+      "crosstalk in other": "XTO",
+      "fragmentation": "Frag",
+      "lack of transmitters": "Tx",
+      "lack of receivers": "Rx",
+      "other": "Outros"
+    },
+    "en": {
+      "QoTN": "OSNRN",
+      "QoTO": "OSNRO",
+      "crosstalk": "XTN",
+      "crosstalk in other": "XTO",
+      "fragmentation": "Frag",
+      "lack of transmitters": "Tx",
+      "lack of receivers": "Rx",
+      "other": "Other"
+    }
+  },
+  "input": "USA",
+  "output": "outputs/article/PBC_Comp_USA.svg",
+  "ci_output": "outputs/article/PBC_Comp_USA_ci.csv",
+  "best_output": "outputs/article/PBC_Comp_USA_best.csv",
+  "metric_type": [
+    "BlockingProbability"
+  ],
+  "plot": "bar",
+  "bar_mode": "percent",
+  "load_point": 1500,
+  "legend_position": "Bottom (outside)",
+  "components": [
+    "Blocking probability by QoTN",
+    "Blocking probability by QoTO",
+    "Blocking probability by crosstalk",
+    "Blocking probability by crosstalk in other"
+  ],
+  "component_selection": {
+    "Blocking probability by QoTN": true,
+    "Blocking probability by QoTO": true,
+    "Blocking probability by crosstalk": true,
+    "Blocking probability by crosstalk in other": true,
+    "Blocking probability by fragmentation": false,
+    "Blocking probability by lack of receivers": false,
+    "Blocking probability by lack of transmitters": false,
+    "Blocking probability by other": false
+  },
+  "graph_texts": {
+    "pt": {
+      "percent_bar_x": "Algoritmos de atribui\u00e7\u00e3o de pot\u00eancia",
+      "percent_bar_y": "% das Componentes de Bloqueio",
+      "percent_bar_title": "",
+      "stacked_bar_x": "Algoritmos de atribui\u00e7\u00e3o de pot\u00eancia",
+      "stacked_bar_y": "Probabilidade de bloqueio",
+      "stacked_bar_title": ""
+    },
+    "en": {
+      "percent_bar_x": "Power assignment algorithms",
+      "percent_bar_y": "% of blocking components",
+      "percent_bar_title": "",
+      "stacked_bar_x": "Power assignment algorithms",
+      "stacked_bar_y": "Blocking probability",
+      "stacked_bar_title": ""
+    }
+  }
+}

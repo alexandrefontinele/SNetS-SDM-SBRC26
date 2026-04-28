@@ -6,9 +6,7 @@
 
 ## Resumo do artigo
 
-Neste trabalho investigamos o problema ampliado PRMCSA, no qual a potência é tratada como variável de decisão. Propomos o algoritmo **IMPA** (*Impairment-Aware Margin Power Assignment*) para atribuição adaptativa de potência em **SDM-EONs**.
-
-O IMPA seleciona a menor potência viável que satisfaz simultaneamente margens de **OSNR** e **crosstalk**, considerando também o impacto sobre circuitos vizinhos já estabelecidos. Avaliações nas topologias **NSFNet** e **USA** demonstram que o IMPA reduz significativamente a probabilidade de bloqueio em relação aos algoritmos clássicos e adaptativos da literatura.
+Neste trabalho investigamos o problema ampliado PRMCSA, no qual a potência é tratada como variável de decisão. Propomos o algoritmo **IMPA** (*Impairment-Aware Margin Power Assignment*) para atribuição adaptativa de potência em **SDM-EONs**. O IMPA seleciona a menor potência viável que satisfaz simultaneamente margens de **OSNR** e **crosstalk**, considerando também o impacto sobre circuitos vizinhos já estabelecidos. Avaliações nas topologias **NSFNet** e **USA** demonstram que o IMPA reduz significativamente a probabilidade de bloqueio em relação aos algoritmos clássicos e adaptativos da literatura, alcançando uma redução na probabilidade de bloqueio de bitrate de pelo menos **18%** na topologia NSFNet e **46,5%** na topologia USA.
 
 ---
 
@@ -89,6 +87,15 @@ O artefato apoia a avaliação do algoritmo **IMPA**, permitindo:
 - Executar cenários locais;
 - Verificar resultados nas topologias **NSFNet** e **USA**;
 - Recriar gráficos de **PBC** (*Probabilidade de Bloqueio de Circuito*) e **PBBR** (*Probabilidade de Bloqueio de BitRate*);
+- Comparar o IMPA com algoritmos clássicos e adaptativos da literatura.
+
+## Relação com o artigo
+
+O artefato apoia a avaliação do algoritmo **IMPA**, proposto no artigo, permitindo:
+- Examinar a implementação do algoritmo e do simulador;
+- Executar cenários locais;
+- Verificar os resultados nas topologias **NSFNet** e **USA**;
+- Recriar gráficos de **PBC (Probabilidade de Bloqueios de Circuito)** e **PBBR (Probabilidade de Bloqueio de BitRate)**;
 - Comparar o IMPA com algoritmos clássicos e adaptativos da literatura.
 
 ## O que o revisor provavelmente vai usar
@@ -856,13 +863,13 @@ Essa organização permite rastrear cada resultado até sua topologia, algoritmo
 
 O código Java está organizado em módulos como:
 
-- `gprmcsa`: algoritmos e lógica de alocação;
-- `measurement`: métricas e estatísticas;
-- `network`: modelos de rede, enlaces, nós, núcleos e recursos;
-- `request`: requisições de conexão;
-- `simulationControl`: controle de execução e leitura de configurações;
-- `simulator`: núcleo do simulador baseado em eventos;
-- `util`: classes auxiliares.
+- `gprmcsa`: implementa a lógica dos algoritmos de alocação de recursos, incluindo roteamento, espectro, núcleo, modulação, potência, banda de guarda, regeneração, realocação e grooming;
+- `measurement`: reúne as métricas e estatísticas da simulação, como probabilidade de bloqueio, bloqueio por taxa de bits, fragmentação, consumo de energia e utilização de recursos;
+- `network`: modela os principais elementos da rede e do plano de controle, como nós, enlaces, núcleos, espectro, circuitos, malha e camada física;
+- `request`: define as requisições de conexão usadas nas simulações;
+- `simulationControl`: controla a execução da simulação, leitura das configurações, gerenciamento dos experimentos e processamento dos resultados;
+- `simulator`: contém o núcleo do simulador baseado em eventos;
+- `util`: reúne classes utilitárias de apoio usadas em diferentes partes do projeto.
 
 A documentação Javadoc e os comentários de API devem ser mantidos em **inglês** ao longo do projeto para consistência.
 
@@ -885,19 +892,6 @@ Política de documentação:
 
 - Javadocs e comentários de API no código Java devem estar em **inglês**;
 - README e documentação de uso podem estar em **português**, considerando o público do SBRC;
-- Mensagens de scripts `.ps1` podem ser mantidas sem acentos para evitar problemas de codificação no PowerShell.
-
-## Verificação recomendada antes da submissão
-
-Antes da submissão final, recomenda-se executar uma varredura para confirmar que não há comentários/Javadocs residuais em português no código Java:
-
-```bash
-grep -RIn --include="*.java" \
-  -e "ção" -e "ções" -e "não" -e "possui" -e "Existe" -e "Validador" -e "adjacência" \
-  src/main/java
-```
-
-Também é recomendável verificar problemas estruturais de Javadoc, como blocos duplicados antes/depois de `@Override`.
 
 ---
 

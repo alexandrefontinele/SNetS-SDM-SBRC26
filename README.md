@@ -6,60 +6,32 @@
 
 ## Resumo do artigo
 
-Neste trabalho investigamos o problema ampliado PRMCSA, no qual a potência é tratada como variável de decisão. Propomos o algoritmo **IMPA** (*Impairment-Aware Margin Power Assignment*) para atribuição adaptativa de potência em **SDM-EONs**. O IMPA seleciona a menor potência viável que satisfaz simultaneamente margens de **OSNR** e **crosstalk**, considerando também o impacto sobre circuitos vizinhos já estabelecidos. Avaliações nas topologias **NSFNet** e **USA** demonstram que o IMPA reduz significativamente a probabilidade de bloqueio em relação aos algoritmos clássicos e adaptativos da literatura, alcançando uma redução na probabilidade de bloqueio de bitrate de pelo menos **18%** na topologia NSFNet e **46,5%** na topologia USA.
+Neste trabalho investigamos o problema ampliado PRMCSA, no qual a potência é tratada como variável de decisão. Propomos o algoritmo **IMPA** (*Impairment-Aware Margin Power Assignment*) para atribuição adaptativa de potência em **SDM-EONs**.
+
+O IMPA seleciona a menor potência viável que satisfaz simultaneamente margens de **OSNR** e **crosstalk**, considerando também o impacto sobre circuitos vizinhos já estabelecidos. Avaliações nas topologias **NSFNet** e **USA** demonstram que o IMPA reduz significativamente a probabilidade de bloqueio em relação aos algoritmos clássicos e adaptativos da literatura.
+
+---
 
 ## Resumo do artefato
 
 Este repositório contém o artefato associado ao artigo submetido ao **SBRC 2026**, incluindo:
 
-- O código-fonte do simulador em **Java**;
-- Uma versão empacotada do simulador em **JAR**;
-- Conjuntos de simulações organizados por topologia e algoritmo;
-- Arquivos de configuração e resultados das execuções;
-- Uma ferramenta em **Python** para análise dos resultados e geração de gráficos.
+- Código-fonte do simulador em **Java**;
+- Versão empacotada do simulador em **JAR**;
+- Conjuntos de simulação organizados por topologia, algoritmo e parâmetros;
+- Resultados experimentais em CSV;
+- Ferramenta em **Python** para análise dos resultados e geração de gráficos;
+- Arquivos JSON de configuração para recriar automaticamente os gráficos principais;
+- Scripts para geração automatizada dos gráficos no Windows PowerShell e no Linux/WSL;
+- Dockerfiles para execução em container do analisador e do simulador.
 
-O artefato foi organizado para permitir que os revisores:
-1. **Inspecionem** o código-fonte do simulador;
-2. **Executem** uma instância local do simulador usando um diretório de configuração;
-3. **Utilizem** os resultados já incluídos no repositório para recriar gráficos e tabelas;
-4. **Reproduzam** as principais reivindicações experimentais do artigo a partir dos dados disponibilizados.
+O artefato foi organizado para permitir que revisores:
 
----
-
-# Quick Start para revisores
-
-Se você dispõe de pouco tempo, siga este roteiro mínimo.
-
-## Caminho rápido 1 — Recriar gráficos a partir dos CSVs já incluídos
-
-```bash
-git clone https://github.com/alexandrefontinele/SNetS-SDM-SBRC26.git
-cd SNetS-SDM-SBRC26/simulations/Data_Analyzer
-pip install numpy pandas matplotlib scipy
-python SimulationDataAnalyzer.py
-```
-
-Depois:
-1. Carregue arquivos CSV da pasta `USA` ou `NSFNet`;
-2. Selecione a métrica `BlockingProbability` ou `BitRateBlockingProbability`;
-3. Gere um gráfico de linha;
-4. Observe no terminal a tabela de melhor algoritmo por carga.
-
-Para instruções detalhadas sobre o analisador gráfico, consulte:  
-[README do programa de geração de gráficos](https://github.com/alexandrefontinele/SNetS-SDM-SBRC26/blob/main/simulations/Data_Analyzer/README_data_analyzer.md)
-
-## Caminho rápido 2 — Executar uma simulação local com o JAR
-
-Na raiz do repositório:
-
-```bash
-java -jar simulations/SNetS-SDM-SBRC26.jar simulations/USA_sims/IMPA/USA_IMPA_HXT_mo_0_00_mx_0_00
-```
-
-Esse comando deve:
-- Ler os arquivos de configuração;
-- Inicializar a simulação local;
-- Exibir progresso no terminal.
+1. Inspecionem o código-fonte do simulador;
+2. Executem uma simulação local usando o JAR já incluído;
+3. Recriem os principais gráficos do artigo a partir dos CSVs fornecidos;
+4. Executem a geração de gráficos de forma automatizada por linha de comando;
+5. Usem Docker como alternativa de ambiente reprodutível.
 
 ---
 
@@ -69,12 +41,18 @@ Este README está organizado da seguinte forma:
 
 1. [Selos considerados](#selos-considerados)
 2. [Informações básicas](#informações-básicas)
-3. [Dependências](#dependências)
-4. [Preocupações com segurança](#preocupações-com-segurança)
-5. [Instalação](#instalação)
-6. [Teste mínimo](#teste-mínimo)
-7. [Experimentos](#experimentos)
-8. [LICENSE](#license)
+3. [Estrutura do repositório](#estrutura-do-repositório)
+4. [Ambiente de execução](#ambiente-de-execução)
+5. [Dependências](#dependências)
+6. [Preocupações com segurança](#preocupações-com-segurança)
+7. [Instalação](#instalação)
+8. [Quick Start para revisores](#quick-start-para-revisores)
+9. [Uso com Docker](#uso-com-docker)
+10. [Teste mínimo](#teste-mínimo)
+11. [Experimentos](#experimentos)
+12. [Sustentabilidade do código](#sustentabilidade-do-código)
+13. [Limitações conhecidas](#limitações-conhecidas)
+14. [LICENSE](#license)
 
 ---
 
@@ -82,10 +60,10 @@ Este README está organizado da seguinte forma:
 
 Os selos considerados para o processo de avaliação são:
 
-- **Artefatos Disponíveis (SeloD)**
-- **Artefatos Funcionais (SeloF)**
-- **Artefatos Sustentáveis (SeloS)**
-- **Experimentos Reprodutíveis (SeloR)**
+- **Artefatos Disponíveis (Selo D)**
+- **Artefatos Funcionais (Selo F)**
+- **Artefatos Sustentáveis (Selo S)**
+- **Experimentos Reprodutíveis (Selo R)**
 
 ---
 
@@ -96,361 +74,479 @@ Os selos considerados para o processo de avaliação são:
 - **Projeto:** SNetS-SDM-SBRC26
 - **Artigo:** *IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs*
 - **Instituições:** Universidade Federal do Piauí (UFPI) e Instituto Federal do Piauí (IFPI)
-- **Trilha que o trabalho foi submetido:** Trilha Principal
+- **Trilha:** Trilha Principal
 - **Linguagens principais:** Java e Python
 - **Artefato principal:** Simulador Java + conjuntos de simulação + analisador gráfico em Python
 - **Licença:** MIT
 
 ## Objetivo do artefato
 
-O artefato disponibiliza um simulador e um conjunto de resultados experimentais para avaliação de algoritmos em cenários de redes ópticas, além de uma ferramenta auxiliar para análise gráfica dos resultados.
+O artefato disponibiliza um simulador e um conjunto de resultados experimentais para avaliação de algoritmos em cenários de redes ópticas elásticas com multiplexação por divisão espacial, além de uma ferramenta auxiliar para análise gráfica dos resultados.
 
-Pelo conteúdo do repositório, o artefato inclui:
-- Código Java organizado em módulos como `gprmcsa`, `measurement`, `network`, `request`, `simulationControl`, `simulator` e `util`;
-- Diretórios de simulação para as topologias **USA** e **NSFNet**;
-- Múltiplas variantes de algoritmos, como `APAmen`, `APAnoMen`, `CPA`, `CPSD`, `EPA`, `EnPA`, `IMPA` e `PABS`;
-- Arquivos de resultados, como:
-  - `BlockingProbability.csv`
-  - `BitRateBlockingProbability.csv`
-  - `CrosstalkStatistics.csv`
-  - `ModulationUtilization.csv`
-  - `SpectrumUtilization.csv`
+O artefato apoia a avaliação do algoritmo **IMPA**, permitindo:
 
-## Relação com o artigo
-
-O artefato apoia a avaliação do algoritmo **IMPA**, proposto no artigo, permitindo:
 - Examinar a implementação do algoritmo e do simulador;
 - Executar cenários locais;
-- Verificar os resultados nas topologias **NSFNet** e **USA**;
-- Recriar gráficos de **PBC (Probabilidade de Bloqueios de Circuito)** e **PBBR (Probabilidade de Bloqueio de BitRate)**;
+- Verificar resultados nas topologias **NSFNet** e **USA**;
+- Recriar gráficos de **PBC** (*Probabilidade de Bloqueio de Circuito*) e **PBBR** (*Probabilidade de Bloqueio de BitRate*);
 - Comparar o IMPA com algoritmos clássicos e adaptativos da literatura.
 
-## O que o revisor realmente vai usar
+## O que o revisor provavelmente vai usar
 
-Para a avaliação prática do artefato, os caminhos mais importantes são:
+| Caminho | Uso |
+|---|---|
+| `simulations/SNetS-SDM-SBRC26.jar` | Execução do simulador Java em modo local |
+| `simulations/Data_Analyzer/SimulationDataAnalyzer.py` | Analisador gráfico Python, com GUI e modo CLI/headless |
+| `simulations/Data_Analyzer/README_data_analyzer.md` | Documentação específica do analisador de dados |
+| `simulations/Data_Analyzer/configs/` | Configurações JSON para recriar os gráficos do artigo |
+| `simulations/Data_Analyzer/generate_article_graphs.ps1` | Script PowerShell para gerar todos os gráficos |
+| `simulations/Data_Analyzer/generate_article_graphs.sh` | Script Linux/WSL/Docker para gerar todos os gráficos |
+| `simulations/Data_Analyzer/USA/` | CSVs organizados da topologia USA |
+| `simulations/Data_Analyzer/NSFNet/` | CSVs organizados da topologia NSFNet |
+| `simulations/USA_sims/` | Cenários completos de simulação para USA |
+| `simulations/NSFNet_sims/` | Cenários completos de simulação para NSFNet |
+| `src/main/java/` | Código-fonte Java do simulador |
+| `Dockerfile.analyzer` | Container para o analisador Python |
+| `Dockerfile.simulator` | Container para o simulador Java |
 
-- `simulations/SNetS-SDM-SBRC26.jar`  
-  **Uso:** executar o simulador em modo local.
+---
 
-- `simulations/Data_Analyzer/SimulationDataAnalyzer.py`  
-  **Uso:** abrir a ferramenta de análise e geração de gráficos.  
-  **README da ferramenta:** [README do programa de geração de gráficos](https://github.com/alexandrefontinele/SNetS-SDM-SBRC26/blob/main/simulations/Data_Analyzer/README_data_analyzer.md)
+# Estrutura do repositório
 
-- `simulations/Data_Analyzer/USA/`  
-  **Uso:** carregar CSVs já organizados da topologia USA.
-
-- `simulations/Data_Analyzer/NSFNet/`  
-  **Uso:** carregar CSVs já organizados da topologia NSFNet.
-
-- `simulations/USA_sims/`  
-  **Uso:** cenários completos de simulação para a topologia USA.
-
-- `simulations/NSFNet_sims/`  
-  **Uso:** cenários completos de simulação para a topologia NSFNet.
-
-- `src/main/java/`  
-  **Uso:** inspeção do código-fonte do simulador.
-
-## Estrutura do repositório
-
-Estrutura principal observada no repositório:
+Estrutura principal:
 
 ```text
 SNetS-SDM-SBRC26/
-├── .settings/                         # Configurações do ambiente de desenvolvimento (ex.: Eclipse)
-├── src/                               # Código-fonte principal do projeto
+├── src/
 │   └── main/
 │       └── java/
-│           ├── gprmcsa/               # Implementações de algoritmos e lógica de alocação PRMCSA/RMCSA
-│           ├── measurement/           # Métricas, coleta de resultados e estatísticas de simulação
-│           ├── network/               # Modelos de topologia, enlaces, nós, núcleos e recursos da rede
-│           ├── request/               # Modelagem das requisições de tráfego e circuitos
-│           ├── simulationControl/     # Controle da execução das simulações, leitura de configurações e modo local
-│           ├── simulator/             # Núcleo do simulador e fluxo principal de execução
-│           └── util/                  # Classes utilitárias e funções auxiliares
-├── simulations/                       # Arquivos prontos para execução e resultados experimentais
-│   ├── Data_Analyzer/                 # Ferramenta Python para análise dos CSVs e geração de gráficos
-│   │   ├── NSFNet/                    # CSVs organizados para análise da topologia NSFNet
-│   │   ├── USA/                       # CSVs organizados para análise da topologia USA
-│   │   ├── imgs/                      # Imagens e recursos auxiliares do analisador
-│   │   ├── README_data_analyzer.md    # Documentação específica da ferramenta de análise
-│   │   └── SimulationDataAnalyzer.py  # Script principal do analisador gráfico em Python
-│   ├── NSFNet_sims/                   # Conjuntos de cenários e resultados da topologia NSFNet
-│   ├── USA_sims/                      # Conjuntos de cenários e resultados da topologia USA
-│   ├── SNetS-SDM-SBRC26.jar           # Versão empacotada do simulador em JAR
-│   └── run_SNetS-SDM-SBRC26_jar.bat   # Script de apoio para execução do JAR no Windows
-├── pom.xml                            # Arquivo Maven com dependências e configuração de build
-├── LICENSE                            # Licença do projeto
-└── README.md                          # README principal do repositório
+│           ├── gprmcsa/
+│           ├── measurement/
+│           ├── network/
+│           ├── request/
+│           ├── simulationControl/
+│           ├── simulator/
+│           └── util/
+├── simulations/
+│   ├── Data_Analyzer/
+│   │   ├── NSFNet/
+│   │   ├── USA/
+│   │   ├── configs/
+│   │   │   ├── config_article_PBC_log_USA.json
+│   │   │   ├── config_article_PBC_log_NSFNet.json
+│   │   │   ├── config_article_PBBR_log_USA.json
+│   │   │   ├── config_article_PBBR_log_NSFNet.json
+│   │   │   ├── config_article_PBC_Comp_USA.json
+│   │   │   └── config_article_PBC_Comp_NSFNet.json
+│   │   ├── generate_article_graphs.ps1
+│   │   ├── generate_article_graphs.sh
+│   │   ├── README_data_analyzer.md
+│   │   ├── requirements.txt
+│   │   └── SimulationDataAnalyzer.py
+│   ├── NSFNet_sims/
+│   ├── USA_sims/
+│   ├── SNetS-SDM-SBRC26.jar
+│   └── run_SNetS-SDM-SBRC26_jar.bat
+├── Dockerfile.analyzer
+├── Dockerfile.simulator
+├── pom.xml
+├── LICENSE
+└── README.md
 ```
 
-## Ambiente de execução recomendado
+## Descrição das principais pastas e arquivos
 
-### Configuração sugerida para uma avaliação confortável
+### Raiz do repositório
+
+| Caminho | Descrição |
+|---|---|
+| `README.md` | Documento principal do artefato. Contém visão geral, dependências, instalação, testes mínimos, uso com Docker e instruções de reprodução. |
+| `LICENSE` | Licença do projeto. |
+| `pom.xml` | Arquivo Maven do projeto Java. É necessário apenas para quem deseja compilar o simulador a partir do código-fonte. |
+| `Dockerfile.analyzer` | Dockerfile usado para criar a imagem do analisador Python. |
+| `Dockerfile.simulator` | Dockerfile usado para criar a imagem do simulador Java com Java 8. |
+
+### Código-fonte Java
+
+| Caminho | Descrição |
+|---|---|
+| `src/main/java/gprmcsa/` | Implementa algoritmos e procedimentos relacionados a roteamento, alocação de recursos, modulação, núcleo, espectro e potência. |
+| `src/main/java/measurement/` | Contém classes de medição, estatísticas e coleta de métricas da simulação. |
+| `src/main/java/network/` | Contém modelos da rede óptica, como nós, enlaces, rotas, recursos espectrais, núcleos e topologias. |
+| `src/main/java/request/` | Contém classes relacionadas às requisições de conexão e demandas de tráfego. |
+| `src/main/java/simulationControl/` | Contém classes de controle da simulação, leitura de configurações, validação de parâmetros e organização da execução. |
+| `src/main/java/simulator/` | Contém o núcleo do simulador e a lógica principal de execução baseada em eventos. |
+| `src/main/java/util/` | Contém classes utilitárias usadas por diferentes partes do simulador. |
+
+### Diretório de simulações e análise
+
+| Caminho | Descrição |
+|---|---|
+| `simulations/` | Diretório que agrupa o JAR executável, cenários de simulação, resultados e ferramentas de análise. |
+| `simulations/SNetS-SDM-SBRC26.jar` | JAR já empacotado do simulador. É o caminho recomendado para executar uma simulação sem recompilar o código Java. |
+| `simulations/run_SNetS-SDM-SBRC26_jar.bat` | Script auxiliar para execução do JAR no Windows. |
+| `simulations/USA_sims/` | Conjuntos completos de simulação para a topologia USA, organizados por algoritmo e parâmetros experimentais. |
+| `simulations/NSFNet_sims/` | Conjuntos completos de simulação para a topologia NSFNet, organizados por algoritmo e parâmetros experimentais. |
+| `simulations/Data_Analyzer/` | Ferramenta Python usada para analisar CSVs e gerar gráficos do artigo. |
+
+### Analisador de dados e geração de gráficos
+
+| Caminho | Descrição |
+|---|---|
+| `simulations/Data_Analyzer/SimulationDataAnalyzer.py` | Programa principal do analisador. Pode ser executado com GUI ou em modo CLI/headless usando `--config`. |
+| `simulations/Data_Analyzer/README_data_analyzer.md` | Documentação específica do analisador de dados, incluindo GUI, CLI, Docker, configs e solução de problemas. |
+| `simulations/Data_Analyzer/requirements.txt` | Lista de dependências Python necessárias para executar o analisador fora do Docker. |
+| `simulations/Data_Analyzer/generate_article_graphs.ps1` | Script PowerShell para gerar automaticamente todos os gráficos principais do artigo no Windows. |
+| `simulations/Data_Analyzer/generate_article_graphs.sh` | Script Bash para gerar automaticamente todos os gráficos principais do artigo no Linux, WSL ou Docker. |
+| `simulations/Data_Analyzer/USA/` | CSVs organizados para geração dos gráficos da topologia USA. |
+| `simulations/Data_Analyzer/NSFNet/` | CSVs organizados para geração dos gráficos da topologia NSFNet. |
+| `simulations/Data_Analyzer/configs/` | Arquivos JSON com as configurações usadas para recriar automaticamente os gráficos principais do artigo. |
+
+### Arquivos de configuração dos gráficos do artigo
+
+| Caminho | Descrição |
+|---|---|
+| `simulations/Data_Analyzer/configs/config_article_PBC_log_USA.json` | Gera o gráfico de Probabilidade de Bloqueio de Circuito em escala logarítmica para a topologia USA. |
+| `simulations/Data_Analyzer/configs/config_article_PBC_log_NSFNet.json` | Gera o gráfico de Probabilidade de Bloqueio de Circuito em escala logarítmica para a topologia NSFNet. |
+| `simulations/Data_Analyzer/configs/config_article_PBBR_log_USA.json` | Gera o gráfico de Probabilidade de Bloqueio de BitRate em escala logarítmica para a topologia USA. |
+| `simulations/Data_Analyzer/configs/config_article_PBBR_log_NSFNet.json` | Gera o gráfico de Probabilidade de Bloqueio de BitRate em escala logarítmica para a topologia NSFNet. |
+| `simulations/Data_Analyzer/configs/config_article_PBC_Comp_USA.json` | Gera o gráfico percentual dos componentes de bloqueio para a topologia USA. |
+| `simulations/Data_Analyzer/configs/config_article_PBC_Comp_NSFNet.json` | Gera o gráfico percentual dos componentes de bloqueio para a topologia NSFNet. |
+
+### Arquivos gerados durante a execução
+
+| Caminho | Descrição |
+|---|---|
+| `simulations/Data_Analyzer/outputs/` | Diretório criado pelo analisador para armazenar gráficos e tabelas geradas. |
+| `simulations/Data_Analyzer/outputs/article/` | Diretório padrão usado pelos scripts para salvar os gráficos do artigo. |
+| `*.svg` | Gráficos exportados pelo analisador. |
+| `*_ci.csv` | Tabelas de intervalo de confiança geradas para gráficos de linha. |
+| `*_best.csv` | Tabelas com o melhor algoritmo por carga, geradas para gráficos de linha. |
+
+---
+
+# Ambiente de execução
+
+## Ambiente principal usado pelos autores
+
+O ambiente principal usado para desenvolvimento e execução local do simulador foi:
+
+- **Sistema operacional:** Windows 11 Pro
+- **Java:** Java 8
+- **Python:** Python 3.10+ / 3.11
+- **Execução do simulador:** via JAR local
+- **Análise de resultados:** via `SimulationDataAnalyzer.py`
+
+## Ambiente de referência para reprodução
+
+Para reduzir variações de ambiente entre revisores, foram documentados dois caminhos:
+
+1. **Windows 11 Pro com ambiente virtual Python**, correspondente ao ambiente local principal usado pelos autores;
+2. **Docker em Ubuntu/Linux/WSL**, usando imagens com dependências controladas.
+
+Ambiente Linux de referência:
+
+- **Ubuntu 24.04 LTS** ou ambiente Linux equivalente;
+- **Docker Engine** no Ubuntu/WSL ou Docker Desktop;
+- Imagens Docker:
+  - `python:3.11-slim-bookworm` para o analisador;
+  - `eclipse-temurin:8-jre` para o simulador.
+
+## Configuração de hardware recomendada
+
+Para uma avaliação confortável:
+
 - **CPU:** 10 núcleos ou mais;
 - **RAM:** 16 GB ou mais;
 - **Armazenamento livre:** 5 GB ou mais.
 
-> Observação 1: Esta configuração é uma recomendação prática para facilitar a avaliação do artefato. O repositório não impõe esses valores como requisitos rígidos.
+Essa configuração é uma recomendação prática. O artefato não impõe esses valores como requisitos rígidos para os testes mínimos.
 
-> Observação 2: Pode-se definir a quantidade de threads usadas pelo simulador no parâmetro `threads`, localizado no arquivo `simulation`, que se encontra dentro das pastas de configuração das simulações.
-
-### Software recomendado
-- **Windows 10/11** ou **Linux**;
-- **Java 8**;
-- **Python 3.10+**;
-- **Maven 3.x** *(opcional, apenas para compilar a partir do código-fonte)*.
-
-> Observação: Para a avaliação padrão do artefato, o uso do **JAR já incluído no repositório** é suficiente, sem necessidade de compilar o projeto.
-
-## Necessário, opcional e não necessário para a avaliação
-
-### Necessário para executar simulações locais
-- **Java 8**;
-- O arquivo **`simulations/SNetS-SDM-SBRC26.jar`**;
-- Um diretório de simulação válido em:
-  - `simulations/USA_sims/`
-  - `simulations/NSFNet_sims/`
-
-### Necessário para regenerar gráficos e analisar resultados
-- **Python 3.10+**;
-- Bibliotecas Python:
-  - `numpy`
-  - `pandas`
-  - `matplotlib`
-  - `scipy`
-- O script:
-  - `simulations/Data_Analyzer/SimulationDataAnalyzer.py`
-- Os arquivos CSV já incluídos no repositório, especialmente em:
-  - `simulations/Data_Analyzer/USA/`
-  - `simulations/Data_Analyzer/NSFNet/`
-
-### Opcional
-- **Maven 3.x**, caso o revisor deseje compilar o projeto a partir do código-fonte;
-- **`python3-tk` no Linux**, caso o ambiente não tenha suporte ao Tkinter por padrão.
-
-### Não necessário para a avaliação padrão
-- **Firebase**;
-- **Credenciais privadas**;
-- **Modos distribuídos/LAN**;
-- **Infraestrutura externa de nuvem**.
-
-> Observação: O fluxo recomendado para a avaliação é usar o **modo local** do simulador e o **analisador gráfico em Python**. As dependências ligadas a Firebase não são necessárias para esse fluxo.
+Também é possível ajustar a quantidade de threads usadas pelo simulador no parâmetro `threads`, localizado no arquivo `simulation` dentro das pastas de configuração das simulações.
 
 ---
 
 # Dependências
 
-## Dependências do simulador (Java)
+Esta seção separa dependências obrigatórias, opcionais e não necessárias para evitar ambiguidade.
 
-O projeto possui um `pom.xml` com:
+## Dependências obrigatórias para clonar o repositório
+
+É necessário ter **Git** instalado.
+
+### Ubuntu 24.04
+
+```bash
+sudo apt update
+sudo apt install -y git
+```
+
+### Windows 11 Pro
+
+Instale o **Git for Windows** a partir de:
+
+```text
+https://git-scm.com/download/win
+```
+
+Depois confirme:
+
+```powershell
+git --version
+```
+
+## Dependências obrigatórias para executar o simulador Java localmente
+
+Para usar o JAR já incluído:
+
 - **Java 8**
-- Codificação **ISO-8859-1**
-- Dependências:
-  - `gson`
-  - `opencsv`
-  - `org.json`
-  - `firebase-admin`
+- Arquivo `simulations/SNetS-SDM-SBRC26.jar`
+- Um diretório de simulação válido em:
+  - `simulations/USA_sims/`
+  - `simulations/NSFNet_sims/`
 
-### Dependências Maven
-Se desejar instalar tudo automaticamente via Maven:
+### Ubuntu 24.04
 
-```bash
-mvn dependency:resolve
-```
+Em Ubuntu 24.04, o pacote `openjdk-8-jdk` pode não estar disponível diretamente nos repositórios padrão. Para evitar esse problema, o caminho recomendado para reprodução em Linux é usar Docker com a imagem `eclipse-temurin:8-jre`.
 
-## Dependências do analisador de dados (Python)
-
-Instale as bibliotecas necessárias para a ferramenta de gráficos:
-
-```bash
-pip install numpy pandas matplotlib scipy
-```
-
-Em Linux, pode ser necessário instalar também o Tkinter:
-
-```bash
-sudo apt-get install python3-tk
-```
-
-### Observação sobre dependências
-Para a avaliação padrão:
-- as dependências **Java/Maven** são relevantes para o simulador;
-- as dependências **Python** são relevantes para o analisador de resultados;
-- o uso de **Firebase** pode ser ignorado no fluxo local recomendado.
-
-## Recursos de terceiros
-
-O modo local do simulador **não depende** de Firebase.  
-No entanto, o código também possui modos de execução distribuída/servidor com Firebase. Esses modos **não são necessários** para a avaliação padrão do artefato.
-
----
-
-# Preocupações com segurança
-
-## Execução recomendada para avaliação
-Para a avaliação do artefato, recomenda-se utilizar **somente**:
-- O **modo local** do simulador;
-- A ferramenta Python de análise de resultados;
-- Os resultados já incluídos no repositório.
-
-## Modos que não precisam ser usados na avaliação
-O código possui suporte a:
-- Servidor de simulação com Firebase;
-- Cliente/servidor LAN;
-- Leitura de credenciais em `private-key-firebase.json`.
-
-Esses modos não são necessários para reproduzir as funcionalidades e os experimentos principais do artefato e podem ser ignorados durante a avaliação.
-
-## Boas práticas para os revisores
-- Não execute modos que dependam de credenciais privadas;
-- Não adicione chaves de Firebase ao repositório;
-- Use o artefato em um ambiente isolado (máquina virtual ou ambiente de testes), se desejar.
-
----
-
-# Instalação
-
-Há dois caminhos recomendados.
-
-## Opção A — Usar o JAR já incluído no repositório (recomendado para os revisores)
-
-### 1. Clonar o repositório
-
-```bash
-git clone https://github.com/alexandrefontinele/SNetS-SDM-SBRC26.git
-cd SNetS-SDM-SBRC26
-```
-
-### 2. Verificar a instalação do Java
+Se desejar instalar Java localmente, use uma distribuição Java 8, como Temurin/OpenJDK 8, e confirme:
 
 ```bash
 java -version
 ```
 
-O ideal é usar **Java 8**.
+### Windows 11 Pro
 
-### 3. Verificar a instalação do Python
+Instale uma distribuição Java 8, por exemplo Temurin/OpenJDK 8, e confirme:
+
+```powershell
+java -version
+```
+
+## Dependências opcionais para compilar o código-fonte Java
+
+Maven é necessário **somente** se o revisor quiser compilar o projeto a partir do código-fonte.
+
+- **Maven 3.x**
+- **Java 8 JDK**
+
+### Ubuntu 24.04
 
 ```bash
+sudo apt update
+sudo apt install -y maven
+mvn -version
+```
+
+### Windows 11 Pro
+
+Instale Maven 3.x e confirme:
+
+```powershell
+mvn -version
+```
+
+Para a avaliação padrão, **não é necessário compilar o projeto**, pois o JAR já está incluído.
+
+## Dependências obrigatórias para gerar gráficos localmente
+
+Para usar o analisador Python fora do Docker:
+
+- Python 3.10+;
+- Ambiente virtual Python;
+- Bibliotecas em `simulations/Data_Analyzer/requirements.txt`.
+
+### Ubuntu 24.04
+
+```bash
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip python3-tk
+```
+
+### Windows 11 Pro
+
+Instale Python 3.10+ pelo instalador oficial ou pela Microsoft Store. O Tkinter normalmente já vem incluído no Python para Windows.
+
+Confirme:
+
+```powershell
 python --version
 ```
 
-ou
+## Dependências recomendadas para reprodução via Docker
 
-```bash
-python3 --version
-```
+Para usar Docker:
 
-### 4. Instalar dependências do analisador de dados
+- Docker Engine em Linux/WSL; ou
+- Docker Desktop no Windows.
 
-```bash
-pip install numpy pandas matplotlib scipy
-```
+Com Docker, não é necessário instalar localmente as bibliotecas Python nem o Java dentro do sistema hospedeiro, além do próprio Docker.
 
-### 5. Verificar se o JAR está presente
+## Dependências não necessárias para a avaliação padrão
 
-O arquivo deve estar em:
+Não são necessárias para os testes mínimos e para a reprodução dos gráficos principais:
 
-```text
-simulations/SNetS-SDM-SBRC26.jar
-```
-
-### 6. Verificar se o analisador está presente
-
-O script deve estar em:
-
-```text
-simulations/Data_Analyzer/SimulationDataAnalyzer.py
-```
+- Firebase;
+- Credenciais privadas;
+- Servidor distribuído;
+- Modo cliente/servidor LAN;
+- Infraestrutura externa de nuvem.
 
 ---
 
-## Opção B — Compilar a partir do código-fonte
+# Preocupações com segurança
+
+O fluxo recomendado para avaliação usa apenas:
+
+- Simulador Java em modo local;
+- Analisador Python;
+- CSVs já incluídos no repositório;
+- Docker local, opcionalmente.
+
+O código possui suporte a modos com Firebase e cliente/servidor, mas esses modos **não são necessários** para a avaliação padrão.
+
+Recomendações:
+
+- Não execute modos que dependam de credenciais privadas;
+- Não adicione chaves Firebase ao repositório;
+- Use ambiente isolado, como Docker, WSL ou máquina virtual, caso deseje maior isolamento.
+
+---
+
+# Instalação
+
+## Opção A — Windows 11 Pro com ambiente virtual Python
+
+Este é o ambiente principal usado pelos autores para execução local.
 
 ### 1. Clonar o repositório
 
-```bash
+```powershell
 git clone https://github.com/alexandrefontinele/SNetS-SDM-SBRC26.git
 cd SNetS-SDM-SBRC26
 ```
 
-### 2. Verificar Maven
+### 2. Verificar Java
 
-```bash
-mvn -version
+```powershell
+java -version
 ```
 
-### 3. Compilar
+O ideal é usar Java 8.
 
-```bash
-mvn package
+### 3. Criar ambiente virtual Python para o analisador
+
+```powershell
+cd simulations\Data_Analyzer
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-> Observação: Para a avaliação do artefato, a opção mais simples continua sendo usar o **JAR já incluído** no repositório.
+Se o PowerShell bloquear a ativação do ambiente virtual, execute apenas na sessão atual:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+.\.venv\Scripts\Activate.ps1
+```
+
+### 4. Abrir o analisador gráfico
+
+```powershell
+python .\SimulationDataAnalyzer.py
+```
+
+### 5. Voltar para a raiz do repositório
+
+```powershell
+cd ..\..
+```
+
+## Opção B — Ubuntu 24.04 com ambiente virtual Python
+
+```bash
+sudo apt update
+sudo apt install -y git python3 python3-venv python3-pip python3-tk
+git clone https://github.com/alexandrefontinele/SNetS-SDM-SBRC26.git
+cd SNetS-SDM-SBRC26/simulations/Data_Analyzer
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python ./SimulationDataAnalyzer.py
+```
+
+## Opção C — Docker no Ubuntu/WSL/Windows
+
+Este é o caminho recomendado quando se deseja reduzir problemas de versão de sistema operacional e dependências locais.
+
+A partir da raiz do repositório:
+
+```bash
+docker build -f Dockerfile.analyzer -t snets-analyzer .
+docker build -f Dockerfile.simulator -t snets-simulator .
+```
+
+Os comandos de execução estão na seção [Uso com Docker](#uso-com-docker).
 
 ---
 
-# Teste mínimo
+# Quick Start para revisores
 
-Esta seção apresenta um teste mínimo para verificar se o artefato está funcional.
+## Caminho rápido 1 — Recriar todos os gráficos do artigo a partir dos CSVs
 
-## Teste mínimo 1 — Abrir o analisador de dados
+### PowerShell no Windows 11 Pro
 
-### Passo 1
-Entre na pasta do analisador:
-
-```bash
-cd simulations/Data_Analyzer
+```powershell
+git clone https://github.com/alexandrefontinele/SNetS-SDM-SBRC26.git
+cd SNetS-SDM-SBRC26\simulations\Data_Analyzer
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+.\generate_article_graphs.ps1
 ```
 
-### Passo 2
-Execute a ferramenta:
-
-```bash
-python SimulationDataAnalyzer.py
-```
-
-ou
-
-```bash
-python3 SimulationDataAnalyzer.py
-```
-
-### Resultado esperado
-A interface gráfica do analisador deve abrir, permitindo:
-- Carregar arquivos CSV;
-- Escolher métricas;
-- Gerar gráficos;
-- Exportar gráficos em SVG/PDF;
-- Exportar tabelas em CSV.
-
-### Evidência concreta esperada
-O revisor deve conseguir:
-- Selecionar arquivos em `USA/` ou `NSFNet/`;
-- Escolher `BlockingProbability` ou `BitRateBlockingProbability`;
-- Gerar um gráfico de linha;
-- Ver no terminal a saída textual com a tabela de melhor algoritmo por carga.
-
-## Teste mínimo 2 — Executar uma simulação local
-
-Escolha um diretório de configuração completo, por exemplo:
+Saída esperada:
 
 ```text
-simulations/USA_sims/IMPA/USA_IMPA_HXT_mo_0_00_mx_0_00
+outputs/article/
 ```
 
-Esse diretório contém os principais arquivos de configuração da simulação:
+Exemplos de arquivos gerados:
 
-- `simulation`: parâmetros gerais da execução, como requisições, replicações, algoritmo usado e número de threads;
-- `network`: configuração da topologia, enlaces, núcleos, modulações, slots e banda de guarda;
-- `others`: parâmetros adicionais dos algoritmos e margens usadas na simulação;
-- `physicalLayer`: parâmetros da camada física e do modelo de QoT, como ASE, NLI e crosstalk;
-- `traffic`: configuração do tráfego e das demandas geradas;
-- Também podem existir arquivos CSV de saída e arquivos auxiliares gerados pela execução.
+```text
+PBC_log_USA.svg
+PBC_log_NSFNet.svg
+PBBR_log_USA.svg
+PBBR_log_NSFNet.svg
+PBC_Comp_USA.svg
+PBC_Comp_NSFNet.svg
+```
 
+## Caminho rápido 2 — Recriar todos os gráficos usando Docker
 
-### Execução com o JAR
+A partir da raiz do repositório:
+
+```bash
+docker build -f Dockerfile.analyzer -t snets-analyzer .
+
+docker run --rm \
+  --mount type=bind,src="$(pwd)",dst=/workspace \
+  -w /workspace/simulations/Data_Analyzer \
+  snets-analyzer \
+  bash ./generate_article_graphs.sh
+```
+
+Saída esperada:
+
+```text
+simulations/Data_Analyzer/outputs/article/
+```
+
+## Caminho rápido 3 — Executar uma simulação local com o JAR
 
 Na raiz do repositório:
 
@@ -458,18 +554,155 @@ Na raiz do repositório:
 java -jar simulations/SNetS-SDM-SBRC26.jar simulations/USA_sims/IMPA/USA_IMPA_HXT_mo_0_00_mx_0_00
 ```
 
-### Resultado esperado
 O simulador deve:
-- Ler os arquivos de configuração;
-- Validar a configuração de rede;
-- Iniciar a simulação local;
-- Imprimir progresso no terminal.
 
-### Evidência concreta esperada
-O revisor deve observar no terminal:
+- Ler os arquivos de configuração;
+- Validar a configuração;
+- Inicializar a simulação local;
+- Exibir progresso no terminal.
+
+## Caminho rápido 4 — Executar uma simulação local com Docker
+
+```bash
+docker build -f Dockerfile.simulator -t snets-simulator .
+
+docker run --rm \
+  --mount type=bind,src="$(pwd)",dst=/workspace \
+  -w /workspace \
+  snets-simulator \
+  simulations/USA_sims/IMPA/USA_IMPA_HXT_mo_0_00_mx_0_00
+```
+
+---
+
+# Uso com Docker
+
+Os comandos desta seção devem ser executados a partir da raiz do repositório.
+
+## Analisador Python
+
+### Build da imagem
+
+```bash
+docker build -f Dockerfile.analyzer -t snets-analyzer .
+```
+
+### Gerar todos os gráficos do artigo
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$(pwd)",dst=/workspace \
+  -w /workspace/simulations/Data_Analyzer \
+  snets-analyzer \
+  bash ./generate_article_graphs.sh
+```
+
+### Gerar apenas um gráfico
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$(pwd)",dst=/workspace \
+  -w /workspace/simulations/Data_Analyzer \
+  snets-analyzer \
+  python ./SimulationDataAnalyzer.py --config ./configs/config_article_PBC_log_USA.json
+```
+
+### Listar métricas detectadas
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$(pwd)",dst=/workspace \
+  -w /workspace/simulations/Data_Analyzer \
+  snets-analyzer \
+  python ./SimulationDataAnalyzer.py --config ./configs/config_article_PBC_log_USA.json --list-metrics
+```
+
+## Simulador Java
+
+### Build da imagem
+
+```bash
+docker build -f Dockerfile.simulator -t snets-simulator .
+```
+
+### Executar cenário de exemplo
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$(pwd)",dst=/workspace \
+  -w /workspace \
+  snets-simulator \
+  simulations/USA_sims/IMPA/USA_IMPA_HXT_mo_0_00_mx_0_00
+```
+
+---
+
+# Teste mínimo
+
+## Teste mínimo 1 — Gerar um gráfico por linha de comando
+
+Entre na pasta do analisador:
+
+```bash
+cd simulations/Data_Analyzer
+```
+
+Execute:
+
+```bash
+python SimulationDataAnalyzer.py --config configs/config_article_PBC_log_USA.json
+```
+
+Resultado esperado:
+
+```text
+outputs/article/PBC_log_USA.svg
+outputs/article/PBC_log_USA_ci.csv
+outputs/article/PBC_log_USA_best.csv
+```
+
+Esse teste é preferível para revisão rápida porque não depende de interação manual com a GUI.
+
+## Teste mínimo 2 — Abrir a interface gráfica
+
+```bash
+cd simulations/Data_Analyzer
+python SimulationDataAnalyzer.py
+```
+
+Resultado esperado:
+
+- A interface gráfica deve abrir;
+- O revisor deve conseguir carregar CSVs;
+- O revisor deve conseguir selecionar métricas;
+- O revisor deve conseguir gerar gráficos.
+
+## Teste mínimo 3 — Executar uma simulação local
+
+Na raiz do repositório:
+
+```bash
+java -jar simulations/SNetS-SDM-SBRC26.jar simulations/USA_sims/IMPA/USA_IMPA_HXT_mo_0_00_mx_0_00
+```
+
+Resultado esperado:
+
 - Leitura do diretório de configuração;
+- Validação da configuração;
 - Inicialização da simulação;
-- Mensagens de progresso ou processamento.
+- Saída textual de progresso no terminal.
+
+## Teste mínimo 4 — Executar teste com Docker
+
+```bash
+docker build -f Dockerfile.analyzer -t snets-analyzer .
+
+docker run --rm \
+  --mount type=bind,src="$(pwd)",dst=/workspace \
+  -w /workspace/simulations/Data_Analyzer \
+  snets-analyzer \
+  python ./SimulationDataAnalyzer.py --config ./configs/config_article_PBC_log_USA.json
+```
 
 ---
 
@@ -481,173 +714,209 @@ Esta seção descreve formas de reproduzir as principais reivindicações experi
 
 | Reivindicação | Como reproduzir | Resultado esperado |
 |---|---|---|
-| Recriar os principais gráficos a partir dos CSVs | Usar `SimulationDataAnalyzer.py` com os CSVs de `USA/` e `NSFNet/` | Gráficos de PBC/PBBR, ICs e melhor algoritmo por carga |
-| Executar uma simulação local válida | Rodar o JAR com um diretório completo de `USA_sims/` ou `NSFNet_sims/` | Inicialização correta e progresso da simulação no terminal |
-| Verificar organização experimental do artefato | Inspecionar pastas por topologia, algoritmo e parametrização | Relação clara entre cenários, resultados e configurações |
-| Inspecionar a implementação | Examinar `src/main/java/` | Código modularizado e rastreável em relação ao artigo |
+| Recriar os gráficos PBC/PBBR e componentes | Rodar `generate_article_graphs.ps1` ou `generate_article_graphs.sh` | Arquivos SVG e CSV em `outputs/article/` |
+| Executar simulação local válida | Rodar o JAR com um diretório completo de `USA_sims/` ou `NSFNet_sims/` | Inicialização correta e progresso no terminal |
+| Usar ambiente reprodutível | Rodar analisador e simulador via Docker | Mesmos comandos funcionam sem instalar dependências Python/Java localmente |
+| Inspecionar implementação | Examinar `src/main/java/` | Código modular e documentado |
 
----
-
-## Reivindicação #1 — Os resultados experimentais podem ser regenerados graficamente a partir dos CSVs incluídos
+## Reivindicação 1 — Recriar os principais gráficos do artigo
 
 ### Objetivo
-Mostrar que os resultados salvos no repositório podem ser carregados e convertidos novamente em gráficos comparativos.
 
-### Procedimento
+Recriar automaticamente os gráficos principais usando os CSVs já incluídos.
 
-#### Passo 1
-Abra o analisador:
+### Procedimento no Windows
+
+```powershell
+cd simulations\Data_Analyzer
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+.\generate_article_graphs.ps1
+```
+
+### Procedimento no Linux/WSL
 
 ```bash
 cd simulations/Data_Analyzer
-python SimulationDataAnalyzer.py
+chmod +x ./generate_article_graphs.sh
+./generate_article_graphs.sh
 ```
 
-#### Passo 2
-Carregue arquivos CSV de uma das topologias:
-- `simulations/Data_Analyzer/USA`
-- Ou `simulations/Data_Analyzer/NSFNet`
+### Procedimento via Docker
 
-#### Passo 3
-Selecione uma métrica, por exemplo:
-- `BlockingProbability`
-- `BitRateBlockingProbability`
+Na raiz do repositório:
 
-#### Passo 4
-Gere um gráfico de linha.
+```bash
+docker build -f Dockerfile.analyzer -t snets-analyzer .
+
+docker run --rm \
+  --mount type=bind,src="$(pwd)",dst=/workspace \
+  -w /workspace/simulations/Data_Analyzer \
+  snets-analyzer \
+  bash ./generate_article_graphs.sh
+```
 
 ### Resultado esperado
-O analisador deve:
-- Listar os algoritmos carregados;
-- Permitir selecionar a métrica;
-- Gerar um gráfico comparativo;
-- Calcular IC;
-- Imprimir no terminal a tabela de melhor algoritmo por carga.
+
+Arquivos em:
+
+```text
+simulations/Data_Analyzer/outputs/article/
+```
+
+Incluindo:
+
+```text
+PBC_log_USA.svg
+PBC_log_NSFNet.svg
+PBBR_log_USA.svg
+PBBR_log_NSFNet.svg
+PBC_Comp_USA.svg
+PBC_Comp_NSFNet.svg
+```
+
+Também podem ser gerados:
+
+```text
+*_ci.csv
+*_best.csv
+```
+
+para os gráficos de linha.
 
 ### Recursos esperados
-- RAM: ~1–2 GB
-- Tempo: poucos segundos até alguns minutos, dependendo da quantidade de arquivos carregados
 
----
+- RAM: ~1–2 GB;
+- Tempo: poucos segundos até alguns minutos, dependendo do ambiente.
 
-## Reivindicação #2 — Os diretórios de simulação incluídos permitem reproduzir execuções locais do simulador
+## Reivindicação 2 — Executar uma simulação local
 
 ### Objetivo
-Executar ao menos uma configuração completa de simulação local contida no repositório.
 
-### Procedimento
+Executar pelo menos uma configuração completa de simulação local.
 
-#### Passo 1
-Selecione um diretório completo, por exemplo:
+### Diretório de exemplo
 
 ```text
 simulations/USA_sims/IMPA/USA_IMPA_HXT_mo_0_00_mx_0_00
 ```
 
-Ou um diretório equivalente em:
-- `USA_sims`
-- `NSFNet_sims`
+Esse diretório contém os arquivos de configuração usados pelo simulador, como:
 
-#### Passo 2
-Execute:
+- `simulation`: parâmetros gerais da execução;
+- `network`: configuração da topologia, enlaces, núcleos, modulações e recursos;
+- `others`: parâmetros adicionais dos algoritmos;
+- `physicalLayer`: parâmetros de camada física e QoT;
+- `traffic`: configuração do tráfego e das demandas.
+
+### Procedimento com JAR
 
 ```bash
 java -jar simulations/SNetS-SDM-SBRC26.jar simulations/USA_sims/IMPA/USA_IMPA_HXT_mo_0_00_mx_0_00
 ```
 
-### Resultado esperado
-O simulador deve:
-- Carregar os arquivos do diretório;
-- Iniciar a execução local;
-- Produzir saída textual no terminal com progresso.
+### Procedimento com Docker
 
-### Observação
-Os diretórios de simulação já incluem resultados CSV e configurações. Assim, mesmo que o revisor não deseje rerodar muitos cenários, ele ainda poderá:
-- Verificar a consistência das configurações;
-- Usar os resultados já incluídos para recriar gráficos e comparar algoritmos.
+```bash
+docker build -f Dockerfile.simulator -t snets-simulator .
 
----
-
-## Reivindicação #3 — O artefato contém experimentos organizados por topologia, algoritmo e parâmetros
-
-### Objetivo
-Mostrar que o repositório foi organizado para facilitar rastreabilidade experimental.
-
-### Evidência observável
-No repositório há:
-- Topologias distintas (`USA_sims`, `NSFNet_sims`);
-- Subpastas por algoritmo (`APAmen`, `APAnoMen`, `CPA`, `CPSD`, `EPA`, `EnPA`, `IMPA`, `PABS`);
-- Subpastas de configuração com nomes parametrizados, por exemplo:
-
-```text
-USA_IMPA_HXT_mo_0_00_mx_0_00
-USA_IMPA_HXT_mo_0_00_mx_0_25
-USA_IMPA_HXT_mo_0_25_mx_0_00
-...
+docker run --rm \
+  --mount type=bind,src="$(pwd)",dst=/workspace \
+  -w /workspace \
+  snets-simulator \
+  simulations/USA_sims/IMPA/USA_IMPA_HXT_mo_0_00_mx_0_00
 ```
 
 ### Resultado esperado
-O revisor deve conseguir:
-- Identificar facilmente o cenário correspondente;
-- Localizar os arquivos de configuração;
-- Localizar os arquivos de resultados.
 
----
+O simulador deve:
 
-## Reivindicação #4 — O código-fonte está disponível e organizado de forma modular
+- Carregar arquivos do diretório;
+- Validar a configuração;
+- Iniciar execução local;
+- Produzir saída textual com progresso.
 
-### Objetivo
-Sustentar a avaliação de sustentabilidade e compreensibilidade do artefato.
+### Recursos esperados
 
-### Evidência observável
+- RAM: depende do cenário, mas o teste mínimo deve ser executável em uma máquina comum de avaliação;
+- Tempo: variável conforme número de requisições, replicações e threads configuradas.
+
+## Reivindicação 3 — Organização experimental
+
+O repositório contém:
+
+- Topologias `USA_sims` e `NSFNet_sims`;
+- Subpastas por algoritmo;
+- Configurações parametrizadas;
+- CSVs organizados para análise;
+- Configs JSON de geração de gráficos.
+
+Essa organização permite rastrear cada resultado até sua topologia, algoritmo e parâmetros experimentais.
+
+## Reivindicação 4 — Código-fonte modular e documentado
 
 O código Java está organizado em módulos como:
 
-- `gprmcsa`: implementa a lógica dos algoritmos de alocação de recursos, incluindo roteamento, espectro, núcleo, modulação, potência, banda de guarda, regeneração, realocação e grooming;
-- `measurement`: reúne as métricas e estatísticas da simulação, como probabilidade de bloqueio, bloqueio por taxa de bits, fragmentação, consumo de energia e utilização de recursos;
-- `network`: modela os principais elementos da rede e do plano de controle, como nós, enlaces, núcleos, espectro, circuitos, malha e camada física;
-- `request`: define as requisições de conexão usadas nas simulações;
-- `simulationControl`: controla a execução da simulação, leitura das configurações, gerenciamento dos experimentos e processamento dos resultados;
-- `simulator`: contém o núcleo do simulador baseado em eventos;
-- `util`: reúne classes utilitárias de apoio usadas em diferentes partes do projeto.
+- `gprmcsa`: algoritmos e lógica de alocação;
+- `measurement`: métricas e estatísticas;
+- `network`: modelos de rede, enlaces, nós, núcleos e recursos;
+- `request`: requisições de conexão;
+- `simulationControl`: controle de execução e leitura de configurações;
+- `simulator`: núcleo do simulador baseado em eventos;
+- `util`: classes auxiliares.
 
-Além disso, há um `pom.xml`, licença MIT e uma estrutura consistente de projeto Java/Maven.
+A documentação Javadoc e os comentários de API devem ser mantidos em **inglês** ao longo do projeto para consistência.
 
 ---
 
-## Sugestão de execução para os revisores
+# Sustentabilidade do código
 
-Se o tempo de avaliação for limitado, recomenda-se o seguinte roteiro:
+Para apoiar o **Selo S**, o projeto adota:
 
-1. **Executem** o **analisador Python**;
-2. **Carreguem** CSVs já incluídos e regenerem pelo menos um gráfico;
-3. **Verifiquem** a saída de melhor algoritmo por carga no terminal;
-4. **Executem** **uma** simulação local com o JAR em **um** diretório de configuração;
-5. **Inspecionem** a organização das pastas e do código-fonte.
+- Organização modular em pacotes Java;
+- JAR empacotado para execução direta;
+- Arquivos de configuração separados dos dados;
+- CSVs organizados por topologia;
+- Analisador Python com modo GUI e modo CLI/headless;
+- Configs JSON para geração reprodutível de gráficos;
+- Dockerfiles para isolar dependências;
+- Licença MIT.
 
-Esse fluxo já cobre, de forma prática:
-- Disponibilidade;
-- Funcionalidade;
-- Organização;
-- Reprodutibilidade parcial das reivindicações principais.
+Política de documentação:
+
+- Javadocs e comentários de API no código Java devem estar em **inglês**;
+- README e documentação de uso podem estar em **português**, considerando o público do SBRC;
+- Mensagens de scripts `.ps1` podem ser mantidas sem acentos para evitar problemas de codificação no PowerShell.
+
+## Verificação recomendada antes da submissão
+
+Antes da submissão final, recomenda-se executar uma varredura para confirmar que não há comentários/Javadocs residuais em português no código Java:
+
+```bash
+grep -RIn --include="*.java" \
+  -e "ção" -e "ções" -e "não" -e "possui" -e "Existe" -e "Validador" -e "adjacência" \
+  src/main/java
+```
+
+Também é recomendável verificar problemas estruturais de Javadoc, como blocos duplicados antes/depois de `@Override`.
 
 ---
 
 # Limitações conhecidas
 
-- O ambiente principal testado é **Java 8**;
-- Os modos com **Firebase** não fazem parte do fluxo recomendado de avaliação;
-- Alguns cenários completos podem demandar mais tempo de execução que o ideal para uma avaliação rápida;
-- O fluxo recomendado para os revisores é usar primeiro os **resultados já incluídos** para regeneração de gráficos e, em seguida, executar um cenário local representativo;
-- O analisador gráfico depende de ambiente com suporte a interface gráfica via **Tkinter**.
+- O ambiente principal de execução local usado pelos autores foi **Windows 11 Pro**;
+- O fluxo Docker foi testado em ambiente Ubuntu/Linux/WSL;
+- O Java recomendado para o simulador é **Java 8**;
+- Alguns cenários completos podem demandar tempo maior que o ideal para revisão rápida;
+- O fluxo recomendado para avaliação rápida é usar primeiro os CSVs já incluídos e gerar os gráficos automaticamente;
+- Modos com Firebase não fazem parte do fluxo recomendado;
+- A interface gráfica depende de Tkinter, mas o modo CLI/headless permite gerar gráficos sem interação manual;
+- Em Ubuntu 24.04, para Java 8, o caminho mais robusto é usar Docker com `eclipse-temurin:8-jre`.
 
 ---
 
 # LICENSE
 
-Este projeto está licenciado sob a licença **MIT**.
-
-Consulte o arquivo:
+Este projeto está licenciado sob a licença **MIT**. Consulte o arquivo:
 
 ```text
 LICENSE

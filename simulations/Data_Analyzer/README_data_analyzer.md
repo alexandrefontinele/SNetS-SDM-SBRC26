@@ -20,7 +20,9 @@ O programa também oferece:
 - Personalização de estilos de linha por algoritmo;
 - Exportação dos gráficos em **SVG** e **PDF**;
 - Exportação de tabelas de intervalo de confiança em **CSV**;
-- Salvamento e carregamento de customizações do usuário em **JSON**.
+- Salvamento e carregamento de customizações do usuário em **JSON**;
+- Execução em modo **CLI/headless** por arquivos de configuração JSON;
+- Geração automática dos gráficos do artigo por meio da pasta `configs/` e dos scripts `generate_article_graphs.ps1` e `generate_article_graphs.sh`.
 
 ---
 
@@ -34,7 +36,9 @@ De forma prática, o programa permite:
 4. Gerar gráficos de linha e gráficos de barras;
 5. Calcular e exibir intervalos de confiança;
 6. Calcular o ganho de um algoritmo em relação aos demais;
-7. Exportar gráficos e tabelas para uso em artigos, relatórios e apresentações.
+7. Exportar gráficos e tabelas para uso em artigos, relatórios e apresentações;
+8. Executar a geração de gráficos de forma automática por linha de comando;
+9. Recriar os gráficos do artigo a partir de configurações JSON versionadas no repositório.
 
 ---
 
@@ -76,17 +80,316 @@ sudo apt-get install python3-tk
 
 ## Arquivo principal do programa
 
-Exemplo:
+O programa principal é:
 
 ```text
 SimulationDataAnalyzer.py
 ```
 
-Execução:
+A versão atual pode ser usada de duas formas:
+
+1. **Modo GUI**, com interface gráfica Tkinter;
+2. **Modo CLI/headless**, sem abrir a interface, usando arquivos JSON de configuração.
+
+### Abrir a interface gráfica
 
 ```bash
 python SimulationDataAnalyzer.py
 ```
+
+### Executar em modo CLI/headless com um arquivo de configuração
+
+```bash
+python SimulationDataAnalyzer.py --config configs/config_article_PBC_log_USA.json
+```
+
+O modo CLI é usado principalmente para reproduzir automaticamente os gráficos do artigo e para executar o analisador em ambientes sem interface gráfica, como Docker, WSL ou servidores.
+
+---
+
+## Modo CLI/headless
+
+O modo CLI permite gerar gráficos diretamente pelo terminal, sem interação manual na interface.
+
+Esse modo é acionado quando você informa um arquivo de configuração com `--config`:
+
+```bash
+python SimulationDataAnalyzer.py --config caminho/do/arquivo.json
+```
+
+Também é possível listar as métricas detectadas antes de gerar o gráfico:
+
+```bash
+python SimulationDataAnalyzer.py --config configs/config_article_PBC_log_USA.json --list-metrics
+```
+
+### Para que serve o modo CLI
+
+Use o modo CLI quando quiser:
+
+- Gerar gráficos automaticamente;
+- Reproduzir figuras do artigo;
+- Executar o analisador em Docker, WSL ou servidor;
+- Evitar cliques manuais na interface gráfica;
+- Repetir exatamente a mesma configuração visual e estatística.
+
+### Relação entre GUI e CLI
+
+A recomendação atual é manter apenas um arquivo principal:
+
+```text
+SimulationDataAnalyzer.py
+```
+
+A GUI e o CLI devem usar a mesma lógica interna de leitura dos CSVs, identificação de métricas, inferência dos algoritmos, cálculo estatístico e geração dos gráficos. Isso evita divergências como usar nomes de métricas no lugar dos nomes dos algoritmos.
+
+---
+
+## Geração automática dos gráficos do artigo com configs
+
+A forma recomendada para recriar os gráficos do artigo é usar a pasta `configs/` em conjunto com os scripts:
+
+```text
+generate_article_graphs.ps1
+generate_article_graphs.sh
+```
+
+Esses scripts chamam o `SimulationDataAnalyzer.py` em modo CLI para cada gráfico do artigo.
+
+### Estrutura esperada
+
+Dentro da pasta:
+
+```text
+simulations/Data_Analyzer/
+```
+
+a estrutura esperada é:
+
+```text
+simulations/Data_Analyzer/
+├── SimulationDataAnalyzer.py
+├── generate_article_graphs.ps1
+├── generate_article_graphs.sh
+├── requirements.txt
+├── USA/
+├── NSFNet/
+└── configs/
+    ├── config_article_PBC_log_USA.json
+    ├── config_article_PBC_log_NSFNet.json
+    ├── config_article_PBBR_log_USA.json
+    ├── config_article_PBBR_log_NSFNet.json
+    ├── config_article_PBC_Comp_USA.json
+    └── config_article_PBC_Comp_NSFNet.json
+```
+
+### Gráficos gerados
+
+| Configuração | Gráfico |
+|---|---|
+| `config_article_PBC_log_USA.json` | PBC na topologia USA |
+| `config_article_PBC_log_NSFNet.json` | PBC na topologia NSFNet |
+| `config_article_PBBR_log_USA.json` | PBBR na topologia USA |
+| `config_article_PBBR_log_NSFNet.json` | PBBR na topologia NSFNet |
+| `config_article_PBC_Comp_USA.json` | Componentes de bloqueio na topologia USA |
+| `config_article_PBC_Comp_NSFNet.json` | Componentes de bloqueio na topologia NSFNet |
+
+Onde:
+
+- **PBC**: Probabilidade de Bloqueio de Circuito;
+- **PBBR**: Probabilidade de Bloqueio de BitRate;
+- **PBC_Comp**: decomposição percentual dos componentes de bloqueio.
+
+### Gerar todos os gráficos no PowerShell
+
+No Windows PowerShell, entre na pasta:
+
+```powershell
+cd simulations\Data_Analyzer
+```
+
+Depois execute:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+.\generate_article_graphs.ps1
+```
+
+O `Set-ExecutionPolicy` com `-Scope Process` vale apenas para a sessão atual do PowerShell.
+
+### Gerar todos os gráficos no Linux/WSL
+
+No Linux ou WSL, entre na pasta:
+
+```bash
+cd simulations/Data_Analyzer
+```
+
+Depois execute:
+
+```bash
+chmod +x ./generate_article_graphs.sh
+./generate_article_graphs.sh
+```
+
+### Saída esperada
+
+Os gráficos e tabelas serão gerados em:
+
+```text
+outputs/article/
+```
+
+Exemplos de arquivos de saída:
+
+```text
+outputs/article/PBC_log_USA.svg
+outputs/article/PBC_log_USA_ci.csv
+outputs/article/PBC_log_USA_best.csv
+
+outputs/article/PBBR_log_USA.svg
+outputs/article/PBBR_log_USA_ci.csv
+outputs/article/PBBR_log_USA_best.csv
+
+outputs/article/PBC_Comp_USA.svg
+outputs/article/PBC_Comp_NSFNet.svg
+```
+
+### Gerar apenas um gráfico
+
+Também é possível executar um único arquivo de configuração.
+
+Exemplo para PBC na topologia USA:
+
+```bash
+python SimulationDataAnalyzer.py --config configs/config_article_PBC_log_USA.json
+```
+
+Exemplo para PBBR na topologia NSFNet:
+
+```bash
+python SimulationDataAnalyzer.py --config configs/config_article_PBBR_log_NSFNet.json
+```
+
+Exemplo para componentes na topologia USA:
+
+```bash
+python SimulationDataAnalyzer.py --config configs/config_article_PBC_Comp_USA.json
+```
+
+### Campos principais de um arquivo config
+
+Um arquivo de configuração JSON pode conter campos como:
+
+```json
+{
+  "input": "USA",
+  "output": "outputs/article/PBC_log_USA.svg",
+  "ci_output": "outputs/article/PBC_log_USA_ci.csv",
+  "best_output": "outputs/article/PBC_log_USA_best.csv",
+  "metric_type": ["BlockingProbability"],
+  "metric": "Blocking probability",
+  "plot": "line",
+  "log_scale": true,
+  "language": "pt",
+  "init_load": 500,
+  "load_step": 250,
+  "replications": 0,
+  "legend_position": "Inside (lower right)"
+}
+```
+
+Campos importantes:
+
+- `input`: pasta de entrada, como `USA` ou `NSFNet`;
+- `output`: caminho do gráfico exportado;
+- `ci_output`: caminho da tabela de intervalo de confiança;
+- `best_output`: caminho da tabela de melhor algoritmo por carga;
+- `metric_type`: tipo de arquivo CSV a ser carregado;
+- `metric`: valor exato da coluna `Metrics` a ser plotado;
+- `plot`: tipo de gráfico, como `line` ou `bar`;
+- `log_scale`: usa escala logarítmica no eixo Y;
+- `language`: idioma usado nos textos do gráfico;
+- `init_load`: primeira carga considerada;
+- `load_step`: incremento entre cargas;
+- `replications`: número de replicações; `0` usa detecção automática;
+- `legend_position`: posição da legenda.
+
+### Configs dos gráficos PBC
+
+Os gráficos PBC usam:
+
+```json
+"metric_type": ["BlockingProbability"],
+"metric": "Blocking probability",
+"plot": "line",
+"log_scale": true
+```
+
+Textos configurados:
+
+```text
+Probabilidade de Bloqueio de Circuito (log10)
+Carga da rede (Erlangs)
+```
+
+### Configs dos gráficos PBBR
+
+Os gráficos PBBR usam:
+
+```json
+"metric_type": ["BitRateBlockingProbability"],
+"metric": "BitRate blocking probability",
+"plot": "line",
+"log_scale": true
+```
+
+Textos configurados:
+
+```text
+Probabilidade de Bloqueio de BitRate (log10)
+Carga da rede (Erlangs)
+```
+
+### Configs dos gráficos de componentes
+
+Os gráficos de componentes usam:
+
+```json
+"metric_type": ["BlockingProbability"],
+"plot": "bar",
+"bar_mode": "percent",
+"legend_position": "Bottom (outside)"
+```
+
+Textos configurados:
+
+```text
+% das Componentes de Bloqueio
+Algoritmos de atribuição de potência
+```
+
+Componentes usados nos gráficos do artigo:
+
+```text
+Blocking probability by QoTN
+Blocking probability by QoTO
+Blocking probability by crosstalk
+Blocking probability by crosstalk in other
+```
+
+Eles são exibidos com as legendas:
+
+```text
+OSNRN
+OSNRO
+XTN
+XTO
+```
+
+### Observação sobre codificação dos configs
+
+Os arquivos JSON de configuração podem ser salvos em ASCII usando escapes Unicode. Isso reduz problemas de codificação no Windows/PowerShell e ainda permite que o Python leia corretamente textos com acentos.
 
 ---
 
@@ -470,7 +773,63 @@ Isso torna o carregamento por pasta mais robusto mesmo quando o nome do arquivo 
 
 ---
 
-### Observações importantes sobre carregamento
+#### 9. `generate_article_graphs.ps1` mostra caracteres estranhos no terminal
+
+Se o terminal exibir textos como `grÃ¡fico`, o problema é a codificação do PowerShell. Para evitar isso, prefira mensagens sem acentos nos scripts `.ps1`, ou salve o script em UTF-8 com BOM.
+
+Os textos dos gráficos podem continuar em português com acentos, pois eles são lidos pelo Python a partir dos arquivos JSON.
+
+### 10. Um gráfico por config falha com `Metric ... was not found`
+
+Verifique se o campo `metric` do JSON corresponde exatamente a um valor existente na coluna `Metrics` dos CSVs.
+
+Exemplos:
+
+```json
+"metric": "Blocking probability"
+```
+
+para PBC, e:
+
+```json
+"metric": "BitRate blocking probability"
+```
+
+para PBBR.
+
+Também verifique se `metric_type` aponta para o tipo correto:
+
+```json
+"metric_type": ["BlockingProbability"]
+```
+
+ou:
+
+```json
+"metric_type": ["BitRateBlockingProbability"]
+```
+
+### 11. A legenda aparece em posição diferente do artigo
+
+Ajuste o campo `legend_position` no arquivo JSON.
+
+Exemplos:
+
+```json
+"legend_position": "Inside (lower right)"
+```
+
+para gráficos de linha, ou:
+
+```json
+"legend_position": "Bottom (outside)"
+```
+
+para gráficos de componentes.
+
+---
+
+## Observações importantes sobre carregamento
 - O programa espera arquivos CSV válidos e legíveis;
 - Arquivos com coluna `Metrics` e colunas de replicação (`rep0`, `rep1`, etc.) tendem a ser identificados com mais facilidade;
 - Mesmo no carregamento por pasta, o programa tenta preservar compatibilidade com diferentes estruturas de arquivos;
@@ -480,7 +839,9 @@ Isso torna o carregamento por pasta mais robusto mesmo quando o nome do arquivo 
 
 ## Fluxo rápido de uso
 
-Se você quiser usar o programa rapidamente, o fluxo recomendado é:
+Há dois fluxos principais: uso interativo pela GUI e geração automática por configs.
+
+### Fluxo rápido pela GUI
 
 1. Abra o programa;
 2. Clique em **Load CSV files (Carregar arquivos CSV)**;
@@ -490,6 +851,27 @@ Se você quiser usar o programa rapidamente, o fluxo recomendado é:
 6. Ajuste as opções estatísticas e visuais, se necessário;
 7. Clique em **Generate plot (Gerar gráfico)**;
 8. Exporte o gráfico ou a tabela de IC, se desejar.
+
+### Fluxo rápido por configs
+
+1. Entre em `simulations/Data_Analyzer`;
+2. Verifique se a pasta `configs/` está presente;
+3. Execute `generate_article_graphs.ps1` no Windows ou `generate_article_graphs.sh` no Linux/WSL;
+4. Consulte os arquivos gerados em `outputs/article/`.
+
+PowerShell:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+.\generate_article_graphs.ps1
+```
+
+Linux/WSL:
+
+```bash
+chmod +x ./generate_article_graphs.sh
+./generate_article_graphs.sh
+```
 
 ---
 
@@ -676,12 +1058,6 @@ No menu **Export (Exportar)**:
 
 ## Exemplos de uso
 
-### Executar o programa
-
-```bash
-python SimulationDataAnalyzer.py
-```
-
 ### Instalar dependências
 
 ```bash
@@ -692,6 +1068,38 @@ pip install numpy pandas matplotlib scipy
 
 ```bash
 sudo apt-get install python3-tk
+```
+
+### Abrir a GUI
+
+```bash
+python SimulationDataAnalyzer.py
+```
+
+### Gerar um gráfico com config
+
+```bash
+python SimulationDataAnalyzer.py --config configs/config_article_PBC_log_USA.json
+```
+
+### Listar métricas detectadas
+
+```bash
+python SimulationDataAnalyzer.py --config configs/config_article_PBC_log_USA.json --list-metrics
+```
+
+### Gerar todos os gráficos do artigo no Windows
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+.\generate_article_graphs.ps1
+```
+
+### Gerar todos os gráficos do artigo no Linux/WSL
+
+```bash
+chmod +x ./generate_article_graphs.sh
+./generate_article_graphs.sh
 ```
 
 ---
@@ -752,7 +1160,8 @@ Tente:
 - O programa é voltado para análise de arquivos CSV com resultados de simulações;
 - Ele é especialmente útil para comparar múltiplos algoritmos sob diferentes cargas de rede;
 - Manter nomes de arquivo consistentes ajuda bastante no carregamento por pasta;
-- O carregamento por conteúdo melhora a robustez quando o nome do arquivo não segue padrão.
+- O carregamento por conteúdo melhora a robustez quando o nome do arquivo não segue padrão;
+- Para reproduzir os gráficos do artigo, prefira os arquivos JSON da pasta `configs/`, pois eles preservam métrica, escala, textos, posição da legenda e caminhos de saída.
 
 ---
 

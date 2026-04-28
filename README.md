@@ -89,15 +89,6 @@ O artefato apoia a avaliação do algoritmo **IMPA**, permitindo:
 - Recriar gráficos de **PBC** (*Probabilidade de Bloqueio de Circuito*) e **PBBR** (*Probabilidade de Bloqueio de BitRate*);
 - Comparar o IMPA com algoritmos clássicos e adaptativos da literatura.
 
-## Relação com o artigo
-
-O artefato apoia a avaliação do algoritmo **IMPA**, proposto no artigo, permitindo:
-- Examinar a implementação do algoritmo e do simulador;
-- Executar cenários locais;
-- Verificar os resultados nas topologias **NSFNet** e **USA**;
-- Recriar gráficos de **PBC (Probabilidade de Bloqueios de Circuito)** e **PBBR (Probabilidade de Bloqueio de BitRate)**;
-- Comparar o IMPA com algoritmos clássicos e adaptativos da literatura.
-
 ## O que o revisor provavelmente vai usar
 
 | Caminho | Uso |

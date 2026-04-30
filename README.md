@@ -50,7 +50,7 @@ Este README está organizado da seguinte forma:
 11. [Experimentos](#experimentos)
 12. [Sustentabilidade do código](#sustentabilidade-do-código)
 13. [Limitações conhecidas](#limitações-conhecidas)
-14. [LICENSE](#license)
+14. [LICENÇA](#licença)
 
 ---
 
@@ -899,7 +899,7 @@ Política de documentação:
 
 ---
 
-# LICENSE
+# LICENÇA
 
 Este projeto está licenciado sob a licença **MIT**. Consulte o arquivo:
 

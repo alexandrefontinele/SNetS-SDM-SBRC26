@@ -1,7 +1,5 @@
 # Selos considerados
 
-Esta página resume os selos considerados para a avaliação do artefato.
-
 ## Selos considerados
 
 Os selos considerados para o processo de avaliação são:

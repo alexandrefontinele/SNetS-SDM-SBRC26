@@ -1,3 +1,38 @@
+# SNetS-SDM-SBRC26
+
+## Título do artigo
+
+**IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs**
+
+## Resumo do artigo
+
+Neste trabalho investigamos o problema ampliado PRMCSA, no qual a potência é tratada como variável de decisão. Propomos o algoritmo **IMPA** (*Impairment-Aware Margin Power Assignment*) para atribuição adaptativa de potência em **SDM-EONs**. O IMPA seleciona a menor potência viável que satisfaz simultaneamente margens de **OSNR** e **crosstalk**, considerando também o impacto sobre circuitos vizinhos já estabelecidos. Avaliações nas topologias **NSFNet** e **USA** demonstram que o IMPA reduz significativamente a probabilidade de bloqueio em relação aos algoritmos clássicos e adaptativos da literatura, alcançando uma redução na probabilidade de bloqueio de bitrate de pelo menos **18%** na topologia NSFNet e **46,5%** na topologia USA.
+
+---
+
+## Resumo do artefato
+
+Este repositório contém o artefato associado ao artigo submetido ao **SBRC 2026**, incluindo:
+
+- Código-fonte do simulador em **Java**;
+- Versão empacotada do simulador em **JAR**;
+- Conjuntos de simulação organizados por topologia, algoritmo e parâmetros;
+- Resultados experimentais em CSV;
+- Ferramenta em **Python** para análise dos resultados e geração de gráficos;
+- Arquivos JSON de configuração para recriar automaticamente os gráficos principais;
+- Scripts para geração automatizada dos gráficos no Windows PowerShell e no Linux/WSL;
+- Dockerfiles para execução em container do analisador e do simulador.
+
+O artefato foi organizado para permitir que revisores:
+
+1. Inspecionem o código-fonte do simulador;
+2. Executem uma simulação local usando o JAR já incluído;
+3. Recriem os principais gráficos do artigo a partir dos CSVs fornecidos;
+4. Executem a geração de gráficos de forma automatizada por linha de comando;
+5. Usem Docker como alternativa de ambiente reprodutível.
+
+---
+
 ---
 
 # Documentação complementar

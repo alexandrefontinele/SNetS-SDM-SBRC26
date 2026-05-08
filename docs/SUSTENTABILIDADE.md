@@ -1,7 +1,5 @@
 # Sustentabilidade do código
 
-Esta página descreve os pontos relacionados ao Selo S, incluindo modularização e política de documentação.
-
 ## Sustentabilidade do código
 
 Para apoiar o **Selo S**, o projeto adota:

@@ -1,7 +1,5 @@
 # Uso com Docker
 
-Esta página descreve como usar Docker para executar o analisador Python e o simulador Java.
-
 ## Uso com Docker
 
 Os comandos desta seção devem ser executados a partir da raiz do repositório.

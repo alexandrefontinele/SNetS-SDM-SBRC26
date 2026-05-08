@@ -1,7 +1,5 @@
 # Estrutura do repositório
 
-Esta página descreve as pastas e arquivos principais do artefato.
-
 ## Estrutura do repositório
 
 Estrutura principal:

@@ -1,7 +1,5 @@
 # Instalação
 
-Esta página concentra os passos de instalação local no Windows, Ubuntu/WSL e Docker.
-
 ## Instalação
 
 ## Opção A — Windows 11 Pro com ambiente virtual Python

@@ -1,7 +1,5 @@
 # Informações básicas
 
-Esta página apresenta o objetivo do artefato, os dados gerais do projeto e os principais caminhos usados pelo revisor.
-
 ## Informações básicas
 
 ## Informações do projeto

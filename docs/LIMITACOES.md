@@ -1,7 +1,5 @@
 # Limitações conhecidas
 
-Esta página lista limitações conhecidas e observações práticas sobre execução.
-
 ## Limitações conhecidas
 
 - O ambiente principal de execução local usado pelos autores foi **Windows 11 Pro**;

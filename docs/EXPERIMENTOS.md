@@ -1,7 +1,5 @@
 # Experimentos e reprodução das reivindicações
 
-Esta página descreve como reproduzir as principais reivindicações experimentais do artigo.
-
 ## Experimentos
 
 Esta seção descreve formas de reproduzir as principais reivindicações experimentais do artigo.

@@ -1,7 +1,5 @@
 # Quick Start para revisores
 
-Esta página reúne os caminhos rápidos para gerar gráficos e executar simulações.
-
 ## Quick Start para revisores
 
 ## Caminho rápido 1 — Recriar todos os gráficos do artigo a partir dos CSVs

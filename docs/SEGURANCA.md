@@ -1,7 +1,5 @@
 # Preocupações com segurança
 
-Esta página descreve os cuidados de segurança e os modos que não são necessários para a avaliação padrão.
-
 ## Preocupações com segurança
 
 O fluxo recomendado para avaliação usa apenas:

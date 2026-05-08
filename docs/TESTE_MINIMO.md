@@ -1,7 +1,5 @@
 # Teste mínimo
 
-Esta página descreve os testes mínimos recomendados para confirmar que o artefato está funcionando.
-
 ## Teste mínimo
 
 ## Teste mínimo 1 — Gerar um gráfico por linha de comando

@@ -1,7 +1,5 @@
 # Ambiente de execução e dependências
 
-Esta página descreve os ambientes testados, dependências obrigatórias, opcionais e dependências não necessárias para a avaliação padrão.
-
 ## Ambiente de execução
 
 ## Ambiente principal usado pelos autores

@@ -54,6 +54,9 @@ Este README está organizado da seguinte forma:
 
 ---
 
+<details>
+<summary><strong>Selos considerados</strong></summary>
+
 # Selos considerados
 
 Os selos considerados para o processo de avaliação são:
@@ -64,6 +67,11 @@ Os selos considerados para o processo de avaliação são:
 - **Experimentos Reprodutíveis (Selo R)**
 
 ---
+
+</details>
+
+<details>
+<summary><strong>Informações básicas</strong></summary>
 
 # Informações básicas
 
@@ -108,6 +116,11 @@ O artefato apoia a avaliação do algoritmo **IMPA**, permitindo:
 | `Dockerfile.simulator` | Container para o simulador Java |
 
 ---
+
+</details>
+
+<details>
+<summary><strong>Estrutura do repositório</strong></summary>
 
 # Estrutura do repositório
 
@@ -223,6 +236,11 @@ SNetS-SDM-SBRC26/
 
 ---
 
+</details>
+
+<details>
+<summary><strong>Ambiente de execução</strong></summary>
+
 # Ambiente de execução
 
 ## Ambiente principal usado pelos autores
@@ -263,6 +281,11 @@ Essa configuração é uma recomendação prática. O artefato não impõe esses
 Também é possível ajustar a quantidade de threads usadas pelo simulador no parâmetro `threads`, localizado no arquivo `simulation` dentro das pastas de configuração das simulações.
 
 ---
+
+</details>
+
+<details>
+<summary><strong>Dependências</strong></summary>
 
 # Dependências
 
@@ -392,6 +415,11 @@ Não são necessárias para os testes mínimos e para a reprodução dos gráfic
 
 ---
 
+</details>
+
+<details>
+<summary><strong>Preocupações com segurança</strong></summary>
+
 # Preocupações com segurança
 
 O fluxo recomendado para avaliação usa apenas:
@@ -410,6 +438,11 @@ Recomendações:
 - Use ambiente isolado, como Docker, WSL ou máquina virtual, caso deseje maior isolamento.
 
 ---
+
+</details>
+
+<details>
+<summary><strong>Instalação</strong></summary>
 
 # Instalação
 
@@ -489,6 +522,11 @@ docker build -f Dockerfile.simulator -t snets-simulator .
 Os comandos de execução estão na seção [Uso com Docker](#uso-com-docker).
 
 ---
+
+</details>
+
+<details>
+<summary><strong>Quick Start para revisores</strong></summary>
 
 # Quick Start para revisores
 
@@ -573,6 +611,11 @@ docker run --rm \
 
 ---
 
+</details>
+
+<details>
+<summary><strong>Uso com Docker</strong></summary>
+
 # Uso com Docker
 
 Os comandos desta seção devem ser executados a partir da raiz do repositório.
@@ -634,6 +677,11 @@ docker run --rm \
 ```
 
 ---
+
+</details>
+
+<details>
+<summary><strong>Teste mínimo</strong></summary>
 
 # Teste mínimo
 
@@ -703,6 +751,11 @@ docker run --rm \
 ```
 
 ---
+
+</details>
+
+<details>
+<summary><strong>Experimentos</strong></summary>
 
 # Experimentos
 
@@ -866,6 +919,11 @@ A documentação Javadoc e os comentários de API devem ser mantidos em **inglê
 
 ---
 
+</details>
+
+<details>
+<summary><strong>Sustentabilidade do código</strong></summary>
+
 # Sustentabilidade do código
 
 Para apoiar o **Selo S**, o projeto adota:
@@ -886,6 +944,11 @@ Política de documentação:
 
 ---
 
+</details>
+
+<details>
+<summary><strong>Limitações conhecidas</strong></summary>
+
 # Limitações conhecidas
 
 - O ambiente principal de execução local usado pelos autores foi **Windows 11 Pro**;
@@ -899,6 +962,11 @@ Política de documentação:
 
 ---
 
+</details>
+
+<details>
+<summary><strong>LICENÇA</strong></summary>
+
 # LICENÇA
 
 Este projeto está licenciado sob a licença **MIT**. Consulte o arquivo:
@@ -906,3 +974,5 @@ Este projeto está licenciado sob a licença **MIT**. Consulte o arquivo:
 ```text
 LICENSE
 ```
+
+</details>

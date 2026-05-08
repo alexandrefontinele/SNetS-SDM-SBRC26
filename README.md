@@ -538,10 +538,10 @@ Os comandos de execução estão na seção [Uso com Docker](#uso-com-docker).
 git clone https://github.com/alexandrefontinele/SNetS-SDM-SBRC26.git
 cd SNetS-SDM-SBRC26\simulations\Data_Analyzer
 python -m venv .venv
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 .\generate_article_graphs.ps1
 ```
 

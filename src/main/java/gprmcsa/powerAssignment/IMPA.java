@@ -61,7 +61,7 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
 			}
 		}
 
-		//For the PABS algorithm to work correctly the PSD must be variable.
+		//For the IMPA algorithm to work correctly the PSD must be variable.
 		if (cp.getMesh().getPhysicalLayer().getFixedPowerSpectralDensity()) {
 			cp.getMesh().getPhysicalLayer().setFixedPowerSpectralDensity(false);
 		}
@@ -94,7 +94,7 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
 		double OSNRcurrent = 0.0;
 		double XTcurrent = 0.0;
 
-		//double OSNRth = modulation.getSNRthresholdLinear(); //
+		//double OSNRth = modulation.getSNRthresholdLinear(); //Linear
 		//OSNRth = OSNRth + this.marginO; //margin is linear
 
 		double OSNRth_dB = modulation.getSNRthreshold();
@@ -111,8 +111,6 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
 		double Plow = 1.0E-11; //W, -80 dBm
 		double Pmax = computePmax(circuit, cp);
 		double Pmin = computePmin(circuit, Plow, Pmax, cp);
-
-
 
         List<Double> P_candidates = generateCandidatePowers(circuit, Pmin, Pmax, cp);
 
@@ -138,14 +136,14 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
             }
 
             //====================================================
-            // OSNR in neighboring circuits (QoTO via OSNR)
+            // OSNR in neighboring circuits (QoTO based on OSNR)
             OSNRNeighborInfo infoOSNR = computeOSNRNeighborInfo(circuit, cp);
             if (infoOSNR.violatesThreshold) {
             	continue; // The worst neighbor exceeded the OSNR margin
             }
 
             //====================================================
-            // XT in adjacent circuits (QoTO via XT)
+            // XT in adjacent circuits (QoTO based on XT)
             XTNeighborInfo infoXT = computeXTNeighborsInfo(circuit, cp);
             if (infoXT.violatesThreshold) {
                 continue; // Some neighbor exceeded the XT threshold
@@ -213,7 +211,7 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
 			double OSNRthreshold = neighbor.getModulation().getSNRthresholdLinear();
 			double OSNRmargin = OSNR - OSNRthreshold;
 
-			// Pior margem (mais negativa)
+			// Worst margin (most negative)
 			if (OSNRmargin < minOSNRmargin) {
                 minOSNRmargin = OSNRmargin;
 			}
@@ -296,7 +294,7 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
             // normalized XT quality (1 = optimal, 0 = critical)
             double qk = 1.0 - (XTk / XTth_k);
 
-            // clamp em [0,1]
+            // Clamp to [0, 1]
             if (qk < 0.0) qk = 0.0;
             if (qk > 1.0) qk = 1.0;
 
@@ -329,7 +327,7 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
 
     	// -----------------------------------------------------
         // (2) Automatic calculation of the total number of samples
-    	//    Depende de:
+    	//    Depends on:
         //    - Amplitude do intervalo de power (ordens de grandeza)
         //    - Network load (rho)
     	// -----------------------------------------------------
@@ -351,7 +349,7 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
         if (Nunif < 4) Nunif = 4;
 
         // ----------------------------------
-        // 3) Amostragem Log-Uniforme
+        // 3) Log-uniform sampling
         //    For low power and critical regions
         // ----------------------------------
         for (int i = 0; i < Nlog; i++) {
@@ -361,7 +359,7 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
         }
 
         // ----------------------------------
-        // 4) Amostragem Linear Uniforme
+        // 4) Linear-uniform sampling
         //    To cover the entire interval
         // ----------------------------------
         for (int i = 0; i < Nunif; i++) {
@@ -370,20 +368,19 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
         }
 
         // ----------------------------------
-        // 5) Garantir extremos
+        // 5) Ensure boundary values
         // ----------------------------------
         candidates.add(Pmin);
         candidates.add(Pmax);
 
         // ----------------------------------
-        // 6) Remover duplicatas + ordenar
+        // 6) Remove duplicates and sort
         // ----------------------------------
         List<Double> finalCandidates = candidates.stream().distinct().sorted().collect(Collectors.toList());
 
         return finalCandidates;
 	}
-
-
+	
     /**
      * Network-load calculation rho in [0,1]
      *
@@ -492,7 +489,7 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
             double margin = osnrMid - OSNRtarget;
 
             if (margin >= 0.0) {
-                // Pmid satisfaz o limiar -> salvar como "boa"
+                // Pmid satisfies the threshold -> save it as "good"
                 lastGood = Pmid;
 
                 // try to reduce power
@@ -502,7 +499,7 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
                     break; // numerical convergence of the margin
                 }
             } else {
-                // Pmid insuficiente -> aumentar power
+                // Pmid is insufficient -> increase power
                 L = Pmid;
             }
 
@@ -512,7 +509,7 @@ public class IMPA implements PowerAssignmentAlgorithmInterface {
         }
 
         //===========================================================
-        // (4) Retornar a melhor estimativa encontrada
+        // (4) Return the best estimate found
         //===========================================================
         return lastGood;
     }

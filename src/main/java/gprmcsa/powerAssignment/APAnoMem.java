@@ -63,7 +63,7 @@ public class APAnoMem implements PowerAssignmentAlgorithmInterface {
 			}
 		}
 
-		//For the APAmen algorithm to work correctly the PSD must be variable.
+		//For the APAnoMen algorithm to work correctly the PSD must be variable.
 		if (cp.getMesh().getPhysicalLayer().getFixedPowerSpectralDensity()) {
 			cp.getMesh().getPhysicalLayer().setFixedPowerSpectralDensity(false);
 		}

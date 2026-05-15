@@ -102,7 +102,6 @@ public class IntersectionFreeSpectrum {
         return composition;
     }
 
-	/*
     /**
      * Returns the merge.
      * @param route the route.

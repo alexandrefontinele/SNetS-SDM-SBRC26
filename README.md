@@ -4,13 +4,11 @@
 
 **IMPA: Novo algoritmo para atribuição de potência de forma adaptativa em SDM-EONs**
 
-Artigo publicado nos anais do SBRC:
-
-[https://sol.sbc.org.br/index.php/sbrc/article/view/42333](https://sol.sbc.org.br/index.php/sbrc/article/view/42333)
-
 ## Resumo do artigo
 
 Neste trabalho investigamos o problema ampliado PRMCSA, no qual a potência é tratada como variável de decisão. Propomos o algoritmo **IMPA** (*Impairment-Aware Margin Power Assignment*) para atribuição adaptativa de potência em **SDM-EONs**. O IMPA seleciona a menor potência viável que satisfaz simultaneamente margens de **OSNR** e **crosstalk**, considerando também o impacto sobre circuitos vizinhos já estabelecidos. Avaliações nas topologias **NSFNet** e **USA** demonstram que o IMPA reduz significativamente a probabilidade de bloqueio em relação aos algoritmos clássicos e adaptativos da literatura, alcançando uma redução na probabilidade de bloqueio de bitrate de pelo menos **18%** na topologia NSFNet e **46,5%** na topologia USA.
+
+Artigo publicado nos anais do SBRC: [https://sol.sbc.org.br/index.php/sbrc/article/view/42333](https://sol.sbc.org.br/index.php/sbrc/article/view/42333)
 
 ---
 

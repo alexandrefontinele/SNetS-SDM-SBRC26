@@ -672,7 +672,7 @@ public class Crosstalk implements Serializable {
 				}
 			}
 
-			Pxt = calculatePxt(circuit, link, adjacentCircuitList);
+			Pxt = calculatePxt(circuit, circuit.getSpectrumAssigned(), link, adjacentCircuitList);
 
 			if (Pm > 0.0) {
 				xtInLink += Pxt / Pm; //XT power normalized
@@ -693,7 +693,7 @@ public class Crosstalk implements Serializable {
 	 * @param addTestCircuit boolean
 	 * @return double
 	 */
-	private double calculateCrosstalkInLink3(Circuit circuit, Link link, Circuit testCircuit, boolean addTestCircuit) {
+	public double calculateCrosstalkInLink3(Circuit circuit, Link link, Circuit testCircuit, boolean addTestCircuit) {
 		double xtInLink = 0.0;
 		double Pxt = 0.0;
 
@@ -714,47 +714,89 @@ public class Crosstalk implements Serializable {
 				}
 			}
 
-			Pxt = calculatePxt(circuit, link, adjacentCircuitList);
+			Pxt = calculatePxt(circuit, circuit.getSpectrumAssigned(), link, adjacentCircuitList);
 
 			xtInLink += Pxt;
 		}
 
 		return xtInLink;
 	}
+	
+	/**
+	 * Modelo de Lobato et al 2019
+	 * 
+	 * This method returns the value of the crosstlak in the given link
+	 * 
+	 * @param circuit Circuit
+	 * @param link Link
+	 * @param coreIndex int
+	 * @param spectrumAssigned int[]
+	 * @param testCircuit Circuit
+	 * @param addTestCircuit boolean
+	 * @return double
+	 */
+	public double calculateCrosstalkPowerInLink(Circuit circuit, Link link, int coreIndex, int[] spectrumAssigned, Circuit testCircuit, boolean addTestCircuit) {
+
+	    double pxtInLink = 0.0;
+
+	    ArrayList<Core> adjacentCores = link.getAdjacentCores(coreIndex);
+
+	    for (Core adjacentCore : adjacentCores) {
+
+	        TreeSet<Circuit> adjacentCircuitList = new TreeSet<>();
+
+	        adjacentCircuitList.addAll(adjacentCore.getCircuitList());
+
+	        if (testCircuit != null && link.getCore(testCircuit.getIndexCore()) == adjacentCore && testCircuit.getRoute().getLinkList().contains(link)) {
+
+	            if (addTestCircuit) {
+	                adjacentCircuitList.add(testCircuit);
+	            } else {
+	                adjacentCircuitList.remove(testCircuit);
+	            }
+	        }
+
+	        pxtInLink += calculatePxt(circuit, spectrumAssigned, link, adjacentCircuitList);
+	    }
+
+	    return pxtInLink;
+	}
 
 	/**
 	 * This method calculates the crosstalk power in a given circuit
-	 *
+	 * 
 	 * @param circuit Circuit
+	 * @param spectrumAssigned int[]
 	 * @param link Link
 	 * @param adjacentCircuitList TreeSet<Circuit>
 	 * @return double
 	 */
-	private double calculatePxt(Circuit circuit, Link link, TreeSet<Circuit> adjacentCircuitList) {
+	private double calculatePxt(Circuit circuit, int[] spectrumAssigned, Link link, TreeSet<Circuit> adjacentCircuitList) {
 		double nsoij = 0.0; // number of overlapping slots between i and j
 		double nsj = 0.0; // number of slots of the connection j
-		double Pxt = 0.0;
-		double Pn = 0.0;
-		double Isoij = 0.0;
+	    double Pxt = 0.0;
+	    double Pn = 0.0;
+	    double Isoij = 0.0;
+	    
+	    for (Circuit adjacentCircuit : adjacentCircuitList) {
+	        if (isIntersection(spectrumAssigned, adjacentCircuit.getSpectrumAssigned())) {
 
-		for(Circuit adjacentCircuit : adjacentCircuitList) {
-			if(isIntersection(circuit.getSpectrumAssigned(), adjacentCircuit.getSpectrumAssigned())) {
-				nsj = sizeSpectrumAllocate(adjacentCircuit.getSpectrumAssigned());
-				nsoij = numberOfOverlapping(circuit.getSpectrumAssigned(), adjacentCircuit.getSpectrumAssigned());
+	            nsj = sizeSpectrumAllocate(adjacentCircuit.getSpectrumAssigned());
+	            nsoij = numberOfOverlapping(spectrumAssigned, adjacentCircuit.getSpectrumAssigned());
 
-				if(nsj != 0.0){
+	            if(nsj != 0.0){
 					Isoij = nsoij / nsj;
 				}else {
 					Isoij = 0.0;
 				}
 
-				Pn = physicalLayer.getCircuitLaunchPower(adjacentCircuit, adjacentCircuit.getModulation());
+	            Pn = physicalLayer.getCircuitLaunchPower(adjacentCircuit, adjacentCircuit.getModulation());
 
-				Pxt += Pn * Isoij * h * link.getDistance()*1000.0; //Multiply by 1000 to convert kilometers to meters.
-			}
-		}
+	            Pxt += Pn * Isoij * h * link.getDistance() * 1000.0; //Multiply by 1000 to convert kilometers to meters.
+	        }
+	    }
 
-		return Pxt;
+	    return Pxt;
 	}
 
 	/**
